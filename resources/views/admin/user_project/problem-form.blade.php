@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Assignment Form')
+@section('title', 'Problems Form')
 
 @push('css')
 <link rel="stylesheet" href="{{ asset('assets/vendor/summernote/summernote-bs4.min.css') }}">
@@ -24,10 +24,10 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-title">
-                                            <h3 class="text-center title-2">@isset($assignment) Update @else Add @endisset Assignment</h3>
+                                            <h3 class="text-center title-2">@isset($problem) Update @else Add @endisset Problem</h3>
                                         </div>
                                         <hr>
-                                        <form action="@isset($assignment){{ route('admin.assignment.update', $assignment->id) }}@else{{ route('admin.assignment.submit') }}@endisset" method="post" enctype="multipart/form-data">
+                                        <form action="@isset($problem){{ route('admin.assignment.updateProblem', $problem->id) }}@else{{ route('admin.assignment.problemStore') }}@endisset" method="post" enctype="multipart/form-data">
                                             @csrf
                                             <div class="row">
                                                 <div class="col-sm-6">
@@ -36,8 +36,8 @@
                                                         <select class="form-control" name="project_id" id="project_id">
                                                             <option value="">--Select Project--</option>
                                                             @foreach ($projects as $key => $project)
-                                                                @isset($assignment)
-                                                                    <option value="{{ $project->id }}"{{ $assignment->project_id==$project->id ? ' selected' : '' }}>{{ $project->title }}</option>
+                                                                @isset($problem)
+                                                                    <option value="{{ $project->id }}"{{ $problem->project_id==$project->id ? ' selected' : '' }}>{{ $project->title }}</option>
                                                                 @else
                                                                     <option value="{{ $project->id }}">{{ $project->title }}</option>
                                                                 @endisset
@@ -54,8 +54,8 @@
                                                         <select class="form-control" name="user_id" id="user_id">
                                                             <option value="">--Select Employee--</option>
                                                             @foreach ($employees as $key => $employee)
-                                                                @isset($assignment)
-                                                                    <option value="{{ $employee->id }}"{{ $assignment->user_id==$employee->id ? ' selected' : '' }}>{{ $employee->name }}</option>
+                                                                @isset($problem)
+                                                                    <option value="{{ $employee->id }}"{{ $problem->user_id==$employee->id ? ' selected' : '' }}>{{ $employee->name }}</option>
                                                                 @else
                                                                     <option value="{{ $employee->id }}">{{ $employee->name }}</option>
                                                                 @endisset
@@ -69,8 +69,8 @@
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col-12">
-                                                    <label for="title" class="control-label mb-1">Task Title</label>
-                                                    <input name="title" type="text" class="form-control @error('title') is-invalid @enderror" value="{{ $assignment->title ?? old('title') }}" required>
+                                                    <label for="title" class="control-label mb-1">Problem Title</label>
+                                                    <input name="title" type="text" class="form-control @error('title') is-invalid @enderror" value="{{ $problem->title ?? old('title') }}" required>
                                                     @error('title')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror 
@@ -79,9 +79,9 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="form-group has-success">
-                                                        <label for="task" class="control-label mb-1">Task Details</label>
-                                                        <textarea name="task" id="task" rows="5" class="form-control @error('task') is-invalid @enderror">{{ $assignment->task ?? old('task') }}</textarea>
-                                                        @error('task')
+                                                        <label for="description" class="control-label mb-1">Problem Details</label>
+                                                        <textarea name="description" id="description" rows="5" class="form-control @error('description') is-invalid @enderror">{{ $problem->description ?? old('description') }}</textarea>
+                                                        @error('description')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
                                                     </div>
@@ -89,9 +89,9 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-6">
-                                                    <label for="deadline" class="control-label mb-1">Deadline</label>
-                                                    <input name="deadline" type="datetime-local" class="form-control @error('deadline') is-invalid @enderror" value="{{ $assignment->deadline ?? old('deadline') }}" required>
-                                                    @error('deadline')
+                                                    <label for="date" class="control-label mb-1">Date</label>
+                                                    <input name="date" type="datetime-local" class="form-control @error('date') is-invalid @enderror" value="{{ $problem->date ?? old('date') }}" required>
+                                                    @error('date')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror 
                                                 </div>
@@ -99,9 +99,9 @@
                                                     <div class="form-group">
                                                         <label for="title" class="control-label mb-1">Status</label>
                                                         <select class="form-control" name="status" id="status">
-                                                            <option value="1"@isset($assignment) {{ $assignment->status==1 ? ' selected' : '' }} @endisset>Active</option>
-                                                            <option value="2"@isset($assignment) {{ $assignment->status==2 ? ' selected' : '' }} @endisset>Completed</option>
-                                                            <option value="3"@isset($assignment) {{ $assignment->status==3 ? ' selected' : '' }} @endisset>Cancelled</option>
+                                                            <option value="1"@isset($problem) {{ $problem->status==1 ? ' selected' : '' }} @endisset>Active</option>
+                                                            <option value="2"@isset($problem) {{ $problem->status==2 ? ' selected' : '' }} @endisset>Completed</option>
+                                                            <option value="3"@isset($problem) {{ $problem->status==3 ? ' selected' : '' }} @endisset>Cancelled</option>
                                                         </select>
                                                         @error('project_id')
                                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -109,12 +109,37 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            
                                             <div class="row">
                                                 <div class="col-sm-9">
-
+                                                    
+                                                        <label for="photo" class="control-label mb-1">Profile Photo</label>
+                                                        @isset($problem)
+                                                            <div class="row">
+                                                                <div class="col-6">
+                                                                    @foreach($imageNames as $imageName)
+                                                                    <img src="{{ asset('assets/images/uploads/problems/' . $imageName) }}" alt="" width="100Px" height="100px">
+                                                                  @endforeach
+                                                                  
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <input name="images[]" type="file" class="form-control @error('images') is-invalid @enderror" multiple>
+                                                                    @error('images')
+                                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                                    @enderror
+                                                                   
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            <input name="images[]" multiple type="file" class="form-control @error('images') is-invalid @enderror" required>
+                                                            @error('images')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                            @enderror    
+                                                        @endisset
+                                                   
                                                 </div>
                                                 <div class="col-sm-3">
-                                                    <input id="payment-button" type="submit" class="btn btn-lg btn-info btn-block" value="@isset($assignment) Update @else Submit @endisset">
+                                                    <input id="payment-button" type="submit" class="btn btn-lg btn-info btn-block" value="@isset($problem) Update @else Submit @endisset">
                                                 </div>
                                             </div>
                                         </form>

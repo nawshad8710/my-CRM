@@ -82,6 +82,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::get('/list', [AssignedProjectController::class, 'index'])->name('list');
             Route::get('/problem-list', [AssignedProjectController::class, 'problemIndex'])->name('problemIndex');
             Route::get('/problem-add', [AssignedProjectController::class, 'addProblem'])->name('addProblem');
+            Route::post('/problem-store', [AssignedProjectController::class, 'problemStore'])->name('problemStore');
+            Route::get('/problem-edit/{id}', [AssignedProjectController::class, 'editProblem'])->name('editProblem');
+            Route::post('/update-problem/{id}', [AssignedProjectController::class, 'updateProblem'])->name('updateProblem');
+            Route::get('/delete-problem/{id}', [AssignedProjectController::class, 'deleteProblem'])->name('deleteProblem');
             Route::get('/add', [AssignedProjectController::class, 'create'])->name('add');
             Route::post('/submit', [AssignedProjectController::class, 'store'])->name('submit');
             Route::get('/edit/{id}', [AssignedProjectController::class, 'edit'])->name('edit');

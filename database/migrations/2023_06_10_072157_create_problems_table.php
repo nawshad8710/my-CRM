@@ -15,6 +15,8 @@ class CreateProblemsTable extends Migration
     {
         Schema::create('problems', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('project_id')->nullable();
             $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->text('images')->nullable();

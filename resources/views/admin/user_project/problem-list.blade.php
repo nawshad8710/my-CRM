@@ -29,7 +29,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <!-- DATA TABLE -->
-                                <h3 class="title-5 m-b-35">Assigned Project Task List</h3>
+                                <h3 class="title-5 m-b-35">Problems List</h3>
                                 <div class="table-data__tool">
                                     <div class="table-data__tool-left">
                                         <div class="rs-select2--light rs-select2--sm">
@@ -52,28 +52,30 @@
                                         @endif
                                     </div>
                                 </div>
-                                {{-- <div class="table-responsive table-responsive-data2">
+                                <div class="table-responsive table-responsive-data2">
                                     <table class="table table-data2">
                                         <thead>
                                             <tr>
                                                 <th>Project</th>
                                                 <th>User</th>
-                                                <th>Task</th>
-                                                <th>Deadline</th>
+                                                <th>Title</th>
+                                                <th>Description</th>
+                                                <th>Date</th>
                                                 <th>Status</th>
                                                 <th class="text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if(count($user_projects) > 0)
-                                                @foreach($user_projects as $key => $user_project)
+                                            @if(count($problems) > 0)
+                                                @foreach($problems as $key => $problem)
                                                 <tr class="tr-shadow">
-                                                    <td>{{ $user_project->project->title }}</td>
-                                                    <td>{{ $user_project->user->name }}</td>
+                                                    <td>{{ $problem->project->title }}</td>
+                                                    <td>{{ $problem->user->name }}</td>
+                                                    <td>{{ $problem->title }}</td>
                                                     <td class="desc">
                                                         <?php 
                                                             //$description =  strip_tags(html_entity_decode($user_project->task));
-                                                            $description =  $user_project->task;
+                                                            $description =  $problem->description;
                                                             if (strlen($description) > 30) {
 
                                                                 // truncate string
@@ -88,37 +90,37 @@
                                                         ?>
                                                         @if (strlen($description) > 30)
                                                             {!! $desc !!}
-                                                            <a href="#" class="desc-text" onclick="descModalShow({{ $user_project->id }})"> <u>View Details</u></a>
+                                                            <a href="#" class="desc-text" onclick="descModalShow({{ $problem->id }})"> <u>View Details</u></a>
                                                         @else
-                                                            {!! $user_project->task !!}
+                                                            {!! $problem->description !!}
                                                         @endif
                                                         <!-- {!! Str::limit($description, $limit = 30, $end = '. . .<a href="#" class="desc-text" onclick="descModalShow()">View Details</a>') !!} -->
-                                                        <div id="description{{ $user_project->id }}" class="d-none">
-                                                            {!! $user_project->task !!}
+                                                        <div id="description{{ $problem->id }}" class="d-none">
+                                                            {!! $problem->description !!}
                                                         </div>
                                                     </td>
-                                                    <td>{{ date('d-m-Y H:i a', strtotime($user_project->deadline)) }}</td>
+                                                    <td>{{ date('d-m-Y H:i a', strtotime($problem->date)) }}</td>
                                                     <td class="text-center">
-                                                        @if($user_project->status == 0)
+                                                        @if($problem->status == 0)
                                                             <!-- <span class="status--process">Active</span> -->
                                                             <span class="badge badge-secondary">Pending</span>
-                                                        @elseif($user_project->status == 1)
+                                                        @elseif($problem->status == 1)
                                                             <span class="badge badge-primary">Active</span>
-                                                        @elseif($user_project->status == 2)
+                                                        @elseif($problem->status == 2)
                                                             <span class="badge badge-success">Completed</span>
-                                                        @elseif($user_project->status == 3)
+                                                        @elseif($problem->status == 3)
                                                             <span class="badge badge-danger">Cancelled</span>    
                                                         @endif
                                                     </td>
                                                     <td>
                                                         <div class="table-data-feature">
-                                                            @if(has_access('update_assigned_task'))
-                                                            <a href="{{ route('admin.assignment.edit', $user_project->id) }}" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                            @if(has_access('update_problem'))
+                                                            <a href="{{ route('admin.assignment.editProblem', $problem->id) }}" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
                                                                 <i class="zmdi zmdi-edit"></i>
                                                             </a>
                                                             @endif
-                                                            @if(has_access('delete_assigned_task'))
-                                                            <button class="item" data-toggle="tooltip" data-placement="top" title="Delete" onclick="deleteModalShow({{ $user_project->id }})">
+                                                            @if(has_access('delete_problem'))
+                                                            <button class="item" data-toggle="tooltip" data-placement="top" title="Delete" onclick="deleteModalShow({{ $problem->id }})">
                                                                 <i class="zmdi zmdi-delete"></i>
                                                             </button>
                                                             @endif
@@ -136,7 +138,7 @@
                                             @endif
                                         </tbody>
                                     </table>
-                                </div> --}}
+                                </div>
                                 <!-- END DATA TABLE -->
                             </div>
                         </div>
@@ -149,7 +151,7 @@
 				<div class="modal-dialog modal-sm" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title" id="staticModalLabel">Delete Assignment</h5>
+							<h5 class="modal-title" id="staticModalLabel">Delete Problem</h5>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
@@ -174,7 +176,7 @@
 				<div class="modal-dialog modal-lg" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title" id="scrollmodalLabel">Task Details</h5>
+							<h5 class="modal-title" id="scrollmodalLabel">Description Details</h5>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
@@ -203,7 +205,7 @@
     function deleteData(){
         $("#staticModal").modal("hide");
         var id = $('#deleteDataId').val();
-        var url = "delete/"+id;
+        var url = "delete-problem/"+id;
         $.ajax({
             type: "GET",
             url: url,
