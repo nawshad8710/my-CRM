@@ -28,7 +28,7 @@ class EmployeeController extends Controller
             ->where('status', 1)
             ->get();
         $menuHead = MenuHead::where('key', 'c_sales')->first();
-        dd($menuHead);
+        // dd($menuHead);
         if(!has_access('employee_list_view')){
             abort(404);
         }

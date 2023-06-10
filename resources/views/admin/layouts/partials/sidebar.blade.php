@@ -140,13 +140,38 @@
                             </ul>
                         </li>
                         @endif
+
                         @if(has_menu('project_assignment'))
+                        <li class="has-sub {{Request::is('admin/assignment*') ? 'active':''}}">
+                            <a class="js-arrow" href="#">
+                                <i class="fas fa-download"></i>Assign Project
+                                <span class="arrow {{Request::is('admin/assignment*') ? 'up':''}}">
+                                    <i class="fas fa-angle-down"></i>
+                                </span>
+                            </a>
+                            <ul class="list-unstyled navbar__sub-list js-sub-list" @if(Request::is('admin/assignment*')) style="display: block;" @endif>
+                                @if(has_access('assigned_tasks_list_view'))
+                                <li class="{{Request::is('admin/assignment/list') ? 'active':''}}">
+                                    <a href="{{ route('admin.assignment.list') }}">
+                                        <i class="fas fa-tasks"></i>Assign Project</a>
+                                </li>
+                                @endif
+                                @if(has_access('employee_problem_list'))
+                                <li class="{{Request::is('admin/assignment/problem-list') ? 'active':''}}">
+                                    <a href="{{ route('admin.assignment.problemIndex') }}">
+                                        <i class="fas fa-plus"></i>Problem list</a>
+                                </li>
+                                @endif
+                            </ul>
+                        </li>
+                        @endif
+                        {{-- @if(has_menu('project_assignment'))
                         <li class="{{Request::is('admin/assignment*') ? 'active':''}}">
                             <a href="{{ route('admin.assignment.list') }}">
                                 <i class="fas fa-download"></i>Assign Projects
                             </a>
                         </li>
-                        @endif
+                        @endif --}}
                         @if(has_menu('project_reports'))
                         <li class="{{Request::is('admin/report*') ? 'active':''}}">
                             <a href="{{ route('admin.report.list') }}">

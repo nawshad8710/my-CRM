@@ -32,6 +32,41 @@ class AssignedProjectController extends Controller
         return view('admin.user_project.list', compact('user_projects'));
     }
 
+
+
+    public function problemIndex(){
+        if(!has_access('employee_problem_list')){
+            abort(404);
+        }
+        return view('admin.user_project.problem-list');
+    }
+
+
+    public function addProblem()
+    {
+        if(!has_access('create_problem')){
+            abort(404);
+        }
+
+        $employees = User::leftJoin('roles', function ($join) {
+            $join->on('roles.id', '=', 'users.role_id');
+            })
+            ->where('roles.type', 1)
+            ->select('users.*', 'roles.type')
+            ->get();
+        $projects = Project::where('status','!=' ,2)->where('status','!=' ,3)->latest()->get();
+
+        return view('admin.user_project.problem-form', compact('employees','projects'));
+    }
+
+
+    public function problemStore()
+    {
+        if(!has_access('create_problem')){
+            abort(404);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *
