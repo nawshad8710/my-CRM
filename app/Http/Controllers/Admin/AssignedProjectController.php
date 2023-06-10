@@ -12,6 +12,7 @@ use App\Models\Admin\UserProject;
 use Toastr;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
+
 class AssignedProjectController extends Controller
 {
     /**
@@ -102,7 +103,7 @@ class AssignedProjectController extends Controller
             // 'deadline' => 'required',
         ]);
 
-        $imageNames = []; // Array to store the generated image names
+        $imageNames = [];
 
         $images = $request->file('images');
 
@@ -138,7 +139,7 @@ class AssignedProjectController extends Controller
             'title'                     => $request->title,
             'description'               => $request->description,
             'date'                      => $request->date,
-            'images'                  =>  serialize($imageNames),
+            'images'                    =>  serialize($imageNames),
             'status'                    => $request->status,
         ]);
 
@@ -175,7 +176,7 @@ class AssignedProjectController extends Controller
         $projects = Project::where('status', '!=', 2)->where('status', '!=', 3)->latest()->get();
 
         if ($problem) {
-            return view('admin.user_project.problem-form', compact('problem','imageNames', 'employees', 'projects'));
+            return view('admin.user_project.problem-form', compact('problem', 'imageNames', 'employees', 'projects'));
         }
 
         return back();
@@ -189,6 +190,7 @@ class AssignedProjectController extends Controller
 
     public function updateProblem(Request $request, $id)
     {
+
         $request->validate([
             // 'user_id' => 'required',
             // 'project_id' => 'required',
@@ -200,36 +202,48 @@ class AssignedProjectController extends Controller
         $problems = Problem::findOrFail($id);
 
         $existingImages = unserialize($problems->images);
-        $newImages = [];
+        
+       
 
-        $images = $request->file('images');
+      
 
-        if ($images && is_array($images)) {
-            foreach ($images as $image) {
-                if ($image && $image->isValid()) {
-                    $currentDate = Carbon::now()->toDateString();
-                    $originalName = $image->getClientOriginalName();
-                    $sanitizedFileName = pathinfo($originalName, PATHINFO_FILENAME);
-                    $imageName = $currentDate . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
-
-                    if (!is_dir('assets/images/uploads/problems')) {
-                        mkdir('assets/images/uploads/problems', 0777, true);
+        if($request->file('images'))
+        {
+            $newImages = [];
+            $images = $request->file('images');
+            if ($images && is_array($images)) {
+                foreach ($images as $image) {
+    
+                    if ($image && $image->isValid()) {
+                        $currentDate = Carbon::now()->toDateString();
+                        $originalName = $image->getClientOriginalName();
+                        $sanitizedFileName = pathinfo($originalName, PATHINFO_FILENAME);
+                        $imageName = $currentDate . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+    
+                        if (!is_dir('assets/images/uploads/problems')) {
+                            mkdir('assets/images/uploads/problems', 0777, true);
+                        }
+    
+                        $image->move(public_path('assets/images/uploads/problems'), $imageName);
+    
+                        $newImages[] = $imageName;
                     }
+                }
+            }
     
-                    $image->move(public_path('assets/images/uploads/problems'), $imageName);
-    
-                    $newImages[] = $imageName; 
+            $imagesToDelete = array_diff($existingImages, $newImages);
+            foreach ($imagesToDelete as $imageName) {
+                if (!in_array($imageName, $newImages)) {
+                    $imagePath = public_path('assets/images/uploads/problems') . '/' . $imageName;
+                    if (File::exists($imagePath)) {
+                        File::delete($imagePath);
+                    }
                 }
             }
         }
+       
 
-        $imagesToDelete = array_diff($existingImages, $newImages);
-        foreach ($imagesToDelete as $imageName) {
-            $imagePath = public_path('assets/images/uploads/problems') . '/' . $imageName;
-            if (File::exists($imagePath)) {
-                File::delete($imagePath);
-            }
-        }
+        $updatedImages = !empty($newImages) ? $newImages : $existingImages;
 
         if ($problems) {
             if (!$request->status || $request->status == NULL) {
@@ -242,7 +256,7 @@ class AssignedProjectController extends Controller
                 'title'                     => $request->title,
                 'description'               => $request->description,
                 'date'                      => $request->date,
-                'images'                    => serialize($newImages),
+                'images'                    => serialize($updatedImages) ,
                 'status'                    => $request->status,
             ]);
 
@@ -267,16 +281,16 @@ class AssignedProjectController extends Controller
 
 
             $problems = Problem::findOrFail($id);
-            
+
             if ($problems) {
                 $imageNames = unserialize($problems->images);
 
-            foreach ($imageNames as $imageName) {
-                $imagePath = public_path('assets/images/uploads/problems') . '/' . $imageName;
-                if (File::exists($imagePath)) {
-                    File::delete($imagePath);
+                foreach ($imageNames as $imageName) {
+                    $imagePath = public_path('assets/images/uploads/problems') . '/' . $imageName;
+                    if (File::exists($imagePath)) {
+                        File::delete($imagePath);
+                    }
                 }
-            }
                 $problems->delete();
                 Toastr::success('Problems Deleted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
             }

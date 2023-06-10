@@ -159,7 +159,7 @@
                                 @if(has_access('employee_problem_list'))
                                 <li class="{{Request::is('admin/assignment/problem-list') ? 'active':''}}">
                                     <a href="{{ route('admin.assignment.problemIndex') }}">
-                                        <i class="fas fa-plus"></i>Problem list</a>
+                                        <i class="fas fa-exclamation-circle"></i>Problem list</a>
                                 </li>
                                 @endif
                             </ul>
