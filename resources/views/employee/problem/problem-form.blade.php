@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('employee.layouts.app')
 
 @section('title', 'Problems Form')
 
@@ -30,45 +30,45 @@
                             </div>
                             <hr>
                             <form
-                                action="@isset($problem){{ route('admin.assignment.updateProblem', $problem->id) }}@else{{ route('admin.assignment.problemStore') }}@endisset"
+                                action="@isset($problem){{ route('employee.problem.updateProblem', $problem->id) }}@else{{ route('employee.problem.problemStore') }}@endisset"
                                 method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="title" class="control-label mb-1">Project</label>
-                                            <select class="form-control" name="project_id" id="project_id">
+                                            <label for="project_id" class="control-label mb-1">Project</label>
+                                            <select class="form-control" name="project_id" id="project_id" >
                                                 <option value="">--Select Project--</option>
                                                 @foreach ($projects as $key => $project)
-                                                @isset($problem)
-                                                <option value="{{ $project->id }}" {{ $problem->project_id==$project->id
-                                                    ? ' selected' : '' }}>{{ $project->title }}</option>
-                                                @else
-                                                <option value="{{ $project->id }}">{{ $project->title }}</option>
-                                                @endisset
+                                                    @isset($problem)
+                                                        <option value="{{ $project->project_id }}"{{ $problem->project_id==$project->project_id ? ' selected' : '' }}>{{ $project->project->title }}</option>
+                                                    @else
+                                                    <option value="{{ $project->project_id }}">{{ $project->project->title }}</option>
+                                                    @endisset
                                                 @endforeach
                                             </select>
                                             @error('project_id')
-                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="title" class="control-label mb-1">User</label>
-                                            <select class="form-control" name="user_id" id="user_id">
-                                                <option value="">--Select Employee--</option>
-                                                @foreach ($employees as $key => $employee)
+                                            <label for="user_project_id" class="control-label mb-1">Task</label>
+                                            <select class="form-control" name="user_project_id" id="user_project_id" >
+                                                <option value="">--Select Task--</option>
                                                 @isset($problem)
-                                                <option value="{{ $employee->id }}" {{ $problem->user_id==$employee->id
-                                                    ? ' selected' : '' }}>{{ $employee->name }}</option>
-                                                @else
-                                                <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                                                    @foreach ($tasks as  $key => $task)
+                                                        <option value="{{ $task->id }}" @isset($problem)
+                                                            @if($task->id == $problem->user_project_id)
+                                                                selected
+                                                            @endif
+                                                        @endisset>{{ $task->title }}</option>
+                                                    @endforeach
                                                 @endisset
-                                                @endforeach
                                             </select>
-                                            @error('user_id')
-                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @error('user_project_id')
+                                                <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
                                     </div>
@@ -96,7 +96,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                {{-- <div class="row">
                                     <div class="col-sm-6">
                                         <label for="date" class="control-label mb-1">Date</label>
                                         <input name="date" type="datetime-local"
@@ -122,7 +122,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="row">
                                     <div class="col-sm-9">
@@ -156,12 +156,10 @@
                                         @endisset
 
                                     </div>
-                                    @if(has_access('update_problem'))
                                     <div class="col-sm-3">
                                         <input id="payment-button" type="submit" class="btn btn-lg btn-info btn-block"
                                             value="@isset($problem) Update @else Submit @endisset">
                                     </div>
-                                    @endif
                                 </div>
                             </form>
                         </div>
@@ -237,6 +235,27 @@
     $(document).ready(function () {
         $('#description').summernote();
      });
+
+     $( "#project_id" ).change(function() {
+            var project_id = $(this).val();
+            var url = window.location.origin + '/employee/assignment/get-assignments-by-project/' + project_id;
+            if(project_id > 0){
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.length > 0) {
+                            var html = `<option value="">--Select Task--</option>`;
+                            $.each(data, function (key, val) { 
+                                html += `<option value="${val.id}">${val.title}</option>`;
+                            });
+                            $('#user_project_id').html(html);
+                        }
+                    }
+                });
+            }
+        });
 </script>
 
 <script>

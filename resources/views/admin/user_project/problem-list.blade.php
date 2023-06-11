@@ -46,7 +46,7 @@
                                             <i class="zmdi zmdi-filter-list"></i>filters</button> -->
                                     </div>
                                     <div class="table-data__tool-right">
-                                        @if(has_access('delete_role'))
+                                        @if(has_access('create_problem'))
                                         <a href="{{ route('admin.assignment.addProblem') }}" class="au-btn au-btn-icon au-btn--blue au-btn--small">
                                             <i class="zmdi zmdi-plus"></i>Add Problem</a>
                                         @endif
@@ -99,7 +99,7 @@
                                                             {!! $problem->description !!}
                                                         </div>
                                                     </td>
-                                                    <td>{{ date('d-m-Y H:i a', strtotime($problem->date)) }}</td>
+                                                    <td>{{ date('d-m-Y H:i a', strtotime($problem->created_at)) }}</td>
                                                     <td class="text-center">
                                                         @if($problem->status == 0)
                                                             <!-- <span class="status--process">Active</span> -->
@@ -114,11 +114,11 @@
                                                     </td>
                                                     <td>
                                                         <div class="table-data-feature">
-                                                            @if(has_access('update_problem'))
+                                                            {{-- @if(has_access('update_problem'))
                                                             <a href="{{ route('admin.assignment.editProblem', $problem->id) }}" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
                                                                 <i class="zmdi zmdi-edit"></i>
                                                             </a>
-                                                            @endif
+                                                            @endif --}}
                                                             @if(has_access('delete_problem'))
                                                             <button class="item" data-toggle="tooltip" data-placement="top" title="Delete" onclick="deleteModalShow({{ $problem->id }})">
                                                                 <i class="zmdi zmdi-delete"></i>

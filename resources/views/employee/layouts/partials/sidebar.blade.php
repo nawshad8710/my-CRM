@@ -17,11 +17,20 @@
                                 <i class="fas fa-copy"></i>Assigned Projects
                             </a>
                         </li>
+                       
+
                         <li class="{{Request::is('employee/report*') ? 'active':''}}">
                             <a href="{{ route('employee.report.list') }}">
                                 <i class="fas fa-edit"></i>Project Reports
                             </a>
                         </li>
+
+                      
+                        <li class="{{Request::is('employee/problem*') ? 'active':''}}">
+                            <a href="{{ route('employee.problem.problemIndex') }}">
+                                <i class="fas fa-exclamation-circle"></i>Problem list</a>
+                        </li>
+                       
                     </ul>
                 </nav>
             </div>

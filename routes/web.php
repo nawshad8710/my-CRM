@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\UserReportController;
 use App\Http\Controllers\Admin\RoleController;
 
 use App\Http\Controllers\Employee\EmployeeHomeController;
+use App\Http\Controllers\Employee\ProblemController;
 use App\Http\Controllers\Employee\UserProjectController;
 use App\Http\Controllers\Employee\ReportController;
 
@@ -139,5 +140,16 @@ Route::middleware(['auth', 'employee'])->group(function () {
             Route::post('/update/{id}', [ReportController::class, 'update'])->name('update');
             Route::get('/delete/{id}', [ReportController::class, 'destroy'])->name('delete');
         });
+        Route::group(['as' => 'problem.', 'prefix' => 'problem'], function() {
+            Route::get('/list', [ProblemController::class, 'problemIndex'])->name('problemIndex');
+            Route::get('/add', [ProblemController::class, 'addProblem'])->name('addProblem');
+            Route::post('/store', [ProblemController::class, 'problemStore'])->name('problemStore');
+            Route::get('/edit/{id}', [ProblemController::class, 'editProblem'])->name('editProblem');
+            Route::post('/update/{id}', [ProblemController::class, 'updateProblem'])->name('updateProblem');
+            Route::get('/delete/{id}', [ProblemController::class, 'deleteProblem'])->name('deleteProblem');
+            
+        });
+
+        
     });    
 });

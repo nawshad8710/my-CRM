@@ -121,7 +121,7 @@ class AssignedProjectController extends Controller
 
                     $image->move(public_path('assets/images/uploads/problems'), $imageName);
 
-                    $imageNames[] = $imageName; // Store the generated image name in the array
+                    $imageNames[] = $imageName; 
                 }
             }
         }
@@ -297,7 +297,7 @@ class AssignedProjectController extends Controller
             return 1;
         }
     }
-    /*-----------------end of problems----------------------*/
+    // /*-----------------end of problems----------------------*/
 
 
 
