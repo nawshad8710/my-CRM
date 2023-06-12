@@ -82,7 +82,7 @@
                                     <td>{{ $problem->user->name }}</td>
                                     <td>{{ $problem->title }}</td>
                                     <td class="desc">
-                                        <?php 
+                                        <?php
                                                             //$description =  strip_tags(html_entity_decode($user_project->task));
                                                             $description =  $problem->description;
                                                             if (strlen($description) > 30) {
@@ -90,12 +90,12 @@
                                                                 // truncate string
                                                                 $stringCut = substr($description, 0, 30);
                                                                 $endPoint = strrpos($stringCut, ' ');
-                                                            
+
                                                                 //if the string doesn't contain any space then it will cut without word basis.
                                                                 //$desc = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
                                                                 $desc = $stringCut;
                                                                 $desc .= '...';
-                                                            }                                                            
+                                                            }
                                                         ?>
                                         @if (strlen($description) > 30)
                                         {!! $desc !!}
@@ -144,6 +144,12 @@
                                             <button class="item" data-toggle="tooltip" data-placement="top"
                                                 title="Delete" onclick="deleteModalShow({{ $problem->id }})">
                                                 <i class="zmdi zmdi-delete"></i>
+                                            </button>
+                                            @endif
+                                            @if (count($solution) > 0)
+                                            <button class="item" data-toggle="tooltip" data-placement="top" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                <i class="zmdi zmdi-eye"></i>
+
                                             </button>
                                             @endif
                                             <!-- <button class="item" data-toggle="tooltip" data-placement="top" title="More">
@@ -220,41 +226,44 @@
 
 
 
+
 {{-- full image modal --}}
 <div id="fullImageModal" class="modal">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Full-size Image</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div id="imageCarousel" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-              @php
-                $imageNames = unserialize($problem->images)
-              @endphp
-              @foreach($imageNames as $index => $imageName)
-                <div class="carousel-item @if($index === 0) active @endif">
-                  <img class="img-fluid zoomable-image" src="{{ asset('assets/images/uploads/problems/' . $imageName) }}" alt="Image {{ $index + 1 }}">
-                </div>
-              @endforeach
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Full-size Image</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <a class="carousel-control-prev" href="#imageCarousel" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#imageCarousel" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
-            </a>
-          </div>
+            <div class="modal-body">
+                <div id="imageCarousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        @php
+                        $imageNames = unserialize($problem->images)
+                        @endphp
+                        @foreach($imageNames as $index => $imageName)
+                        <div class="carousel-item @if($index === 0) active @endif">
+                            <img class="img-fluid zoomable-image"
+                                src="{{ asset('assets/images/uploads/problems/' . $imageName) }}"
+                                alt="Image {{ $index + 1 }}">
+                        </div>
+                        @endforeach
+                    </div>
+                    <a class="carousel-control-prev" href="#imageCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#imageCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+</div>
 
 @endsection
 
@@ -301,7 +310,7 @@
             location = url;
         }
 
-    });   
+    });
 </script>
 <script>
     $(document).ready(function() {

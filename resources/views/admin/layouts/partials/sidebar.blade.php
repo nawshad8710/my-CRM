@@ -162,6 +162,15 @@
                                         <i class="fas fa-exclamation-circle"></i>Problem list</a>
                                 </li>
                                 @endif
+
+
+
+                                @if(has_access('view_solution'))
+                                <li class="{{Request::is('admin/assignment/solution-list') ? 'active':''}}">
+                                    <a href="{{ route('admin.assignment.soluitonIndex') }}">
+                                        <i class="fas fa-exclamation-circle"></i>User Solution list</a>
+                                </li>
+                                @endif
                             </ul>
                         </li>
                         @endif

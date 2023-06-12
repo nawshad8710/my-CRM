@@ -121,7 +121,7 @@ class AssignedProjectController extends Controller
 
                     $image->move(public_path('assets/images/uploads/problems'), $imageName);
 
-                    $imageNames[] = $imageName; 
+                    $imageNames[] = $imageName;
                 }
             }
         }
@@ -202,35 +202,34 @@ class AssignedProjectController extends Controller
         $problems = Problem::findOrFail($id);
 
         $existingImages = unserialize($problems->images);
-        
-       
 
-      
 
-        if($request->file('images'))
-        {
+
+
+
+        if ($request->file('images')) {
             $newImages = [];
             $images = $request->file('images');
             if ($images && is_array($images)) {
                 foreach ($images as $image) {
-    
+
                     if ($image && $image->isValid()) {
                         $currentDate = Carbon::now()->toDateString();
                         $originalName = $image->getClientOriginalName();
                         $sanitizedFileName = pathinfo($originalName, PATHINFO_FILENAME);
                         $imageName = $currentDate . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
-    
+
                         if (!is_dir('assets/images/uploads/problems')) {
                             mkdir('assets/images/uploads/problems', 0777, true);
                         }
-    
+
                         $image->move(public_path('assets/images/uploads/problems'), $imageName);
-    
+
                         $newImages[] = $imageName;
                     }
                 }
             }
-    
+
             $imagesToDelete = array_diff($existingImages, $newImages);
             foreach ($imagesToDelete as $imageName) {
                 if (!in_array($imageName, $newImages)) {
@@ -241,7 +240,7 @@ class AssignedProjectController extends Controller
                 }
             }
         }
-       
+
 
         $updatedImages = !empty($newImages) ? $newImages : $existingImages;
 
@@ -256,7 +255,7 @@ class AssignedProjectController extends Controller
                 'title'                     => $request->title,
                 'description'               => $request->description,
                 'date'                      => $request->date,
-                'images'                    => serialize($updatedImages) ,
+                'images'                    => serialize($updatedImages),
                 'status'                    => $request->status,
             ]);
 
@@ -296,6 +295,22 @@ class AssignedProjectController extends Controller
             }
             return 1;
         }
+    }
+
+
+
+
+    public function ProblemStatusUpdate(Request $request, $id)
+    {
+        $problem = Problem::find($id);
+        $problem->update([
+            'status' => $request->status
+        ]);
+
+        return response()->json([
+            'message' => "updated status successfully",
+            'data' => $problem
+        ]);
     }
     // /*-----------------end of problems----------------------*/
 

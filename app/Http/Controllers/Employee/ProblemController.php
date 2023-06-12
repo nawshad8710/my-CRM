@@ -11,6 +11,7 @@ use App\Models\Admin\Problem;
 
 
 use App\Models\Admin\Project;
+use App\Models\Admin\Solution;
 use App\Models\User;
 use App\Models\Admin\UserProject;
 use Toastr;
@@ -33,13 +34,25 @@ class ProblemController extends Controller
         if (!has_access('employee_problem_list')) {
             abort(404);
         }
-        $problems = Problem::latest()->get();
-        
+        $problems = Problem::where('user_id', Auth()->id())->latest()->get();
+        $solution = collect();
+        foreach ($problems as $problem) {
+            $problemId = $problem->id;
+
+            $problemSolution = Solution::where('user_problem_id', $problemId)->get();
+
+            $solution = $solution->concat($problemSolution);
+        }
+
+        // dd($solution);
+
+
+
 
         if (isset($_GET['status'])) {
             $problems = $problems->where('status', $_GET['status']);
         }
-        return view('employee.problem.problem-list', compact('problems'));
+        return view('employee.problem.problem-list', compact('problems','solution'));
     }
 
     /*

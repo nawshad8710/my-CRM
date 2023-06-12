@@ -1,6 +1,6 @@
-@extends('admin.layouts.app')
+@extends('employee.layouts.app')
 
-@section('title', 'Assignments')
+@section('title', 'Admin')
 
 @push('css')
     <style>
@@ -32,7 +32,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <!-- DATA TABLE -->
-                        <h3 class="title-5 m-b-35">Problems List</h3>
+                        <h3 class="title-5 m-b-35">Solution List</h3>
                         <div class="table-data__tool">
                             <div class="table-data__tool-left">
                                 <div class="rs-select2--light rs-select2--sm">
@@ -58,15 +58,18 @@
                                     <div class="dropDownSelect2"></div>
                                 </div>
                                 <!-- <button class="au-btn-filter">
-                                                <i class="zmdi zmdi-filter-list"></i>filters</button> -->
+                                               <i class="zmdi zmdi-filter-list"></i>filters</button> -->
                             </div>
-                            <div class="table-data__tool-right">
-                                @if (has_access('create_problem'))
-                                    <a href="{{ route('admin.assignment.addProblem') }}"
+                            @if (has_access('create_solution'))
+                                <div class="table-data__tool-right">
+
+                                    <a href="{{ route('admin.assignment.solutionCreate') }}"
                                         class="au-btn au-btn-icon au-btn--blue au-btn--small">
-                                        <i class="zmdi zmdi-plus"></i>Add Problem</a>
-                                @endif
-                            </div>
+                                        <i class="zmdi zmdi-plus"></i>Add Solution</a>
+
+                                </div>
+                            @endif
+
                         </div>
                         <div class="table-responsive table-responsive-data2">
                             <table class="table table-data2">
@@ -74,24 +77,26 @@
                                     <tr>
                                         <th>Project</th>
                                         <th>User</th>
-                                        <th>Title</th>
+                                        <th>Task</th>
                                         <th>Description</th>
                                         <th>Date</th>
-                                        <th>Status</th>
+                                        {{-- <th>Status</th> --}}
+                                        @if ((has_access('update_solution')) || (has_access('delete_solution')))
                                         <th class="text-center">Action</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (count($problems) > 0)
-                                        @foreach ($problems as $key => $problem)
+                                    @if (count($solutions) > 0)
+                                        @foreach ($solutions as $key => $solution)
                                             <tr class="tr-shadow">
-                                                <td>{{ $problem->project->title }}</td>
-                                                <td>{{ $problem->user->name }}</td>
-                                                <td>{{ $problem->title }}</td>
+                                                <td>{{ $solution->project->title }}</td>
+                                                <td>{{ $solution->user->name }}</td>
+                                                <td>{!! $solution->user_project->task !!}</td>
                                                 <td class="desc">
                                                     <?php
                                                     //$description =  strip_tags(html_entity_decode($user_project->task));
-                                                    $description = $problem->description;
+                                                    $description = $solution->description;
                                                     if (strlen($description) > 30) {
                                                         // truncate string
                                                         $stringCut = substr($description, 0, 30);
@@ -106,62 +111,56 @@
                                                     @if (strlen($description) > 30)
                                                         {!! $desc !!}
                                                         <a href="#" class="desc-text"
-                                                            onclick="descModalShow({{ $problem->id }})">
+                                                            onclick="descModalShow({{ $solution->id }})">
                                                             <u>View Details</u></a>
                                                     @else
-                                                        {!! $problem->description !!}
+                                                        {!! $solution->description !!}
                                                     @endif
-                                                    <!-- {!! Str::limit(
-                                                        $description,
-                                                        $limit = 30,
-                                                        $end = '. . .<a href="#" class="desc-text" onclick="descModalShow()">View Details</a>',
-                                                    ) !!} -->
-                                                    <div id="description{{ $problem->id }}" class="d-none">
-                                                        {!! $problem->description !!}
+
+                                                    <div id="description{{ $solution->id }}" class="d-none">
+                                                        {!! $solution->description !!}
                                                     </div>
                                                 </td>
-                                                <td>{{ date('d-m-Y H:i a', strtotime($problem->created_at)) }}</td>
-                                                <td class="text-center">
-                                                    <select name="status" id="problemStatus" dataId="{{$problem->id}}">
-                                                        <option value="0"
-                                                            @if ($problem->status == 0) selected @endif>Pending
-                                                        </option>
-                                                        <option value="1"
-                                                            @if ($problem->status == 1) selected @endif>Active
-                                                        </option>
-                                                        <option value="2"
-                                                            @if ($problem->status == 2) selected @endif>Completed
-                                                        </option>
-                                                        <option value="3"
-                                                            @if ($problem->status == 3) selected @endif>Cancelled
-                                                        </option>
-                                                    </select>
-                                                </td>
+
+                                                <td>{{ date('d-m-Y H:i a', strtotime($solution->created_at)) }}</td>
+                                                {{-- <td class="text-center">
+                                                    @if ($solution->status == 0)
+                                                        <!-- <span class="status--process">Active</span> -->
+                                                        <span class="badge badge-secondary">Pending</span>
+                                                    @elseif($solution->status == 1)
+                                                        <span class="badge badge-primary">Active</span>
+                                                    @elseif($solution->status == 2)
+                                                        <span class="badge badge-success">Completed</span>
+                                                    @elseif($solution->status == 3)
+                                                        <span class="badge badge-danger">Cancelled</span>
+                                                    @endif
+                                                </td> --}}
                                                 <td>
                                                     <div class="table-data-feature">
-                                                        {{-- @if (has_access('update_problem'))
-                                            <a href="{{ route('admin.assignment.editProblem', $problem->id) }}"
-                                                class="item" data-toggle="tooltip" data-placement="top" title="Edit">
-                                                <i class="zmdi zmdi-edit"></i>
-                                            </a>
-                                            @endif --}}
-                                                        @if (has_access('delete_problem'))
+                                                        @if (has_access('update_solution'))
+                                                            <a href="{{ route('admin.assignment.solutionEdit', $solution->id) }}"
+                                                                class="item" data-toggle="tooltip" data-placement="top"
+                                                                title="Edit">
+                                                                <i class="zmdi zmdi-edit"></i>
+                                                            </a>
+                                                        @endif
+                                                        @if (has_access('delete_solution'))
                                                             <button class="item" data-toggle="tooltip"
                                                                 data-placement="top" title="Delete"
-                                                                onclick="deleteModalShow({{ $problem->id }})">
+                                                                onclick="deleteModalShow({{ $solution->id }})">
                                                                 <i class="zmdi zmdi-delete"></i>
                                                             </button>
                                                         @endif
                                                         <!-- <button class="item" data-toggle="tooltip" data-placement="top" title="More">
-                                                                    <i class="zmdi zmdi-more"></i>
-                                                                </button> -->
+                                                                   <i class="zmdi zmdi-more"></i>
+                                                               </button> -->
                                                     </div>
                                                 </td>
                                             </tr>
                                         @endforeach
                                     @else
                                         <tr class="tr-shadow">
-                                            <td colspan="6" class="text-center">No Assignment Found!</td>
+                                            <td colspan="6" class="text-center">No data Found!</td>
                                         </tr>
                                     @endif
                                 </tbody>
@@ -223,6 +222,10 @@
         </div>
     </div>
     <!-- end modal description -->
+
+
+    {{-- full image modal --}}
+
 @endsection
 
 @push('js')
@@ -235,7 +238,8 @@
         function deleteData() {
             $("#staticModal").modal("hide");
             var id = $('#deleteDataId').val();
-            var url = "delete-problem/" + id;
+            var url = "delete/" + id;
+            console.log(url, id);
             $.ajax({
                 type: "GET",
                 url: url,
@@ -259,7 +263,6 @@
 
         $("#status").change(function() {
             var status = $("#status").val();
-            console.log(status)
             if (status) {
                 var url = window.location.origin + window.location.pathname + "?filter=1&status=" + status;
                 location = url;
@@ -270,26 +273,17 @@
 
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        $('#problemStatus').change(function() {
-            var status = $(this).val()
-            var problemId = $(this).attr('dataId')
-            var url = window.location.origin + '/admin/assignment/problem-status-update/' + problemId
-            $.ajax({
-            type: "POST",
-            url: url,
-            dataType: "json",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                status: status,
-            },
-            success: function(data) {
-                Swal.fire('Success', data?.message);
-                console.log(data)
+        $(document).ready(function() {
+            $('.thumbnail').click(function() {
+                var fullImagePath = $(this).attr('src');
+                $('#fullImageModal .modal-body img').attr('src', fullImagePath);
+                $('#fullImageModal').modal('show');
+            });
 
-            }
+            $('#fullImageModal').on('hidden.bs.modal', function() {
+                $('#fullImageModal .modal-body img').attr('src', '');
+            });
         });
-        })
     </script>
 @endpush
