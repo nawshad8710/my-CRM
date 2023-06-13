@@ -21,6 +21,23 @@
         color: #ff8327;
         cursor: pointer;
     }
+
+    .slider {
+        display: none;
+        /* Hide the slider by default */
+    }
+
+    .slider.slick-initialized {
+        display: block;
+        /* Show the slider when initialized */
+    }
+
+    .slider img {
+        width: 100%;
+        /* Make the images expand to full width */
+        height: auto;
+        /* Maintain the aspect ratio */
+    }
 </style>
 @endpush
 
@@ -38,19 +55,23 @@
                             <div class="rs-select2--light rs-select2--sm">
                                 <select class="js-select2" name="status" id="status">
                                     <option selected="selected" value="">Status</option>
-                                    <option value="0" @isset($_GET['status']) @if($_GET['status']==0) selected @endif
-                                        @endisset)>Pending</option>
-                                    <option value="1" @isset($_GET['status']) @if($_GET['status']==1) selected @endif
-                                        @endisset)>Active</option>
-                                    <option value="2" @isset($_GET['status']) @if($_GET['status']==2) selected @endif
-                                        @endisset)>Completed</option>
-                                    <option value="3" @isset($_GET['status']) @if($_GET['status']==3) selected @endif
-                                        @endisset)>Cancelled</option>
+                                    <option value="0" @isset($_GET['status']) @if ($_GET['status']==0) selected @endif
+                                        @endisset)>
+                                        Pending</option>
+                                    <option value="1" @isset($_GET['status']) @if ($_GET['status']==1) selected @endif
+                                        @endisset)>
+                                        Active</option>
+                                    <option value="2" @isset($_GET['status']) @if ($_GET['status']==2) selected @endif
+                                        @endisset)>
+                                        Completed</option>
+                                    <option value="3" @isset($_GET['status']) @if ($_GET['status']==3) selected @endif
+                                        @endisset)>
+                                        Cancelled</option>
                                 </select>
                                 <div class="dropDownSelect2"></div>
                             </div>
                             <!-- <button class="au-btn-filter">
-                                            <i class="zmdi zmdi-filter-list"></i>filters</button> -->
+                                                <i class="zmdi zmdi-filter-list"></i>filters</button> -->
                         </div>
                         <div class="table-data__tool-right">
 
@@ -75,28 +96,27 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if(count($problems) > 0)
-                                @foreach($problems as $key => $problem)
+                                @if (count($problems) > 0)
+                                @foreach ($problems as $key => $problem)
                                 <tr class="tr-shadow">
                                     <td>{{ $problem->project->title }}</td>
                                     <td>{{ $problem->user->name }}</td>
                                     <td>{{ $problem->title }}</td>
                                     <td class="desc">
                                         <?php
-                                                            //$description =  strip_tags(html_entity_decode($user_project->task));
-                                                            $description =  $problem->description;
-                                                            if (strlen($description) > 30) {
+                                                    //$description =  strip_tags(html_entity_decode($user_project->task));
+                                                    $description = $problem->description;
+                                                    if (strlen($description) > 30) {
+                                                        // truncate string
+                                                        $stringCut = substr($description, 0, 30);
+                                                        $endPoint = strrpos($stringCut, ' ');
 
-                                                                // truncate string
-                                                                $stringCut = substr($description, 0, 30);
-                                                                $endPoint = strrpos($stringCut, ' ');
-
-                                                                //if the string doesn't contain any space then it will cut without word basis.
-                                                                //$desc = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
-                                                                $desc = $stringCut;
-                                                                $desc .= '...';
-                                                            }
-                                                        ?>
+                                                        //if the string doesn't contain any space then it will cut without word basis.
+                                                        //$desc = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
+                                                        $desc = $stringCut;
+                                                        $desc .= '...';
+                                                    }
+                                                    ?>
                                         @if (strlen($description) > 30)
                                         {!! $desc !!}
                                         <a href="#" class="desc-text" onclick="descModalShow({{ $problem->id }})">
@@ -104,24 +124,35 @@
                                         @else
                                         {!! $problem->description !!}
                                         @endif
-                                        <!-- {!! Str::limit($description, $limit = 30, $end = '. . .<a href="#" class="desc-text" onclick="descModalShow()">View Details</a>') !!} -->
+                                        <!-- {!! Str::limit(
+                                                        $description,
+                                                        $limit = 30,
+                                                        $end = '. . .<a href="#" class="desc-text" onclick="descModalShow()">View Details</a>',
+                                                    ) !!} -->
                                         <div id="description{{ $problem->id }}" class="d-none">
                                             {!! $problem->description !!}
                                         </div>
                                     </td>
                                     <td>
                                         @php
-                                        $imageNames = unserialize($problem->images)
+                                        $imageNames = unserialize($problem->images);
                                         @endphp
-                                        @foreach($imageNames as $index => $imageName)
-                                        <img class="thumbnail"
+                                        @foreach ($imageNames as $index => $imageName)
+                                        {{-- <img class="thumbnail example-image"
                                             src="{{ asset('assets/images/uploads/problems/' . $imageName) }}" alt=""
-                                            width="100Px" height="100px">
+                                            width="100Px" height="100px" data-lightbox="example-1"> --}}
+                                            <a class="demo" href="{{ asset('assets/images/uploads/problems/' . $imageName) }}" data-lightbox="example">
+
+                                                  <img class="example-image" src="{{ asset('assets/images/uploads/problems/' . $imageName) }}" alt="image-1">
+
+                                                </a>
+
                                         @endforeach
+
                                     </td>
                                     <td>{{ date('d-m-Y H:i a', strtotime($problem->created_at)) }}</td>
                                     <td class="text-center">
-                                        @if($problem->status == 0)
+                                        @if ($problem->status == 0)
                                         <!-- <span class="status--process">Active</span> -->
                                         <span class="badge badge-secondary">Pending</span>
                                         @elseif($problem->status == 1)
@@ -134,27 +165,28 @@
                                     </td>
                                     <td>
                                         <div class="table-data-feature">
-                                            @if(has_access('update_problem'))
+                                            @if (has_access('update_problem'))
                                             <a href="{{ route('employee.problem.editProblem', $problem->id) }}"
                                                 class="item" data-toggle="tooltip" data-placement="top" title="Edit">
                                                 <i class="zmdi zmdi-edit"></i>
                                             </a>
                                             @endif
-                                            @if(has_access('delete_problem'))
+                                            @if (has_access('delete_problem'))
                                             <button class="item" data-toggle="tooltip" data-placement="top"
                                                 title="Delete" onclick="deleteModalShow({{ $problem->id }})">
                                                 <i class="zmdi zmdi-delete"></i>
                                             </button>
                                             @endif
                                             @if (count($solution) > 0)
-                                            <button class="item" data-toggle="tooltip" data-placement="top" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                            <button class="item" data-toggle="tooltip" data-placement="top"
+                                                id="openSolutionModal">
                                                 <i class="zmdi zmdi-eye"></i>
 
                                             </button>
                                             @endif
                                             <!-- <button class="item" data-toggle="tooltip" data-placement="top" title="More">
-                                                                <i class="zmdi zmdi-more"></i>
-                                                            </button> -->
+                                                                    <i class="zmdi zmdi-more"></i>
+                                                                </button> -->
                                         </div>
                                     </td>
                                 </tr>
@@ -228,7 +260,7 @@
 
 
 {{-- full image modal --}}
-<div id="fullImageModal" class="modal">
+{{-- <div id="fullImageModal" class="modal">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -243,11 +275,13 @@
                         @php
                         $imageNames = unserialize($problem->images)
                         @endphp
-                        @foreach($imageNames as $index => $imageName)
-                        <div class="carousel-item @if($index === 0) active @endif">
+
+
+                        @foreach ($imageNames as $index => $imageName)
+                        <div class="carousel-item @if ($index === 0) active @endif">
                             <img class="img-fluid zoomable-image"
                                 src="{{ asset('assets/images/uploads/problems/' . $imageName) }}"
-                                alt="Image {{ $index + 1 }}">
+                                alt="Image {{ $index + 1 }}" data-action="zoom">
                         </div>
                         @endforeach
                     </div>
@@ -263,67 +297,101 @@
             </div>
         </div>
     </div>
+</div> --}}
+
+
+{{-- view solution modal --}}
+<div id="solutionModal" class="modal modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">View Solution</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @foreach ($solution as $key => $solution)
+                <p>{!! $solution->description !!}</p>
+                @endforeach
+            </div>
+        </div>
+    </div>
 </div>
 
 @endsection
 
 @push('js')
 <script>
-    function deleteModalShow(id){
-        $('#deleteDataId').val(id);
-        $("#staticModal").modal("show");
-    }
-
-    function deleteData(){
-        $("#staticModal").modal("hide");
-        var id = $('#deleteDataId').val();
-        var url = "delete/"+id;
-        console.log(url,id);
-        $.ajax({
-            type: "GET",
-            url: url,
-            dataType: "JSON",
-            success: function (response) {
-                location.reload();
-            },
-            error: function(xhr) {
-               console.log(xhr.statusText);
-            }
-        });
-    }
-
-    function descModalShow(id){
-        this.event.preventDefault();
-        var description = $('#description'+id).html();
-        //alert(description);
-        $("#taskDetailsWrapper").html(description);
-        $("#scrollmodal").modal("show");
-    }
-
-    $("#status").change(function() {
-        var status = $("#status").val();
-        if(status){
-            var url = window.location.origin + window.location.pathname + "?filter=1&status=" + status;
-            location = url;
-        }else{
-            var url = window.location.origin + window.location.pathname;
-            location = url;
+    function deleteModalShow(id) {
+            $('#deleteDataId').val(id);
+            $("#staticModal").modal("show");
         }
 
-    });
+
+        function deleteData() {
+            $("#staticModal").modal("hide");
+            var id = $('#deleteDataId').val();
+            var url = "delete/" + id;
+            console.log(url, id);
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "JSON",
+                success: function(response) {
+                    location.reload();
+                },
+                error: function(xhr) {
+                    console.log(xhr.statusText);
+                }
+            });
+        }
+
+        function descModalShow(id) {
+            this.event.preventDefault();
+            var description = $('#description' + id).html();
+            //alert(description);
+            $("#taskDetailsWrapper").html(description);
+            $("#scrollmodal").modal("show");
+        }
+
+        $("#status").change(function() {
+            var status = $("#status").val();
+            if (status) {
+                var url = window.location.origin + window.location.pathname + "?filter=1&status=" + status;
+                location = url;
+            } else {
+                var url = window.location.origin + window.location.pathname;
+                location = url;
+            }
+
+        });
 </script>
+
+{{-- <script>
+    $(document).ready(function() {
+            $('.thumbnail').click(function() {
+                var fullImagePath = $(this).attr('src');
+                $('#fullImageModal .modal-body img').attr('src', fullImagePath);
+                $('#fullImageModal').modal('show');
+            });
+
+            $('#fullImageModal').on('hidden.bs.modal', function() {
+                $('#fullImageModal .modal-body img').attr('src', '');
+            });
+        });
+</script> --}}
+
 <script>
     $(document).ready(function() {
-    $('.thumbnail').click(function() {
-    var fullImagePath = $(this).attr('src');
-    $('#fullImageModal .modal-body img').attr('src', fullImagePath);
-    $('#fullImageModal').modal('show');
-  });
-
-  $('#fullImageModal').on('hidden.bs.modal', function () {
-    $('#fullImageModal .modal-body img').attr('src', '');
-  });
-});
-
+            var modal = $("#solutionModal");
+            var span = $(".close");
+            span.on("click", function() {
+                modal.hide();
+            });
+            $("#openSolutionModal").on("click", function() {
+                modal.show();
+            });
+        });
 </script>
 @endpush

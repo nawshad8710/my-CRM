@@ -181,6 +181,33 @@
                             </a>
                         </li>
                         @endif --}}
+
+                        @if(has_menu('customer'))
+                        <li class="has-sub {{Request::is('admin/customer*') ? 'active':''}}">
+                            <a class="js-arrow" href="#">
+                                <i class="fas fa-download"></i>Customers
+                                <span class="arrow {{Request::is('admin/customer*') ? 'up':''}}">
+                                    <i class="fas fa-angle-down"></i>
+                                </span>
+                            </a>
+                            <ul class="list-unstyled navbar__sub-list js-sub-list" @if(Request::is('admin/customer*')) style="display: block;" @endif>
+                                @if(has_access('view_customer'))
+                                <li class="{{Request::is('admin/customer/list') ? 'active':''}}">
+                                    <a href="{{ route('admin.customer.index') }}">
+                                        <i class="fas fa-tasks"></i>All Customer</a>
+                                </li>
+                                @endif
+                                {{-- @if(has_access('employee_problem_list'))
+                                <li class="{{Request::is('admin/assignment/problem-list') ? 'active':''}}">
+                                    <a href="{{ route('admin.assignment.problemIndex') }}">
+                                        <i class="fas fa-exclamation-circle"></i>Problem list</a>
+                                </li>
+                                @endif --}}
+                            </ul>
+                        </li>
+                        @endif
+
+
                         @if(has_menu('project_reports'))
                         <li class="{{Request::is('admin/report*') ? 'active':''}}">
                             <a href="{{ route('admin.report.list') }}">

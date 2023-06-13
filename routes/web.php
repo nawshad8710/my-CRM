@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\AssignedProjectController;
+use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\UserReportController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserSolutionController;
@@ -115,8 +116,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::get('/solution-delete/{id}', [UserSolutionController::class, 'solutionDelete'])->name('solutionDelete');
             Route::get('/get-task-by-user/{projectId}', [UserSolutionController::class, 'getTaskByUser'])->name('getTaskByUser');
             Route::get('/get-problem-by-user/{id}', [UserSolutionController::class, 'getProblemByUser'])->name('getProblemByUser');
-
-
         });
         Route::group(['as' => 'report.', 'prefix' => 'report'], function () {
             Route::get('/list', [UserReportController::class, 'index'])->name('list');
@@ -147,6 +146,21 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::get('/edit-role-access/{id}', [RoleController::class, 'editRoleAccess'])->name('editRoleAccess');
             Route::post('/role-access-update/{id}', [RoleController::class, 'updateRoleAccess'])->name('roleAccessUpdate');
         });
+
+        /*
+        |--------------------------------------------------------------------------
+        | CUSTOMER (ROUTE)
+        |--------------------------------------------------------------------------
+        */
+        Route::group(['as' => 'customer.', 'prefix' => 'customer'], function () {
+            Route::get('/list', [CustomerController::class, 'index'])->name('index');
+            Route::get('/add', [CustomerController::class, 'create'])->name('create');
+            Route::post('/submit', [CustomerController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [CustomerController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [CustomerController::class, 'update'])->name('update');
+            Route::get('/delete/{id}', [CustomerController::class, 'delete'])->name('delete');
+        });
+
     });
 });
 

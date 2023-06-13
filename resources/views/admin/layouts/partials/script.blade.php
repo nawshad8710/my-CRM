@@ -22,3 +22,6 @@
 
 <!-- Main JS-->
 <script src="{{ asset('assets/js/main.js') }}"></script>
+
+{{-- <script src="{{asset('assets/js/zoom.js')}}"></script> --}}
+<script src="{{asset('assets/js/lightbox.js')}}"></script>

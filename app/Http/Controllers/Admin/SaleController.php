@@ -3,83 +3,131 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin\Customer;
+use App\Models\Admin\Sale;
+use App\Models\User;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 
 class SaleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SALE INDEX (METHOD)
+    |--------------------------------------------------------------------------
+    */
     public function index()
     {
-        //
+        $data['sales'] = Sale::get();
+        // dd($data['sales']);
+        return view('admin.sale.list', $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    /*
+    |--------------------------------------------------------------------------
+    | SALE CREATE (METHOD)
+    |--------------------------------------------------------------------------
+    */
+
     public function create()
     {
-        //
+        $data['customers'] = Customer::get();
+        $data['users'] = User::where('role_id', 1)
+            ->where('status', 1)->get();
+
+        return view('admin.sale.form', $data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SALE STORE (METHOD)
+    |--------------------------------------------------------------------------
+    */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        $request->validate([]);
+
+        Sale::create([
+            'invoice_no' => $request->invoice_no,
+            'customer_id' => $request->customer_id,
+            'user_id' => $request->user_id,
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'price' => $request->price,
+            'due_amount' => $request->due_amount,
+            'paid_amount' => $request->paid_amount,
+            'payment_method' => $request->payment_method,
+            'payment_status' => $request->payment_status,
+        ]);
+        Toastr::success('Sales Create Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return redirect()->route('admin.sales.list');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | SALE EDIT (METHOD)
+    |--------------------------------------------------------------------------
+    */
     public function edit($id)
     {
-        //
+        $data['sale'] = Sale::findOrFail($id);
+        $data['customers'] = Customer::get();
+        $data['users'] = User::where('role_id', 1)
+            ->where('status', 1)->get();
+
+        return view('admin.sale.form', $data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SALE UPDATE (METHOD)
+    |--------------------------------------------------------------------------
+    */
     public function update(Request $request, $id)
     {
-        //
+        $sale = Sale::findOrFail($id);
+        $request->validate([]);
+        $sale->update([
+            'invoice_no' => $request->invoice_no,
+            'customer_id' => $request->customer_id,
+            'user_id' => $request->user_id,
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'price' => $request->price,
+            'due_amount' => $request->due_amount,
+            'paid_amount' => $request->paid_amount,
+            'payment_method' => $request->payment_method,
+            'payment_status' => $request->payment_status,
+        ]);
+        Toastr::success('Sales Updated Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return redirect()->route('admin.sales.list');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SALE DELETE (METHOD)
+    |--------------------------------------------------------------------------
+    */
     public function destroy($id)
     {
-        //
+        $sale = Sale::findOrFail($id);
+        if ($sale) {
+            $sale->delete();
+            return 1;
+        }
+        return 0;
     }
 }

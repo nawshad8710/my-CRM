@@ -63,7 +63,8 @@
                                                 <option value="">--Select Project--</option>
                                                 @foreach ($projects as $key => $project)
                                                 @isset($solution)
-                                                <option value="{{ $project->id }}" {{ $solution->project_id==$project->id
+                                                <option value="{{ $project->id }}" {{ $solution->
+                                                    project_id==$project->id
                                                     ? ' selected' : '' }}>{{ $solution->project->title }}</option>
                                                 @else
                                                 <option value="{{ $project->id }}">{{ $project->title }}</option>
@@ -100,7 +101,8 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="user_problem_id" class="control-label mb-1">Employee Problem</label>
+                                            <label for="user_problem_id" class="control-label mb-1">Employee
+                                                Problem</label>
                                             <select class="form-control" name="user_problem_id" id="user_problem_id">
                                                 <option value="">--Select Problem--</option>
                                                 @isset($solution)

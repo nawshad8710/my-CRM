@@ -20,3 +20,5 @@
 <link href="{{ asset('assets/css/theme.css') }}" rel="stylesheet" media="all">
 
 <link rel="stylesheet" href="{{ asset('assets/vendor/toastr/toastr.min.css') }}">
+{{-- <link rel="stylesheet" href="{{asset('assets/css/zoom.css')}}"> --}}
+<link rel="stylesheet" href="{{asset('assets/css/lightbox.css')}}">

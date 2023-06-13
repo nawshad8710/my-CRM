@@ -54,74 +54,43 @@
                                     <table class="table table-data2">
                                         <thead>
                                             <tr>
+                                                <th>Invoice No.</th>
+                                                <th>Customer Name</th>
+                                                <th>User Name</th>
+                                                {{-- <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Phone</th> --}}
                                                 <th>Price</th>
-                                                <th>Discount</th>
-                                                <th>Long Description</th>
-                                                <th>Status</th>
+                                                <th>Due Amount</th>
+                                                <th>Paid Amount</th>
+                                                <th>Payment Method</th>
+                                                <th>Payment Status</th>
                                                 <th class="text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if(count($products) > 0)
-                                                @foreach($products as $key => $sale)
+                                            @if(count($sales) > 0)
+                                                @foreach($sales as $key => $sale)
                                                 <tr class="tr-shadow">
-                                                    <td>{{ $sale->title }}</td>
-                                                    <td class="desc">
-                                                        <?php 
-                                                            $description =  strip_tags(html_entity_decode($sale->short_description));
-                                                            if (strlen($description) > 30) {
+                                                    <td>{{ optional($sale)->invoice_no }}</td>
+                                                    <td>{{ optional($sale->customer)->name }}</td>
 
-                                                                // truncate string
-                                                                $stringCut = substr($description, 0, 30);
-                                                                $endPoint = strrpos($stringCut, ' ');
-                                                            
-                                                                //if the string doesn't contain any space then it will cut without word basis.
-                                                                $desc = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
-                                                                $desc .= '...';
-                                                            }                                                            
-                                                        ?>
-                                                        @if (strlen($description) > 30)
-                                                            {{ $desc }}
-                                                            <a href="#" class="desc-text" onclick="shortDescModalShow({{ $sale->id }})"> <u>View Details</u></a>
-                                                        @else
-                                                            {!! $sale->short_description !!}
-                                                        @endif
-                                                        <!-- {!! Str::limit($description, $limit = 30, $end = '. . .<a href="#" class="desc-text" onclick="descModalShow()">View Details</a>') !!} -->
-                                                        <div id="short_description{{ $sale->id }}" class="d-none">
-                                                            {!! $sale->short_description !!}
-                                                        </div>
-                                                    </td>
-                                                    <td class="desc">
-                                                        <?php 
-                                                            $description =  strip_tags(html_entity_decode($sale->long_description));
-                                                            if (strlen($description) > 30) {
-
-                                                                // truncate string
-                                                                $stringCut = substr($description, 0, 30);
-                                                                $endPoint = strrpos($stringCut, ' ');
-                                                            
-                                                                //if the string doesn't contain any space then it will cut without word basis.
-                                                                $desc = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
-                                                                $desc .= '...';
-                                                            }                                                            
-                                                        ?>
-                                                        @if (strlen($description) > 30)
-                                                            {{ $desc }}
-                                                            <a href="#" class="desc-text" onclick="longDescModalShow({{ $sale->id }})"> <u>View Details</u></a>
-                                                        @else
-                                                            {!! $sale->long_description !!}
-                                                        @endif
-                                                        <!-- {!! Str::limit($description, $limit = 30, $end = '. . .<a href="#" class="desc-text" onclick="descModalShow()">View Details</a>') !!} -->
-                                                        <div id="long_description{{ $sale->id }}" class="d-none">
-                                                            {!! $sale->long_description !!}
-                                                        </div>
-                                                    </td>
+                                                    <td>{{ optional($sale->user)->name }}</td>
+                                                    {{-- <td>{{ optional($sale)->name }}</td>
+                                                    <td>{{ optional($sale)->email }}</td>
+                                                    <td>{{ optional($sale)->phone }}</td> --}}
+                                                    <td>{{ optional($sale)->price }}</td>
+                                                    <td>{{ optional($sale)->due_amount }}</td>
+                                                    <td>{{ optional($sale)->paid_amount }}</td>
+                                                    <td>{{ optional($sale)->payment_method }}</td>
                                                     <td class="text-center">
-                                                        @if($sale->status == 0)
+                                                        @if($sale->payment_status == 0)
                                                             <!-- <span class="status--process">Active</span> -->
-                                                            <span class="badge badge-secondary">Inactive</span>
-                                                        @elseif($sale->status == 1)
-                                                            <span class="badge badge-primary">Active</span>
+                                                            <span class="badge badge-secondary">Pending</span>
+                                                        @elseif($sale->payment_status == 1)
+                                                            <span class="badge badge-primary">Paid</span>
+                                                        @elseif ($sale->payment_status == 2)
+                                                        <span class="badge badge-warning">Partialy Paid</span>
                                                         @endif
                                                     </td>
                                                     <td>
@@ -192,7 +161,7 @@
 						</div>
 						<div class="modal-body">
 							<div id="productDetailsWrapper">
-								
+
                             </div>
 						</div>
 						<div class="modal-footer">
@@ -254,6 +223,6 @@
             location = url;
         }
 
-    });   
+    });
 </script>
 @endpush

@@ -76,6 +76,7 @@
                                         <th>User</th>
                                         <th>Title</th>
                                         <th>Description</th>
+                                        <th>Image</th>
                                         <th>Date</th>
                                         <th>Status</th>
                                         <th class="text-center">Action</th>
@@ -119,6 +120,23 @@
                                                     <div id="description{{ $problem->id }}" class="d-none">
                                                         {!! $problem->description !!}
                                                     </div>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                    $imageNames = unserialize($problem->images);
+                                                    @endphp
+                                                    @foreach ($imageNames as $index => $imageName)
+                                                    {{-- <img class="thumbnail example-image"
+                                                        src="{{ asset('assets/images/uploads/problems/' . $imageName) }}" alt=""
+                                                        width="100Px" height="100px" data-lightbox="example-1"> --}}
+                                                        <a class="demo" href="{{ asset('assets/images/uploads/problems/' . $imageName) }}" data-lightbox="example">
+
+                                                              <img class="example-image" src="{{ asset('assets/images/uploads/problems/' . $imageName) }}" alt="image-1">
+
+                                                            </a>
+
+                                                    @endforeach
+
                                                 </td>
                                                 <td>{{ date('d-m-Y H:i a', strtotime($problem->created_at)) }}</td>
                                                 <td class="text-center">
