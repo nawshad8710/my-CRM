@@ -76,6 +76,7 @@ class ProductController extends Controller
             'long_description' => $request->long_description,
             'status' => $request->status,
             'category_id' => $request->category_id,
+            'price' => $request->price,
             'is_renewable' => $request->is_renewable,
         ]);
 
@@ -155,6 +156,7 @@ class ProductController extends Controller
                 'long_description' => $request->long_description,
                 'status' => $request->status,
                 'category_id' => $request->category_id,
+                'price' => $request->price,
                 'is_renewable' => $request->is_renewable,
             ]);
 

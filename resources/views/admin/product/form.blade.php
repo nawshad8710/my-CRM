@@ -34,11 +34,20 @@
                                         <form action="@isset($product){{ route('admin.sales.product.update', $product->id) }}@else{{ route('admin.sales.product.submit') }}@endisset" method="post" enctype="multipart/form-data">
                                             @csrf
                                             <div class="row">
-                                                <div class="col-12">
+                                                <div class="col-6">
                                                     <div class="form-group">
                                                         <label for="title" class="control-label mb-1">Title</label>
                                                         <input id="title" name="title" type="text" class="form-control @error('title') is-invalid @enderror" value="{{ $product->title ?? old('title') }}" required>
                                                         @error('title')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label for="price" class="control-label mb-1">Price</label>
+                                                        <input id="price" name="price" type="text" class="form-control @error('price') is-invalid @enderror" value="{{ $product->price ?? old('price') }}" required>
+                                                        @error('price')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
                                                     </div>

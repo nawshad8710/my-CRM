@@ -19,6 +19,7 @@ use App\Http\Controllers\Employee\ProblemController;
 use App\Http\Controllers\Employee\UserProjectController;
 use App\Http\Controllers\Employee\ReportController;
 use App\Http\Controllers\Employee\SolutionController;
+use App\Http\Controllers\Frontend\SaleController as FrontendSaleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -206,3 +207,19 @@ Route::middleware(['auth', 'employee'])->group(function () {
         });
     });
 });
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| FRONTEND ROUTE
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/sale', [FrontendSaleController::class, 'index'])->name('index');
+Route::get('/search-product', [FrontendSaleController::class, 'searchProduct'])->name('searchProduct');
+Route::get('/search', [FrontendSaleController::class, 'search'])->name('search');
+Route::post('/add-list-product', [FrontendSaleController::class, 'addtoList'])->name('addtoList');
+Route::get('/list-product', [FrontendSaleController::class, 'listProduct'])->name('listProduct');
+
