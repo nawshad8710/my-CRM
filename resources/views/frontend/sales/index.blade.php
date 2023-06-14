@@ -369,9 +369,10 @@
             var due = 0;
             console.log(paid)
             console.log(total)
-            var paidAmount = parseFloat($(this).val());
+            var paidAmount = parseFloat(paid);
         var remainingBalance = totalSum - paidAmount;
-        $('#remainingBalanceInput').val(remainingBalance.toFixed(2));
+        // $('#remainingBalanceInput').val(remainingBalance.toFixed(2));
+console.log(remainingBalance)
 
         })
     </script>
