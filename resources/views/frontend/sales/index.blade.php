@@ -29,7 +29,7 @@
                 </form>
 
             </div>
-            <div class="col-md-6 mt-5">
+            <div class="col-md-12 mt-5">
                 <h4>Search Result : {{ $products->count() }}</h4>
                 <div class="row">
                     <div class="col-md-12">
@@ -38,6 +38,11 @@
                                 <div class="card shadow-0 border rounded-3 mb-3">
                                     <div class="card-body">
                                         <div class="row">
+                                            {{-- <div class="col-md-4">product title</div>
+                                            <div class="col-md-2">Quantity</div>
+                                            <div class="col-md-2">hello </div>
+                                            <div class="col-md-2">hello</div>
+                                            <div class="col-md-2">hello</div> --}}
                                             <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
                                                 <div class="bg-image hover-zoom ripple rounded ripple-surface">
                                                     <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/img%20(4).webp"
@@ -60,22 +65,9 @@
                                                         <i class="fa fa-star"></i>
                                                         <i class="fa fa-star"></i>
                                                     </div>
-                                                    {{-- <span>310</span> --}}
+
                                                 </div>
-                                                {{-- <div class="mt-1 mb-0 text-muted small">
-                                            <span>100% cotton</span>
-                                            <span class="text-primary"> • </span>
-                                            <span>Light weight</span>
-                                            <span class="text-primary"> • </span>
-                                            <span>Best finish<br /></span>
-                                        </div>
-                                        <div class="mb-2 text-muted small">
-                                            <span>Unique design</span>
-                                            <span class="text-primary"> • </span>
-                                            <span>For men</span>
-                                            <span class="text-primary"> • </span>
-                                            <span>Casual<br /></span>
-                                        </div> --}}
+
                                                 <p class="text-truncate mb-4 mb-md-0">
                                                     {!! $product->short_description !!}
                                                 </p>
@@ -83,12 +75,11 @@
                                             <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
                                                 <div class="d-flex flex-row align-items-center mb-1">
                                                     <h4 class="mb-1 me-1">${{ $product->price }}</h4>
-                                                    {{-- <span class="text-danger"><s>$20.99</s></span> --}}
                                                 </div>
-                                                {{-- <h6 class="text-success">Free shipping</h6> --}}
+
+
                                                 <div class="d-flex flex-column mt-4">
-                                                    {{-- <button class="btn btn-primary btn-sm" type="button">Details</button>
-                                            --}}
+
                                                     <button class="addTolist btn btn-primary"
                                                         data-id="{{ $product->id }}"
                                                         class="btn btn-outline-primary btn-sm mt-2" type="button">
@@ -108,53 +99,87 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+
+
+            <div class="col-md-12">
                 <h5 class="mb-1 mt-5">List Product</h5>
                 @if (session('list'))
                     <div class="listItemdiv">
-                        @foreach (session('list') as $key => $value)
+                        @foreach (session('list') as $id => $value)
                             <div class="card mb-3 border border-ligh shadow-sm" style="padding-left: 10px">
-                                {{-- <div class="">
-                            <div class="">
-                                <p class="listName fw-bold text-capitalize">{{ $value['name'] }}</p>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <p>Qty</p>
-                                    <div class="w-25 d-flex">
-                                        <button>-</button>
-                                        <input type="text" value="{{ $value['quantity'] }}">
-                                        <button>+</button>
-                                    </div>
-
-                                </div>
-                                <div>
-                                    <label for="">Unit Price</label>
-                                    <input type="text" value="{{ $value['price'] }}">
-                                </div>
-                                <div>
-                                    <p>total Price: {{ $value['price'] }}</p>
-                                </div>
-
-                            </div>
-                        </div> --}}
 
                             </div>
 
-                            <ul class="list-group">
+                            <ul class="list-group mb-4">
                                 <li class="list-group-item">
-                                    <div class="">
-                                        <p class="listName fw-bold text-capitalize mb-0">{{ $value['name'] }}</p>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div>
+                                                <p class="listName fw-bold text-capitalize mb-0">{{ $value['name'] }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div>
+                                                <button class="decrease-button btn btn-secondary p-1 rounded-0"
+                                                    data-id="{{ $id }}">-</button>
+
+                                                <input class="w-25" type="text" readonly
+                                                    value="{{ $value['quantity'] }}">
+
+                                                <button class="increase-button btn btn-secondary p-1 rounded-0"
+                                                    data-id="{{ $id }}">+</button>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div>
+                                                <label for="">Unit Price</label>
+                                                <input type="text" style="width: 50px"
+                                                    value="{{ $value['unit_price'] }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div>
+                                                <p>total Price: <span class="totalPrice">{{ $value['price'] }}</span></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="renewable" value="" id="flexCheckChecked" checked>
+                                                    <label class="form-check-label" for="flexCheckChecked">
+                                                    Renewable
+                                                    </label>
+                                                  </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div>
+                                                <button class="deleteItem btn btn-danger" class="btn btn-danger"
+                                                    data-id="{{ $id }}">
+                                                    <ion-icon name="trash-bin"></ion-icon>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="d-flex justify-content-between align-items-center">
+                                    {{-- <div class="d-flex justify-content-between align-items-center">
                                         <div>
 
-                                            <div class="w-25 d-flex">
-                                                <button class="btn btn-secondary p-1 rounded-0">-</button>
-                                                <input type="text" style="width: 25px"
-                                                    value="{{ $value['quantity'] }}">
-                                                <button class="btn btn-secondary p-1 rounded-0">+</button>
+                                            <div class=" d-flex justify-content-between">
+                                                <p class="listName fw-bold text-capitalize mb-0">{{ $value['name'] }}
+                                                </p>
+                                                <div>
+                                                    <button class="decrease-button btn btn-secondary p-1 rounded-0"
+                                                        data-id="{{ $id }}">-</button>
 
+                                                    <input class="w-25" type="text" readonly
+                                                        value="{{ $value['quantity'] }}">
+
+                                                    <button class="increase-button btn btn-secondary p-1 rounded-0"
+                                                        data-id="{{ $id }}">+</button>
+
+                                                </div>
                                             </div>
 
                                         </div>
@@ -167,12 +192,13 @@
                                             <p>total Price: <span class="totalPrice">{{ $value['price'] }}</span></p>
                                         </div>
                                         <div>
-                                            <button class="btn btn-danger">
+                                            <button class="deleteItem btn btn-danger" class="btn btn-danger"
+                                                data-id="{{ $id }}">
                                                 <ion-icon name="trash-bin"></ion-icon>
                                             </button>
                                         </div>
 
-                                    </div>
+                                    </div> --}}
                                 </li>
                             </ul>
                         @endforeach
@@ -187,16 +213,16 @@
 
     </div>
 
-    <form action="">
-
+    <form action="{{ route('storeSale') }}" method="POST">
+        @csrf
         <div class="row">
             <div class="col-md-6">
                 <h5>Payment Method</h5>
-                <select class="form-select" aria-label="Default select example">
+                <select class="form-select" name="payment_method" aria-label="Default select example">
                     <option selected>Select Payment Method</option>
-                    <option value="1">Bkash</option>
-                    <option value="2">Nagad</option>
-                    <option value="3">Upay</option>
+                    <option value="bkash">Bkash</option>
+                    <option value="nagad">Nagad</option>
+                    <option value="upay">Upay</option>
                 </select>
             </div>
             <div class="col-md-6">
@@ -206,7 +232,7 @@
                         <div class="mb-3 mt-2">
                             <label for="vat">Vat</label>
                             <div class="border d-flex justify-content-between align-items-center">
-                                <input class="border-0" style="width:100%" type="text">
+                                <input class="border-0" id="vat" name="vat" style="width:100%" type="text">
                                 <button disabled>%</button>
                             </div>
                         </div>
@@ -215,7 +241,8 @@
                         <div class="mb-3 mt-2">
                             <label for="total">total</label>
                             <div class="border d-flex justify-content-between align-items-center">
-                                <input disabled class="border-0" id="total" value="0" style="width:100%" type="text">
+                                <input class="border-0" name="total" id="total" value="0" style="width:100%"
+                                    type="text" readonly>
                             </div>
                         </div>
                     </div>
@@ -227,21 +254,23 @@
                         <div class="mb-3 mt-2">
                             <label for="vat">Paid</label>
                             <div class="border d-flex justify-content-between align-items-center">
-                                <input class="border-0" id="paid" style="width:100%" type="text">
+                                <input class="border-0" name="paid" id="paid" style="width:100%"
+                                    type="text">
                             </div>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="mb-3 mt-2">
-                            <label for="vat">Due</label>
+                            <label for="due">Due</label>
                             <div class="border d-flex justify-content-between align-items-center">
-                                <input class="border-0" style="width:100%" type="text">
+                                <input class="border-0" name="due" id="due" style="width:100%"
+                                    type="text">
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <button type="button" class="btn btn-success">Submit</button>
+                <button type="submit" class="btn btn-success">Submit</button>
             </div>
         </div>
 
@@ -299,7 +328,7 @@
         });
     </script>
 
-    {{-- add to list --}}
+    {{-- ---------------- add to list ----------------------------- --}}
     <script>
         $(document).ready(function() {
             $('.addTolist').click(function() {
@@ -316,7 +345,7 @@
                         id: productId,
                     },
                     success: function(data) {
-                        updateCartView();
+                        updatelistView();
                         console.log(data)
 
                     }
@@ -325,7 +354,7 @@
 
         });
 
-        function updateCartView() {
+        function updatelistView() {
             $.ajax({
                 url: '{{ route('listProduct') }}',
                 type: 'GET',
@@ -346,10 +375,13 @@
         }
     </script>
 
+
+
     <script>
-        $('#document').ready(function() {
+        $(document).ready(function() {
             var totalSum = 0;
             var priceValues = [];
+            var vatAmount = 100;
             $('.totalPrice').each(function() {
                 priceValues.push(parseFloat($(this).text()));
             });
@@ -357,26 +389,170 @@
                 totalSum += value;
             });
 
-            var totalprice = $('#total').val(totalSum.toFixed(2));
+            $('#total').val(totalSum.toFixed(2)); //total price..
+
+            // vat
+            $('#vat').keyup('input', function() {
+                var selectedType = $(this).val();
+                var vatPercentage = parseFloat($(this).val());
+                var vatReduction = vatAmount * (vatPercentage / 100);
+                var reducedTotal = totalSum - vatReduction;
+
+                if (isNaN(vatReduction)) {
+                    vatReduction = 0;
+                    reducedTotal = totalSum;
+                }
+
+                $('#total').val(reducedTotal.toFixed(2));
+                $('#due').val(reducedTotal.toFixed(2));
+                console.log(vatReduction)
+                console.log(reducedTotal)
+                var totalAfterVat = $('#total').val();
+
+                $('#paid').keyup('input', function() {
+                    var paidAmount = parseFloat($(this).val());
+                    console.log(totalAfterVat)
+
+                    if (isNaN(paidAmount)) {
+                        paidAmount = 0;
+                    }
+
+                    if (paidAmount === 0) {
+                        totalAfterVat;
+                    } else {
+                        if (paidAmount > totalAfterVat) {
+                            paidAmount = totalAfterVat;
+                            $(this).val(paidAmount.toFixed(2));
+                        }
+
+                    }
+                    var remainingBalance = Math.max(totalAfterVat - paidAmount, 0);
+                    $('#due').val(remainingBalance.toFixed(2));
+
+
+                    console.log(remainingBalance)
+                });
+
+
+
+
+
+
+
+
+
+            });
+            // paid due
+            $('#paid').keyup('input', function() {
+                var paidAmount = parseFloat($(this).val());
+                var totalAfterVat = $('#total').val();
+                console.log(totalAfterVat)
+
+                if (isNaN(paidAmount)) {
+                    paidAmount = 0;
+                }
+
+                if (paidAmount === 0) {
+                    $('#total').val(totalSum.toFixed(2));
+                } else {
+                    if (paidAmount > totalSum) {
+                        paidAmount = totalSum;
+                        $(this).val(paidAmount.toFixed(2));
+                    }
+                    var remainingBalance = Math.max(totalSum - paidAmount, 0);
+                    $('#due').val(remainingBalance.toFixed(2));
+
+
+                    console.log(remainingBalance)
+                }
+            });
 
         })
     </script>
+
+
+    {{-- update list --}}
+    <script>
+        $(document).ready(function() {
+            $('.decrease-button').on('click', function() {
+                var productId = $(this).data('id');
+                updateQuantity(productId, 'decrease');
+            });
+
+
+            $('.increase-button').on('click', function() {
+                var productId = $(this).data('id');
+                updateQuantity(productId, 'increase');
+            });
+
+            function updateQuantity(productId, action) {
+                $.ajax({
+                    url: '{{ route('updateList') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        id: productId,
+                        action: action,
+                    },
+                    success: function(response) {
+                        console.log(response)
+                        window.location.reload();
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            }
+        });
+    </script>
+
+    {{-- delete item --}}
+    <script>
+        $(document).ready(function() {
+            $(".deleteItem").on('click', function() {
+                var itemid = $(this).data('id');
+                console.log(itemid)
+                $.ajax({
+                    url: '{{ route('deleteItem') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        id: itemid
+                    },
+                    success: function(response) {
+                        window.location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            })
+
+        })
+    </script>
+
 
     <script>
-        $('#paid').keyup(function(){
-            var paid = $(this).val();
-            var total = $('#total').val();
-            var due = 0;
-            console.log(paid)
-            console.log(total)
-            var paidAmount = parseFloat(paid);
-        var remainingBalance = totalSum - paidAmount;
-        // $('#remainingBalanceInput').val(remainingBalance.toFixed(2));
-console.log(remainingBalance)
+        $(document).ready(function() {
+            var newQuantity = 0; // Declare and initialize newQuantity outside the click event handler
 
-        })
+            $('.plusQuantity').click(function() {
+                var productId = $(this).data('id');
+                var productQuantityValue = parseInt($('#productquantity_' + productId).val());
+                newQuantity +=
+                    productQuantityValue; // Increment newQuantity by the quantity of the specific product
+                console.log(newQuantity);
+            });
+
+            $('.minusQuantity').click(function() {
+                var productId = $(this).data('id');
+                console.log(productId);
+            });
+        });
     </script>
-
 
 </body>
 

@@ -221,5 +221,9 @@ Route::get('/sale', [FrontendSaleController::class, 'index'])->name('index');
 Route::get('/search-product', [FrontendSaleController::class, 'searchProduct'])->name('searchProduct');
 Route::get('/search', [FrontendSaleController::class, 'search'])->name('search');
 Route::post('/add-list-product', [FrontendSaleController::class, 'addtoList'])->name('addtoList');
+Route::post('/update-list-product', [FrontendSaleController::class, 'updateList'])->name('updateList');
+Route::post('/delete-list-product', [FrontendSaleController::class, 'deleteItem'])->name('deleteItem');
 Route::get('/list-product', [FrontendSaleController::class, 'listProduct'])->name('listProduct');
+Route::post('/sale-store', [FrontendSaleController::class, 'storeSale'])->name('storeSale');
+Route::get('generate-invoice-pdf', array('as'=> 'generate.invoice.pdf', 'uses' => 'FrontendSaleController@generateInvoicePDF'));
 
