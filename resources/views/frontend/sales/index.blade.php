@@ -29,7 +29,7 @@
                 </form>
 
             </div>
-            <div class="col-md-12 mt-5">
+            {{-- <div class="col-md-12 mt-5">
                 <h4>Search Result : {{ $products->count() }}</h4>
                 <div class="row">
                     <div class="col-md-12">
@@ -38,11 +38,7 @@
                                 <div class="card shadow-0 border rounded-3 mb-3">
                                     <div class="card-body">
                                         <div class="row">
-                                            {{-- <div class="col-md-4">product title</div>
-                                            <div class="col-md-2">Quantity</div>
-                                            <div class="col-md-2">hello </div>
-                                            <div class="col-md-2">hello</div>
-                                            <div class="col-md-2">hello</div> --}}
+
                                             <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
                                                 <div class="bg-image hover-zoom ripple rounded ripple-surface">
                                                     <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/img%20(4).webp"
@@ -98,7 +94,7 @@
 
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
 
             <div class="col-md-12">
@@ -106,7 +102,7 @@
                 @if (session('list'))
                     <div class="listItemdiv">
                         @foreach (session('list') as $id => $value)
-                            <div class="card mb-3 border border-ligh shadow-sm" style="padding-left: 10px">
+                            <div class=" mb-3 border-ligh shadow-sm" style="padding-left: 10px">
 
                             </div>
 
@@ -141,17 +137,19 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div>
-                                                <p>total Price: <span class="totalPrice">{{ $value['price'] }}</span></p>
+                                                <p>total Price: <span class="totalPrice">{{ $value['price'] }}</span>
+                                                </p>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div>
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="renewable" value="" id="flexCheckChecked" checked>
+                                                    <input class="form-check-input" type="checkbox" name="renewable"
+                                                        value="" id="flexCheckChecked" checked>
                                                     <label class="form-check-label" for="flexCheckChecked">
-                                                    Renewable
+                                                        Renewable
                                                     </label>
-                                                  </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-md-1">
@@ -291,7 +289,6 @@
     <script>
         $('#search').keyup(function() {
             var search = $(this).val();
-            console.log(search)
             var url = window.location.origin + '/search-product'
             console.log(url)
             $.ajax({
@@ -303,18 +300,36 @@
                 success: function(data) {
                     var dropdown = $('#suggestions-dropdown');
                     dropdown.empty();
-                    console.log(data.length)
+
 
                     if (data.length > 0) {
                         // Add each suggestion as a dropdown item
                         $.each(data, function(index, suggestion) {
-                            console.log(suggestion)
+                            console.log(suggestion.id)
                             var suggestionItem = $('<a class="dropdown-item" href="#">' +
                                 suggestion.title + '</a>');
                             suggestionItem.click(function(event) {
-                                event.preventDefault();
-                                $('#search').val(suggestion.title);
-                                $('#search-form').submit();
+                                // event.preventDefault();
+                                // $('#search').val(suggestion.title);
+                                // $('#search-form').submit();
+                                var productId = suggestion.id;
+                                console.log(productId);
+                                var url = window.location.origin + '/add-list-product'
+                                console.log(url)
+
+                                $.ajax({
+                                    url: url,
+                                    method: 'POST',
+                                    data: {
+                                        "_token": "{{ csrf_token() }}",
+                                        id: productId,
+                                    },
+                                    success: function(data) {
+                                        updatelistView();
+                                        console.log(data)
+
+                                    }
+                                });
                             });
                             dropdown.append(suggestionItem);
                         });
