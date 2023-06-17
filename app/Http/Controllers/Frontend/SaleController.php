@@ -60,6 +60,7 @@ class SaleController extends Controller
                 'unit_price' => $listProduct->price,
                 'quantity' => 1,
                 'price' => $listProduct->price,
+                'renewable' => 0,
             ];
         }
 
@@ -183,6 +184,53 @@ class SaleController extends Controller
 
         return response()->json([
             'message' => 'Item not found.',
+        ]);
+    }
+
+
+    public function updateListRenewable(Request $request){
+        $id = $request->id;
+        $action = $request->action;
+        $list = session()->get('list', []);
+
+
+        if (isset($list[$id])) {
+            if ($action === 'true') {
+                $list[$id]['renewable'] = 1;
+
+            } elseif ($action === 'false') {
+                $list[$id]['renewable'] = 0;
+
+            }
+        }
+
+        session()->put('list', $list);
+        return response()->json([
+            'message' => 'Product Renewable updated.',
+            'listItem' => $list,
+        ]);
+    }
+
+
+    public function updateListUnitprice(Request $request)
+    {
+        $id = $request->id;
+        $unitprice = $request->unit_price;
+
+        $list = session()->get('list', []);
+
+        if (isset($list[$id])) {
+
+                $list[$id]['unit_price'] = $unitprice;
+                $list[$id]['price'] = $list[$id]['unit_price'] * $list[$id]['quantity'];
+
+        }
+
+        session()->put('list', $list);
+
+        return response()->json([
+            'message' => 'Product Unit Price Updated.',
+            'listItem' => $list,
         ]);
     }
 

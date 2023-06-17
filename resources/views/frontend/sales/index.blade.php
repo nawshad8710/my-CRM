@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>Pos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
@@ -102,13 +102,13 @@
                 @if (session('list'))
                     <div class="listItemdiv">
                         @foreach (session('list') as $id => $value)
-                            <div class=" mb-3 border-ligh shadow-sm" style="padding-left: 10px">
+                            <div class=" mb-3 shadow-sm" style="padding-left: 10px">
 
                             </div>
 
                             <ul class="list-group mb-4">
-                                <li class="list-group-item">
-                                    <div class="row">
+                                <li class="list-group-item border border-light shadow-sm">
+                                    <div class="row align-items-center">
                                         <div class="col-md-3">
                                             <div>
                                                 <p class="listName fw-bold text-capitalize mb-0">{{ $value['name'] }}
@@ -116,36 +116,40 @@
                                             </div>
                                         </div>
                                         <div class="col-md-2">
-                                            <div>
-                                                <button class="decrease-button btn btn-secondary p-1 rounded-0"
+                                            <div class="d-flex">
+                                                <button class="decrease-button btn btn-secondary  rounded-0"
                                                     data-id="{{ $id }}">-</button>
 
-                                                <input class="w-25" type="text" readonly
+                                                <input class="w-25 text-center border border-gray" type="text" readonly
                                                     value="{{ $value['quantity'] }}">
 
-                                                <button class="increase-button btn btn-secondary p-1 rounded-0"
+                                                <button class="increase-button btn btn-secondary  rounded-0"
                                                     data-id="{{ $id }}">+</button>
 
                                             </div>
                                         </div>
                                         <div class="col-md-2">
-                                            <div>
+                                            <div class="d-flex flex-row align-items-center gap-2">
                                                 <label for="">Unit Price</label>
-                                                <input type="text" style="width: 50px"
+                                                <input class="unitPrice border border-gray text-center" data-id="{{$id}}" type="text" style="width: 50px"
                                                     value="{{ $value['unit_price'] }}">
                                             </div>
                                         </div>
                                         <div class="col-md-2">
-                                            <div>
-                                                <p>total Price: <span class="totalPrice">{{ $value['price'] }}</span>
+                                            <div class="d-flex flex-row align-items-center gap-2">
+                                                <p class="">total Price:
                                                 </p>
+                                                <p class="totalPrice">{{ $value['price'] }}</p>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div>
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="renewable"
-                                                        value="" id="flexCheckChecked" checked>
+                                                    <input class="form-check-input checkboxRenewable" type="checkbox"
+                                                        name="renewable" value="" id="flexCheckChecked" @if ($value['renewable'] ===1)
+                                                        checked
+                                                        @endif
+                                                        data-id="{{ $id }}">
                                                     <label class="form-check-label" for="flexCheckChecked">
                                                         Renewable
                                                     </label>
@@ -213,62 +217,65 @@
 
     <form action="{{ route('storeSale') }}" method="POST">
         @csrf
-        <div class="row">
-            <div class="col-md-6">
-                <h5>Payment Method</h5>
-                <select class="form-select" name="payment_method" aria-label="Default select example">
-                    <option selected>Select Payment Method</option>
-                    <option value="bkash">Bkash</option>
-                    <option value="nagad">Nagad</option>
-                    <option value="upay">Upay</option>
-                </select>
-            </div>
-            <div class="col-md-6">
-                <h5>Subtotal</h5>
-                <div class="row">
-                    <div class="col-6">
-                        <div class="mb-3 mt-2">
-                            <label for="vat">Vat</label>
-                            <div class="border d-flex justify-content-between align-items-center">
-                                <input class="border-0" id="vat" name="vat" style="width:100%" type="text">
-                                <button disabled>%</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="mb-3 mt-2">
-                            <label for="total">total</label>
-                            <div class="border d-flex justify-content-between align-items-center">
-                                <input class="border-0" name="total" id="total" value="0" style="width:100%"
-                                    type="text" readonly>
-                            </div>
-                        </div>
-                    </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Payment Method</h5>
+                    <select class="form-select" name="payment_method" aria-label="Default select example">
+                        <option selected>Select Payment Method</option>
+                        <option value="bkash">Bkash</option>
+                        <option value="nagad">Nagad</option>
+                        <option value="upay">Upay</option>
+                    </select>
                 </div>
-
-
-                <div class="row">
-                    <div class="col-6">
-                        <div class="mb-3 mt-2">
-                            <label for="vat">Paid</label>
-                            <div class="border d-flex justify-content-between align-items-center">
-                                <input class="border-0" name="paid" id="paid" style="width:100%"
-                                    type="text">
+                <div class="col-md-6">
+                    <h5>Subtotal</h5>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3 mt-2">
+                                <label for="vat">Vat</label>
+                                <div class="border d-flex justify-content-between align-items-center">
+                                    <input class="border-0 text-capitalize" id="vat" name="vat" style="width:100%"
+                                        type="text">
+                                    <button class="bg-primary text-white border-0" disabled>%</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 mt-2">
+                                <label for="total">Total</label>
+                                <div class="border d-flex justify-content-between align-items-center">
+                                    <input class="border-0" name="total" id="total" value="0"
+                                        style="width:100%" type="text" readonly>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <div class="mb-3 mt-2">
-                            <label for="due">Due</label>
-                            <div class="border d-flex justify-content-between align-items-center">
-                                <input class="border-0" name="due" id="due" style="width:100%"
-                                    type="text">
+
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3 mt-2">
+                                <label for="vat">Paid</label>
+                                <div class="border d-flex justify-content-between align-items-center">
+                                    <input class="border-0" name="paid" id="paid" style="width:100%"
+                                        type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 mt-2">
+                                <label for="due">Due</label>
+                                <div class="border d-flex justify-content-between align-items-center">
+                                    <input class="border-0" name="due" id="due" style="width:100%"
+                                        type="text">
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    <button type="submit" class="btn btn-success rounded-0 px-4 py-1">Submit</button>
                 </div>
-
-                <button type="submit" class="btn btn-success">Submit</button>
             </div>
         </div>
 
@@ -392,97 +399,63 @@
 
 
 
+
+
+
     <script>
         $(document).ready(function() {
-            var totalSum = 0;
             var priceValues = [];
+            var totalSum = 0;
             var vatAmount = 100;
+
             $('.totalPrice').each(function() {
                 priceValues.push(parseFloat($(this).text()));
             });
-            var newPrices = priceValues.map(function(value) {
-                totalSum += value;
-            });
 
-            $('#total').val(totalSum.toFixed(2)); //total price..
+            totalSum = priceValues.reduce(function(acc, value) {
+                return acc + value;
+            }, 0);
 
-            // vat
-            $('#vat').keyup('input', function() {
-                var selectedType = $(this).val();
-                var vatPercentage = parseFloat($(this).val());
-                var vatReduction = vatAmount * (vatPercentage / 100);
-                var reducedTotal = totalSum - vatReduction;
+            $('#total').val(totalSum.toFixed(2));
 
-                if (isNaN(vatReduction)) {
-                    vatReduction = 0;
-                    reducedTotal = totalSum;
+            $('#vat, #paid').on('input', function() {
+                var vatPercentage = parseFloat($('#vat').val()) || 0;
+                var paidAmount = parseFloat($('#paid').val()) || 0;
+
+                var vatAmountReduction = vatAmount * (vatPercentage / 100);
+                var reducedTotal = totalSum + vatAmountReduction;
+
+                if (paidAmount > reducedTotal) {
+                    paidAmount = reducedTotal;
+                    $('#paid').val(paidAmount.toFixed(2));
                 }
+
+                var remainingBalance = reducedTotal - paidAmount;
 
                 $('#total').val(reducedTotal.toFixed(2));
-                $('#due').val(reducedTotal.toFixed(2));
-                console.log(vatReduction)
-                console.log(reducedTotal)
-                var totalAfterVat = $('#total').val();
-
-                $('#paid').keyup('input', function() {
-                    var paidAmount = parseFloat($(this).val());
-                    console.log(totalAfterVat)
-
-                    if (isNaN(paidAmount)) {
-                        paidAmount = 0;
-                    }
-
-                    if (paidAmount === 0) {
-                        totalAfterVat;
-                    } else {
-                        if (paidAmount > totalAfterVat) {
-                            paidAmount = totalAfterVat;
-                            $(this).val(paidAmount.toFixed(2));
-                        }
-
-                    }
-                    var remainingBalance = Math.max(totalAfterVat - paidAmount, 0);
-                    $('#due').val(remainingBalance.toFixed(2));
-
-
-                    console.log(remainingBalance)
-                });
-
-
-
-
-
-
-
-
-
-            });
-            // paid due
-            $('#paid').keyup('input', function() {
-                var paidAmount = parseFloat($(this).val());
-                var totalAfterVat = $('#total').val();
-                console.log(totalAfterVat)
-
-                if (isNaN(paidAmount)) {
-                    paidAmount = 0;
-                }
-
-                if (paidAmount === 0) {
-                    $('#total').val(totalSum.toFixed(2));
-                } else {
-                    if (paidAmount > totalSum) {
-                        paidAmount = totalSum;
-                        $(this).val(paidAmount.toFixed(2));
-                    }
-                    var remainingBalance = Math.max(totalSum - paidAmount, 0);
-                    $('#due').val(remainingBalance.toFixed(2));
-
-
-                    console.log(remainingBalance)
-                }
+                $('#due').val(remainingBalance.toFixed(2));
             });
 
-        })
+            $('#vatAmount').on('input', function() {
+                vatAmount = parseFloat($(this).val()) || 0;
+
+                var vatPercentage = (vatAmount / totalSum) * 100;
+                $('#vat').val(vatPercentage.toFixed(2));
+
+                var reducedTotal = totalSum + vatAmount;
+                var paidAmount = parseFloat($('#paid').val()) || 0;
+
+                if (paidAmount > reducedTotal) {
+                    paidAmount = reducedTotal;
+                    $('#paid').val(paidAmount.toFixed(2));
+                }
+
+                var remainingBalance = reducedTotal - paidAmount;
+
+                $('#total').val(reducedTotal.toFixed(2));
+                $('#due').val(remainingBalance.toFixed(2));
+            });
+        });
     </script>
 
 
@@ -552,13 +525,13 @@
 
     <script>
         $(document).ready(function() {
-            var newQuantity = 0; // Declare and initialize newQuantity outside the click event handler
+            var newQuantity = 0;
 
             $('.plusQuantity').click(function() {
                 var productId = $(this).data('id');
                 var productQuantityValue = parseInt($('#productquantity_' + productId).val());
                 newQuantity +=
-                    productQuantityValue; // Increment newQuantity by the quantity of the specific product
+                    productQuantityValue;
                 console.log(newQuantity);
             });
 
@@ -568,6 +541,71 @@
             });
         });
     </script>
+
+    <script>
+        $(document).ready(function() {
+            $('.checkboxRenewable').change(function() {
+                var productId = $(this).attr('data-id')
+                var isChecked = $(this).prop('checked');
+                if (isChecked === true){
+                    updateRenewable(productId, 'true');
+                }else{
+                    updateRenewable(productId, 'false');
+                }
+
+                function updateRenewable(productId, action) {
+                $.ajax({
+                    url: '{{ route('updateListRenewable') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        id: productId,
+                        action: action,
+                    },
+                    success: function(response) {
+                        console.log(response)
+                        window.location.reload();
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            }
+            })
+        })
+    </script>
+
+
+<script>
+    $(document).ready(function() {
+        $('.unitPrice').change(function() {
+            var productId = $(this).attr('data-id')
+            var unit_price = $(this).val();
+            // console.log(productId)
+            // console.log(unit_price)
+            $.ajax({
+                url: '{{ route('updateListUnitprice') }}',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    id: productId,
+                    unit_price: unit_price,
+                },
+                success: function(response) {
+                    console.log(response)
+                    window.location.reload();
+
+                },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        })
+    })
+</script>
 
 </body>
 
