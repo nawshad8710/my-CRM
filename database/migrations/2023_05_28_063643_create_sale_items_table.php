@@ -18,7 +18,8 @@ class CreateSaleItemsTable extends Migration
             $table->foreignId('sale_id')->constrained('sales')->cascadeOnDelete();
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->double('price', 10, 2)->default(0.00);
-            $table->double('discount', 10, 2)->default(0.00);
+            $table->integer('quantity')->default(0);
+            $table->double('total_price', 10, 2)->default(0.00);
             $table->unsignedTinyInteger('is_customizable')->default(0)->comment('0=>no, 1=>yes');
             $table->unsignedTinyInteger('is_renewable')->default(0)->comment('0=>no, 1=>yes');
             $table->timestamps();

@@ -197,12 +197,13 @@
                                         <i class="fas fa-tasks"></i>All Customer</a>
                                 </li>
                                 @endif
-                                {{-- @if(has_access('employee_problem_list'))
-                                <li class="{{Request::is('admin/assignment/problem-list') ? 'active':''}}">
-                                    <a href="{{ route('admin.assignment.problemIndex') }}">
-                                        <i class="fas fa-exclamation-circle"></i>Problem list</a>
+                                @if(has_access('view_customer'))
+                                <li class="{{Request::is('admin/customer/customer-query-list') ? 'active':''}}">
+                                    <a href="{{ route('admin.customer.customerQueryList') }}">
+                                        <i class="fas fa-tasks"></i>All Customer Queries</a>
                                 </li>
-                                @endif --}}
+                                @endif
+
                             </ul>
                         </li>
                         @endif
@@ -215,6 +216,12 @@
                             </a>
                         </li>
                         @endif
+
+                        <li class="{{Request::is('admin/our-achive*') ? 'active':''}}">
+                            <a href="{{ route('admin.our-achive.index') }}">
+                                <i class="fas fa-edit"></i>Our Achive
+                            </a>
+                        </li>
                     </ul>
                 </nav>
             </div>

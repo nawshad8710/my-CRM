@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Customer;
+use App\Models\CustomerQuery;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 
@@ -22,6 +23,19 @@ class CustomerController extends Controller
         $data['customers'] = Customer::get();
 
         return view('admin.customer.list', $data);
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | CUSTOMER QUERY LIST (METHOD)
+    |--------------------------------------------------------------------------
+    */
+
+    public function customerQueryList()
+    {
+
+        $data['customers'] = CustomerQuery::get();
+
+        return view('admin.customer.customer-query', $data);
     }
 
 
@@ -106,6 +120,23 @@ class CustomerController extends Controller
         if ($customer) {
             $customer->delete();
             Toastr::success('Customer Deleted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+            return 1;
+        }
+        return 0;
+
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | CUSTOMER QUERY DELETE (METHOD)
+    |--------------------------------------------------------------------------
+    */
+
+    public function customerQueryDelete($id)
+    {
+        $customer = CustomerQuery::findOrFail($id);
+        if ($customer) {
+            $customer->delete();
+            Toastr::success('Customer Query Deleted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
             return 1;
         }
         return 0;

@@ -10,6 +10,7 @@ use PDF;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 
 class SaleController extends Controller
@@ -53,47 +54,51 @@ class SaleController extends Controller
     */
     public function store(Request $request)
     {
+        // dd($request->all());
         $customer = Customer::where('id', $request->customer_id)->first();
-
-
         $request->validate([]);
+        if ($customer) {
+            $sale = Sale::where('customer_id', $customer->id)->get();
+            if ($sale->count() > 0) {
+                Toastr::warning('Sale Already Create For This Customer', 'warning', ["positionClass" => "toast-top-right"]);
+                return back();
+            } else {
+                $sale = Sale::create([
+                    'invoice_no' =>  Str::random(8),
+                    'customer_id' => $request->customer_id,
+                    'user_id' => Auth()->id(),
+                    'name' => optional($customer)->name,
+                    'email' => optional($customer)->email,
+                    'phone' => optional($customer)->phone,
+                    'price' => $request->total,
+                    'due_amount' => $request->due,
+                    'paid_amount' => $request->paid,
+                    'payment_method' => $request->payment_method,
+                    'payment_status' => $request->payment_status,
+                ]);
 
+                foreach ($request->product_id as $index => $productId) {
+                    $saleItem = $sale->saleItem()->create([
+                        "product_id" => $productId,
+                        "quantity" => $request->product_quantity[$index],
+                        "price" => $request->product_price[$index],
+                        "is_renewable" => $request->renewable[$index],
+                        "total_price" => $request->product_total_price[$index],
+                    ]);
+                }
 
+                $data = [
+                    'sale' => $sale,
+                    'product_info' => $saleItem
 
-        $sale = Sale::create([
-            'invoice_no' =>  Str::random(8),
-            'customer_id' => $request->customer_id,
-            'user_id' => Auth()->id(),
-            'name' => optional($customer)->name,
-            'email' => optional($customer)->email,
-            'phone' => optional($customer)->phone,
-            'price' => $request->total,
-            'due_amount' => $request->due,
-            'paid_amount' => $request->paid,
-            'payment_method' => $request->payment_method,
-            'payment_status' => $request->payment_status,
-        ]);
+                ];
 
-        foreach ($request->product_id as $index => $productId) {
-            $saleItem = $sale->saleItem()->create([
-                "product_id" => $productId,
-                "quantity" => $request->product_quantity[$index],
-                "price" => $request->product_price[$index],
-                "renewable" => $request->renewable[$index] ?? 0,
-                "total_price" => $request->product_total_price[$index],
-            ]);
+                $pdf = PDF::loadView('frontend/sales/myPDF', $data);
+                $pdf->download('nicesnippets.pdf');
+                Toastr::success('Sales Create Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+                return  $pdf->download('nicesnippets.pdf');
+            }
         }
-
-        $data = [
-            'sale' => $sale,
-            'product_info' => $saleItem
-
-        ];
-
-        $pdf = PDF::loadView('frontend/sales/myPDF', $data);
-
-        Toastr::success('Sales Create Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-        return $pdf->download('nicesnippets.pdf')->header('Refresh', '3;url=route("admin.sales.list")');
     }
 
 

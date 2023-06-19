@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\AssignedProjectController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\OurAchiveController;
 use App\Http\Controllers\Admin\UserReportController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserSolutionController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\Employee\ProblemController;
 use App\Http\Controllers\Employee\UserProjectController;
 use App\Http\Controllers\Employee\ReportController;
 use App\Http\Controllers\Employee\SolutionController;
+use App\Http\Controllers\Frontend\CustomerQueryController;
 use App\Http\Controllers\Frontend\SaleController as FrontendSaleController;
 
 /*
@@ -121,6 +123,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::group(['as' => 'report.', 'prefix' => 'report'], function () {
             Route::get('/list', [UserReportController::class, 'index'])->name('list');
         });
+        Route::group(['as' => 'our-achive.', 'prefix' => 'our-achive'], function () {
+            Route::get('/index', [OurAchiveController::class, 'index'])->name('index');
+        });
         Route::group(['as' => 'role.', 'prefix' => 'role'], function () {
             Route::get('/list', [RoleController::class, 'index'])->name('list');
             Route::get('/user-list', [RoleController::class, 'userList'])->name('userList');
@@ -155,11 +160,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
         */
         Route::group(['as' => 'customer.', 'prefix' => 'customer'], function () {
             Route::get('/list', [CustomerController::class, 'index'])->name('index');
+            Route::get('/customer-query-list', [CustomerController::class, 'customerQueryList'])->name('customerQueryList');
             Route::get('/add', [CustomerController::class, 'create'])->name('create');
             Route::post('/submit', [CustomerController::class, 'store'])->name('store');
             Route::get('/edit/{id}', [CustomerController::class, 'edit'])->name('edit');
             Route::post('/update/{id}', [CustomerController::class, 'update'])->name('update');
             Route::get('/delete/{id}', [CustomerController::class, 'delete'])->name('delete');
+            Route::get('/customer-query-delete/{id}', [CustomerController::class, 'customerQueryDelete'])->name('customerQueryDelete');
         });
 
     });
@@ -229,3 +236,7 @@ Route::post('/update-list-unitprice', [FrontendSaleController::class, 'updateLis
 Route::post('/sale-store', [FrontendSaleController::class, 'storeSale'])->name('storeSale');
 Route::get('generate-invoice-pdf', array('as'=> 'generate.invoice.pdf', 'uses' => 'FrontendSaleController@generateInvoicePDF'));
 
+
+// contact info
+Route::get('/contact', [CustomerQueryController::class, 'index'])->name('index');
+Route::post('/contact-store', [CustomerQueryController::class, 'store'])->name('store');

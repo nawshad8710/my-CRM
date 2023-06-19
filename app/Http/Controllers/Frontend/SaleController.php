@@ -40,7 +40,7 @@ class SaleController extends Controller
 
     public function searchProduct(Request $request)
     {
-        $products = Product::where('title', 'like', '%' . $request->search . '%')->get();
+        $products = Product::where('is_renewable',1)->where('title', 'like', '%' . $request->search . '%')->get();
         // return view('frontend.sales.index', compact('products'));
         return json_decode($products);
     }
@@ -48,7 +48,7 @@ class SaleController extends Controller
     public function addtoList(Request $request)
     {
         $id = $request->id;
-        $listProduct = Product::find($id);
+        $listProduct = Product::where('is_renewable',1)->find($id);
         $list = session()->get('list', []);
         if (isset($list[$id])) {
             $list[$id]['quantity']++;
@@ -61,6 +61,7 @@ class SaleController extends Controller
                 'quantity' => 1,
                 'price' => $listProduct->price,
                 'renewable' => 0,
+                'is_customization' => 0,
             ];
         }
 

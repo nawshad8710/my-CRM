@@ -63,185 +63,6 @@
                                     action="@isset($sale){{ route('admin.sales.update', $sale->id) }}@else{{ route('admin.sales.submit') }}@endisset"
                                     method="post" enctype="multipart/form-data">
                                     @csrf
-                                    {{-- <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="invoice_no" class="control-label mb-1">Invoice No.</label>
-                                                <input id="invoice_no" name="invoice_no" type="text"
-                                                    class="form-control @error('invoice_no') is-invalid @enderror"
-                                                    value="{{ $sale->invoice_no ?? old('invoice_no') }}" required>
-                                                @error('invoice_no')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="customer_id" class="control-label mb-1">Customer</label>
-                                                <select class="form-control" name="customer_id" id="customer_id" required>
-                                                    <option value="">--Select Customer--</option>
-                                                    @foreach ($customers as $customer)
-                                                        @isset($sale)
-                                                            <option value="{{ $customer->id }}"
-                                                                {{ $sale->customer_id == $customer->id ? ' selected' : '' }}>
-                                                                {{ $customer->name }}</option>
-                                                        @else
-                                                            <option value="{{ $customer->id }}">{{ $customer->name }}</option>
-                                                        @endisset
-                                                    @endforeach
-                                                </select>
-                                                @error('product_id')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="user_id" class="control-label mb-1">User</label>
-                                                <select class="form-control" name="user_id" id="user_id" required>
-                                                    <option value="">--Select User--</option>
-                                                    @foreach ($users as $user)
-                                                        @isset($sale)
-                                                            <option value="{{ $user->id }}"
-                                                                {{ $sale->user_id == $user->id ? ' selected' : '' }}>
-                                                                {{ $user->name }}</option>
-                                                        @else
-                                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                                        @endisset
-                                                    @endforeach
-                                                </select>
-                                                @error('product_id')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="name" class="control-label mb-1">Name</label>
-                                                <input id="name" name="name" type="text"
-                                                    class="form-control @error('name') is-invalid @enderror"
-                                                    value="{{ $sale->name ?? old('name') }}" required>
-                                                @error('name')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="email" class="control-label mb-1">Email</label>
-                                                <input id="email" name="email" type="email"
-                                                    class="form-control @error('email') is-invalid @enderror"
-                                                    value="{{ $sale->email ?? old('email') }}" required>
-                                                @error('name')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="phone" class="control-label mb-1">Phone</label>
-                                                <input id="phone" name="phone" type="text"
-                                                    class="form-control @error('phone') is-invalid @enderror"
-                                                    value="{{ $sale->phone ?? old('phone') }}" required>
-                                                @error('phone')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="price" class="control-label mb-1">Price</label>
-                                                <input id="price" name="price" type="text"
-                                                    class="form-control @error('price') is-invalid @enderror"
-                                                    value="{{ $sale->price ?? old('price') }}" required>
-                                                @error('price')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="due_amount" class="control-label mb-1">Due Amount</label>
-                                                <input id="due_amount" name="due_amount" type="text"
-                                                    class="form-control @error('due_amount') is-invalid @enderror"
-                                                    value="{{ $sale->due_amount ?? old('due_amount') }}" required>
-                                                @error('due_amount')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="paid_amount" class="control-label mb-1">Paid Amount</label>
-                                                <input id="paid_amount" name="paid_amount" type="text"
-                                                    class="form-control @error('paid_amount') is-invalid @enderror"
-                                                    value="{{ $sale->paid_amount ?? old('paid_amount') }}" required>
-                                                @error('paid_amount')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="payment_method" class="control-label mb-1">Payment
-                                                    Method</label>
-                                                <input id="payment_method" name="payment_method" type="text"
-                                                    class="form-control @error('payment_method') is-invalid @enderror"
-                                                    value="{{ $sale->payment_method ?? old('payment_method') }}" required>
-                                                @error('payment_method')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="row">
-
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <label for="payment_status" class="control-label mb-1">Payment
-                                                    Status</label>
-                                                <select class="form-control" name="payment_status" id="payment_status">
-                                                    <option value="0"
-                                                        @isset($sale) {{ $sale->payment_status == 0 ? ' selected' : '' }} @endisset>
-                                                        Pending</option>
-                                                    <option value="1"
-                                                        @isset($sale) {{ $sale->payment_status == 1 ? ' selected' : '' }} @endisset>
-                                                        Paid</option>
-                                                    <option value="2"
-                                                        @isset($sale) {{ $sale->payment_status == 2 ? ' selected' : '' }} @endisset>
-                                                        Partially Paid</option>
-                                                </select>
-                                                @error('payment_status')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-9">
-
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <input id="payment-button" type="submit"
-                                                class="btn btn-lg btn-info btn-block"
-                                                value="@isset($product) Update @else Submit @endisset">
-                                        </div>
-                                    </div> --}}
-
-
                                     <div class="col-md-12">
 
                                         @if (session('list'))
@@ -259,7 +80,8 @@
                                                                     <div>
                                                                         <p class="listName fw-bold text-capitalize mb-0">
                                                                             {{ $value['name'] }}
-                                                                            <input type="text" name="product_id[]" value="{{ $id }}" hidden>
+                                                                            <input type="text" name="product_id[]"
+                                                                                value="{{ $id }}" hidden>
                                                                         </p>
                                                                     </div>
                                                                 </div>
@@ -270,7 +92,8 @@
                                                                             data-id="{{ $id }}">-</button>
 
                                                                         <input class="w-25 text-center border border-gray"
-                                                                            type="text" readonly name="product_quantity[]"
+                                                                            type="text" readonly
+                                                                            name="product_quantity[]"
                                                                             value="{{ $value['quantity'] }}">
 
                                                                         <button
@@ -294,10 +117,34 @@
                                                                         <p class="">total Price:
                                                                         </p>
                                                                         <p class="totalPrice">{{ $value['price'] }}</p>
-                                                                        <input type="text" hidden name="product_total_price[]" value="{{ $value['price'] }}">
+                                                                        <input type="text" hidden
+                                                                            name="product_total_price[]"
+                                                                            value="{{ $value['price'] }}">
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-2">
+
+                                                                    <!--customization field start-->
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input checkboxCustomizable"
+                                                                            type="checkbox" name="" value=""
+                                                                            id="flexCheckChecked" {{-- @if ($value['renewable'] === 1) checked @endif --}}
+                                                                            data-id="{{ $id }}">
+                                                                        {{-- <input type="text" name="customizable[]"
+                                                                            value="{{ $value['customizable'] }}" hidden> --}}
+                                                                        <label class="form-check-label ml-2"
+                                                                            for="flexCheckChecked">
+                                                                            Customizable
+                                                                        </label>
+
+
+
+                                                                    </div>
+
+
+                                                                    <!--customization field end-->
+
+
                                                                     <div>
                                                                         <div class="form-check">
                                                                             <input
@@ -306,8 +153,9 @@
                                                                                 value="" id="flexCheckChecked"
                                                                                 @if ($value['renewable'] === 1) checked @endif
                                                                                 data-id="{{ $id }}">
-                                                                                <input type="text" name="renewable[]" value="{{ $value['renewable'] }}" hidden>
-                                                                            <label class="form-check-label"
+                                                                            <input type="text" name="renewable[]"
+                                                                                value="{{ $value['renewable'] }}" hidden>
+                                                                            <label class="form-check-label ml-2"
                                                                                 for="flexCheckChecked">
                                                                                 Renewable
                                                                             </label>
@@ -324,7 +172,43 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div style="display: none;"
+                                                                class=" customizableDiv border border-light shadow p-1 "
+                                                                data-id="{{ $id }}">
+                                                                <div class="row">
 
+                                                                    <div class="col-md-6">
+                                                                        <div class="input-group input-group-sm mb-3">
+                                                                            <div class="input-group-prepend">
+                                                                                <span class="input-group-text"
+                                                                                    id="inputGroup-sizing-sm">Customization
+                                                                                    Description</span>
+                                                                            </div>
+                                                                            <input type="text"
+                                                                                class="form-control customizeDescription"
+                                                                                aria-label="Sizing example input"
+                                                                                name="customizeDescription[]"
+                                                                                data-id="{{ $id }}"
+                                                                                aria-describedby="inputGroup-sizing-sm">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div class="input-group input-group-sm mb-3">
+                                                                            <div class="input-group-prepend">
+                                                                                <span class="input-group-text"
+                                                                                    id="inputGroup-sizing-sm">Customzable
+                                                                                    amount</span>
+                                                                            </div>
+                                                                            <input type="text"
+                                                                                data-id="{{ $id }}"
+                                                                                class="form-control customizeAmount"
+                                                                                aria-label="Sizing example input"
+                                                                                name="customizeAmount[]"
+                                                                                aria-describedby="inputGroup-sizing-sm">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </li>
                                                     </ul>
                                                 @endforeach
@@ -444,6 +328,9 @@
 @endsection
 
 @push('js')
+    <!----------------------------------------------
+                                                                                DESCRIPTION EDITOR SCRIPT
+                                                                    ----------------------------------------------->
     <script src="{{ asset('assets/vendor/summernote/summernote-bs4.min.js') }}"></script>
     <script>
         $(document).ready(function() {
@@ -451,9 +338,9 @@
             $('#long_description').summernote();
         });
     </script>
-
-
-
+    <!------------------------------------------------------
+                                                                SEARCH PRODUCT, ADD AND UPDATE LIST SCRIPT
+                                                                    ----------------------------------------------->
     <script>
         $('#search').keyup(function() {
             var search = $(this).val();
@@ -468,23 +355,14 @@
                 success: function(data) {
                     var dropdown = $('#suggestions-dropdown');
                     dropdown.empty();
-
-
                     if (data.length > 0) {
-                        // Add each suggestion as a dropdown item
                         $.each(data, function(index, suggestion) {
                             console.log(suggestion.id)
                             var suggestionItem = $('<a class="dropdown-item" href="#">' +
                                 suggestion.title + '</a>');
                             suggestionItem.click(function(event) {
-                                // event.preventDefault();
-                                // $('#search').val(suggestion.title);
-                                // $('#search-form').submit();
                                 var productId = suggestion.id;
-                                console.log(productId);
                                 var url = window.location.origin + '/add-list-product'
-                                console.log(url)
-
                                 $.ajax({
                                     url: url,
                                     method: 'POST',
@@ -494,7 +372,7 @@
                                     },
                                     success: function(data) {
                                         updatelistView();
-                                        console.log(data)
+
 
                                     }
                                 });
@@ -508,33 +386,6 @@
                     }
                 }
             });
-        });
-    </script>
-
-    {{-- ---------------- add to list ----------------------------- --}}
-    <script>
-        $(document).ready(function() {
-            $('.addTolist').click(function() {
-                var productId = $(this).attr('data-id');
-                console.log(productId);
-                var url = window.location.origin + '/add-list-product'
-                console.log(url)
-
-                $.ajax({
-                    url: url,
-                    method: 'POST',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        id: productId,
-                    },
-                    success: function(data) {
-                        updatelistView();
-                        console.log(data)
-
-                    }
-                });
-            });
-
         });
 
         function updatelistView() {
@@ -557,18 +408,16 @@
             });
         }
     </script>
-
-
-
-
-
-
+    <!----------------------------------------------
+                                                                       PRODUCT CALCULATION SCRIPT
+                                                            ----------------------------------------------->
     <script>
         $(document).ready(function() {
             var priceValues = [];
             var totalSum = 0;
             var vatAmount = 100;
             var paymentStatus = 0;
+            var customizationValues = [];
 
             $('.totalPrice').each(function() {
                 priceValues.push(parseFloat($(this).text()));
@@ -580,12 +429,34 @@
 
             $('#total').val(totalSum.toFixed(2));
 
-            $('#vat, #paid').on('input', function() {
+            $('#vat, #paid, .customizeAmount').on('input', function() {
+
+
+                // console.log(productId)
+                var customizationIndex = customizationValues.findIndex(function(item) {
+                    // return item.productId === productId;
+                });
+                var customizationValue = parseFloat($(this).val()) || 0;
+
+                if (customizationIndex !== -1) {
+                    customizationValues[customizationIndex].value = customizationValue;
+                } else {
+                    customizationValues.push({
+                        // productId: productId,
+                        value: customizationValue
+                    });
+                }
+
+                var totalCustomization = customizationValues.reduce(function(acc, item) {
+                    return acc + item.value;
+                }, 0);
+                // console.log(customizationValues)
+
+
                 var vatPercentage = parseFloat($('#vat').val()) || 0;
                 var paidAmount = parseFloat($('#paid').val()) || 0;
-
                 var vatAmountReduction = vatAmount * (vatPercentage / 100);
-                var reducedTotal = totalSum + vatAmountReduction;
+                var reducedTotal = totalSum + vatAmountReduction + totalCustomization;
 
                 if (paidAmount > reducedTotal) {
                     paidAmount = reducedTotal;
@@ -606,40 +477,11 @@
                 $('#due').val(remainingBalance.toFixed(2));
                 $('#paymentStatus').val(paymentStatus);
             });
-
-            $('#vatAmount').on('input', function() {
-                vatAmount = parseFloat($(this).val()) || 0;
-
-                var vatPercentage = (vatAmount / totalSum) * 100;
-                $('#vat').val(vatPercentage.toFixed(2));
-
-                var reducedTotal = totalSum + vatAmount;
-                var paidAmount = parseFloat($('#paid').val()) || 0;
-
-                if (paidAmount > reducedTotal) {
-                    paidAmount = reducedTotal;
-                    $('#paid').val(paidAmount.toFixed(2));
-                }
-
-                var remainingBalance = reducedTotal - paidAmount;
-
-
-                if (remainingBalance === 0) {
-                    paymentStatus = 1;
-
-                } else if (remainingBalance == reducedTotal) {
-                    paymentStatus = 2;
-                }
-                console.log(paymentStatus)
-                $('#total').val(reducedTotal.toFixed(2));
-                $('#due').val(remainingBalance.toFixed(2));
-                $('#paymentStatus').val(paymentStatus);
-            });
         });
     </script>
-
-
-    {{-- update list --}}
+    <!----------------------------------------------
+                                                        UPDATE LIST BY PRESSING + - BUTTON SCRIPT
+                                                            ----------------------------------------------->
     <script>
         $(document).ready(function() {
             $('.decrease-button').on('click', function() {
@@ -675,8 +517,9 @@
             }
         });
     </script>
-
-    {{-- delete item --}}
+    <!----------------------------------------------
+                                                                   DELETE LIST ITEM SCRIPT
+                                                        ----------------------------------------------->
     <script>
         $(document).ready(function() {
             $(".deleteItem").on('click', function() {
@@ -701,27 +544,9 @@
 
         })
     </script>
-
-
-    <script>
-        $(document).ready(function() {
-            var newQuantity = 0;
-
-            $('.plusQuantity').click(function() {
-                var productId = $(this).data('id');
-                var productQuantityValue = parseInt($('#productquantity_' + productId).val());
-                newQuantity +=
-                    productQuantityValue;
-                console.log(newQuantity);
-            });
-
-            $('.minusQuantity').click(function() {
-                var productId = $(this).data('id');
-                console.log(productId);
-            });
-        });
-    </script>
-
+    <!----------------------------------------------
+                                                                   CHECKBOX RENEWABLE UPDATE SCRIPT
+                                                        ----------------------------------------------->
     <script>
         $(document).ready(function() {
             $('.checkboxRenewable').change(function() {
@@ -758,13 +583,38 @@
     </script>
 
 
+    <!----------------------------------------------
+                                                                   CHECKBOX IS_CUSTOMIZE UPDATE SCRIPT
+                                                        ----------------------------------------------->
+    <script>
+        $(document).ready(function() {
+            $('.checkboxCustomizable').change(function() {
+                var productId = $(this).attr('data-id')
+                var isChecked = $(this).prop('checked');
+                var customizeDivId = $(this).attr('data-id');
+                // var customizeDescription = ;
+
+                if (isChecked === true & productId === customizeDivId) {
+                    $('.customizableDiv[data-id="' + productId + '"]').show();
+                } else {
+
+                    $('.customizableDiv[data-id="' + productId + '"]').hide();
+                }
+
+            })
+        })
+    </script>
+
+
+    <!----------------------------------------------
+                                                                   UPDATE UNIT PRICE SCRIPT
+                                                        ----------------------------------------------->
     <script>
         $(document).ready(function() {
             $('.unitPrice').change(function() {
                 var productId = $(this).attr('data-id')
                 var unit_price = $(this).val();
-                // console.log(productId)
-                // console.log(unit_price)
+
                 $.ajax({
                     url: '{{ route('updateListUnitprice') }}',
                     type: 'POST',
