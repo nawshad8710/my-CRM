@@ -118,13 +118,13 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="d-flex">
-                                                <button class="decrease-button btn btn-secondary  rounded-0"
+                                                <button type="button" class="decrease-button btn btn-secondary  rounded-0"
                                                     data-id="{{ $id }}">-</button>
 
-                                                <input class="w-25 text-center border border-gray" type="text" readonly
-                                                    value="{{ $value['quantity'] }}">
+                                                <input data-id="{{$id}}" class="w-25 text-center border border-gray" type="text"
+                                                    readonly value="{{ $value['quantity'] }}">
 
-                                                <button class="increase-button btn btn-secondary  rounded-0"
+                                                <button type="button" class="increase-button btn btn-secondary  rounded-0"
                                                     data-id="{{ $id }}">+</button>
 
                                             </div>
@@ -132,7 +132,8 @@
                                         <div class="col-md-2">
                                             <div class="d-flex flex-row align-items-center gap-2">
                                                 <label for="">Unit Price</label>
-                                                <input class="unitPrice border border-gray text-center" data-id="{{$id}}" type="text" style="width: 50px"
+                                                <input class="unitPrice border border-gray text-center"
+                                                    data-id="{{ $id }}" type="text" style="width: 50px"
                                                     value="{{ $value['unit_price'] }}">
                                             </div>
                                         </div>
@@ -147,9 +148,8 @@
                                             <div>
                                                 <div class="form-check">
                                                     <input class="form-check-input checkboxRenewable" type="checkbox"
-                                                        name="renewable" value="" id="flexCheckChecked" @if ($value['renewable'] ===1)
-                                                        checked
-                                                        @endif
+                                                        name="renewable" value="" id="flexCheckChecked"
+                                                        @if ($value['renewable'] === 1) checked @endif
                                                         data-id="{{ $id }}">
                                                     <label class="form-check-label" for="flexCheckChecked">
                                                         Renewable
@@ -166,42 +166,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="d-flex justify-content-between align-items-center">
-                                        <div>
 
-                                            <div class=" d-flex justify-content-between">
-                                                <p class="listName fw-bold text-capitalize mb-0">{{ $value['name'] }}
-                                                </p>
-                                                <div>
-                                                    <button class="decrease-button btn btn-secondary p-1 rounded-0"
-                                                        data-id="{{ $id }}">-</button>
-
-                                                    <input class="w-25" type="text" readonly
-                                                        value="{{ $value['quantity'] }}">
-
-                                                    <button class="increase-button btn btn-secondary p-1 rounded-0"
-                                                        data-id="{{ $id }}">+</button>
-
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div>
-                                            <label for="">Unit Price</label>
-                                            <input type="text" style="width: 50px"
-                                                value="{{ $value['unit_price'] }}">
-                                        </div>
-                                        <div>
-                                            <p>total Price: <span class="totalPrice">{{ $value['price'] }}</span></p>
-                                        </div>
-                                        <div>
-                                            <button class="deleteItem btn btn-danger" class="btn btn-danger"
-                                                data-id="{{ $id }}">
-                                                <ion-icon name="trash-bin"></ion-icon>
-                                            </button>
-                                        </div>
-
-                                    </div> --}}
                                 </li>
                             </ul>
                         @endforeach
@@ -236,8 +201,8 @@
                             <div class="mb-3 mt-2">
                                 <label for="vat">Vat</label>
                                 <div class="border d-flex justify-content-between align-items-center">
-                                    <input class="border-0 text-capitalize" id="vat" name="vat" style="width:100%"
-                                        type="text">
+                                    <input class="border-0 text-capitalize" id="vat" name="vat"
+                                        style="width:100%" type="text">
                                     <button class="bg-primary text-white border-0" disabled>%</button>
                                 </div>
                             </div>
@@ -292,6 +257,18 @@
     </script>
     <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
         crossorigin="anonymous"></script>
+
+
+
+        <script>
+            $(document).ready(function() {
+                $('.decrease-button').click(function(event) {
+                    event.preventDefault();
+                var unitpriceId =  $(this)->attr('data-id');
+                console.log(unitpriceId)
+                });
+            })
+        </script>
 
     <script>
         $('#search').keyup(function() {
@@ -350,6 +327,9 @@
         });
     </script>
 
+
+
+
     {{-- ---------------- add to list ----------------------------- --}}
     <script>
         $(document).ready(function() {
@@ -386,7 +366,7 @@
 
                     $.each(item, function(id, value) {
                         console.log(id, value)
-                        window.location.reload();
+
                     });
 
                 },
@@ -459,42 +439,7 @@
     </script>
 
 
-    {{-- update list --}}
-    <script>
-        $(document).ready(function() {
-            $('.decrease-button').on('click', function() {
-                var productId = $(this).data('id');
-                updateQuantity(productId, 'decrease');
-            });
 
-
-            $('.increase-button').on('click', function() {
-                var productId = $(this).data('id');
-                updateQuantity(productId, 'increase');
-            });
-
-            function updateQuantity(productId, action) {
-                $.ajax({
-                    url: '{{ route('updateList') }}',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        id: productId,
-                        action: action,
-                    },
-                    success: function(response) {
-                        console.log(response)
-                        window.location.reload();
-
-                    },
-                    error: function(xhr, status, error) {
-                        console.log(error);
-                    }
-                });
-            }
-        });
-    </script>
 
     {{-- delete item --}}
     <script>
@@ -511,7 +456,7 @@
                         id: itemid
                     },
                     success: function(response) {
-                        window.location.reload();
+
                     },
                     error: function(xhr, status, error) {
                         console.log(error);
@@ -521,6 +466,7 @@
 
         })
     </script>
+
 
 
     <script>
@@ -547,65 +493,69 @@
             $('.checkboxRenewable').change(function() {
                 var productId = $(this).attr('data-id')
                 var isChecked = $(this).prop('checked');
-                if (isChecked === true){
+                if (isChecked === true) {
                     updateRenewable(productId, 'true');
-                }else{
+                } else {
                     updateRenewable(productId, 'false');
                 }
 
                 function updateRenewable(productId, action) {
+                    $.ajax({
+                        url: '{{ route('updateListRenewable') }}',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            id: productId,
+                            action: action,
+                        },
+                        success: function(response) {
+                            console.log(response)
+
+
+                        },
+                        error: function(xhr, status, error) {
+                            console.log(error);
+                        }
+                    });
+                }
+            })
+        })
+    </script>
+
+
+    <script>
+        $(document).ready(function() {
+            $('.unitPrice').change(function() {
+                var productId = $(this).attr('data-id')
+                var unit_price = $(this).val();
+                // console.log(productId)
+                // console.log(unit_price)
                 $.ajax({
-                    url: '{{ route('updateListRenewable') }}',
+                    url: '{{ route('updateListUnitprice') }}',
                     type: 'POST',
                     dataType: 'json',
                     data: {
                         "_token": "{{ csrf_token() }}",
                         id: productId,
-                        action: action,
+                        unit_price: unit_price,
                     },
                     success: function(response) {
                         console.log(response)
-                        window.location.reload();
+
 
                     },
                     error: function(xhr, status, error) {
                         console.log(error);
                     }
                 });
-            }
             })
         })
     </script>
 
 
-<script>
-    $(document).ready(function() {
-        $('.unitPrice').change(function() {
-            var productId = $(this).attr('data-id')
-            var unit_price = $(this).val();
-            // console.log(productId)
-            // console.log(unit_price)
-            $.ajax({
-                url: '{{ route('updateListUnitprice') }}',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    id: productId,
-                    unit_price: unit_price,
-                },
-                success: function(response) {
-                    console.log(response)
-                    window.location.reload();
 
-                },
-                error: function(xhr, status, error) {
-                    console.log(error);
-                }
-            });
-        })
-    })
-</script>
+
 
 </body>
 

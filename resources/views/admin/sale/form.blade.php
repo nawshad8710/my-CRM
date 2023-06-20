@@ -64,7 +64,28 @@
                                     method="post" enctype="multipart/form-data">
                                     @csrf
                                     <div class="col-md-12">
-
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="customer_id" class="control-label mb-1">Customer</label>
+                                                <select class="form-control" name="customer_id" id="customer_id"
+                                                    required>
+                                                    <option value="">--Select Customer--</option>
+                                                    @foreach ($customers as $customer)
+                                                        @isset($sale)
+                                                            <option value="{{ $customer->id }}"
+                                                                {{ $sale->customer_id == $customer->id ? ' selected' : '' }}>
+                                                                {{ $customer->name }}</option>
+                                                        @else
+                                                            <option value="{{ $customer->id }}">{{ $customer->name }}
+                                                            </option>
+                                                        @endisset
+                                                    @endforeach
+                                                </select>
+                                                @error('product_id')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
                                         @if (session('list'))
                                             <h5 class="mb-1 mt-5">List Product</h5>
                                             <div class="listItemdiv">
@@ -91,7 +112,7 @@
                                                                             class="decrease-button btn btn-secondary  rounded-0"
                                                                             data-id="{{ $id }}">-</button>
 
-                                                                        <input class="w-25 text-center border border-gray"
+                                                                        <input data-id="{{$id}}" class="w-25 text-center border border-gray productQuantity"
                                                                             type="text" readonly
                                                                             name="product_quantity[]"
                                                                             value="{{ $value['quantity'] }}">
@@ -222,26 +243,7 @@
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="customer_id" class="control-label mb-1">Customer</label>
-                                                    <select class="form-control" name="customer_id" id="customer_id"
-                                                        required>
-                                                        <option value="">--Select Customer--</option>
-                                                        @foreach ($customers as $customer)
-                                                            @isset($sale)
-                                                                <option value="{{ $customer->id }}"
-                                                                    {{ $sale->customer_id == $customer->id ? ' selected' : '' }}>
-                                                                    {{ $customer->name }}</option>
-                                                            @else
-                                                                <option value="{{ $customer->id }}">{{ $customer->name }}
-                                                                </option>
-                                                            @endisset
-                                                        @endforeach
-                                                    </select>
-                                                    @error('product_id')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
+
                                                 <label for="payment_method" class="control-label mb-1">Payment
                                                     Method</label>
                                                 <select class="form-control border border-gray py-2 px-2 select2"
@@ -254,7 +256,7 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
-                                                <h5>Subtotal</h5>
+                                                <h5>Subtotal: <span id="subtotal"></span></h5>
                                                 <div class="row">
                                                     <div class="col-6">
                                                         <div class="mb-3 mt-2">
@@ -329,8 +331,8 @@
 
 @push('js')
     <!----------------------------------------------
-                                                                                DESCRIPTION EDITOR SCRIPT
-                                                                    ----------------------------------------------->
+                                                                                        DESCRIPTION EDITOR SCRIPT
+                                                                            ----------------------------------------------->
     <script src="{{ asset('assets/vendor/summernote/summernote-bs4.min.js') }}"></script>
     <script>
         $(document).ready(function() {
@@ -339,8 +341,8 @@
         });
     </script>
     <!------------------------------------------------------
-                                                                SEARCH PRODUCT, ADD AND UPDATE LIST SCRIPT
-                                                                    ----------------------------------------------->
+                                                                        SEARCH PRODUCT, ADD AND UPDATE LIST SCRIPT
+                                                                            ----------------------------------------------->
     <script>
         $('#search').keyup(function() {
             var search = $(this).val();
@@ -409,15 +411,14 @@
         }
     </script>
     <!----------------------------------------------
-                                                                       PRODUCT CALCULATION SCRIPT
-                                                            ----------------------------------------------->
-    <script>
+                                                                               PRODUCT CALCULATION SCRIPT
+                                                                    ----------------------------------------------->
+    {{-- <script>
         $(document).ready(function() {
             var priceValues = [];
             var totalSum = 0;
             var vatAmount = 100;
             var paymentStatus = 0;
-            var customizationValues = [];
 
             $('.totalPrice').each(function() {
                 priceValues.push(parseFloat($(this).text()));
@@ -428,35 +429,14 @@
             }, 0);
 
             $('#total').val(totalSum.toFixed(2));
+            $('#subtotal').text(totalSum.toFixed(2));
 
-            $('#vat, #paid, .customizeAmount').on('input', function() {
-
-
-                // console.log(productId)
-                var customizationIndex = customizationValues.findIndex(function(item) {
-                    // return item.productId === productId;
-                });
-                var customizationValue = parseFloat($(this).val()) || 0;
-
-                if (customizationIndex !== -1) {
-                    customizationValues[customizationIndex].value = customizationValue;
-                } else {
-                    customizationValues.push({
-                        // productId: productId,
-                        value: customizationValue
-                    });
-                }
-
-                var totalCustomization = customizationValues.reduce(function(acc, item) {
-                    return acc + item.value;
-                }, 0);
-                // console.log(customizationValues)
-
+            $('#vat, #paid').on('input', function() {
 
                 var vatPercentage = parseFloat($('#vat').val()) || 0;
                 var paidAmount = parseFloat($('#paid').val()) || 0;
-                var vatAmountReduction = vatAmount * (vatPercentage / 100);
-                var reducedTotal = totalSum + vatAmountReduction + totalCustomization;
+                var vatAmountReduction = totalSum * (vatPercentage / 100);
+                var reducedTotal = totalSum + vatAmountReduction;
 
                 if (paidAmount > reducedTotal) {
                     paidAmount = reducedTotal;
@@ -478,11 +458,11 @@
                 $('#paymentStatus').val(paymentStatus);
             });
         });
-    </script>
+    </script> --}}
     <!----------------------------------------------
-                                                        UPDATE LIST BY PRESSING + - BUTTON SCRIPT
-                                                            ----------------------------------------------->
-    <script>
+                                                                UPDATE LIST BY PRESSING + - BUTTON SCRIPT
+                                                                    ----------------------------------------------->
+    {{-- <script>
         $(document).ready(function() {
             $('.decrease-button').on('click', function() {
                 var productId = $(this).data('id');
@@ -516,11 +496,11 @@
                 });
             }
         });
-    </script>
+    </script> --}}
     <!----------------------------------------------
-                                                                   DELETE LIST ITEM SCRIPT
-                                                        ----------------------------------------------->
-    <script>
+                                                                           DELETE LIST ITEM SCRIPT
+                                                                ----------------------------------------------->
+    {{-- <script>
         $(document).ready(function() {
             $(".deleteItem").on('click', function() {
                 var itemid = $(this).data('id');
@@ -543,11 +523,11 @@
             })
 
         })
-    </script>
+    </script> --}}
     <!----------------------------------------------
-                                                                   CHECKBOX RENEWABLE UPDATE SCRIPT
-                                                        ----------------------------------------------->
-    <script>
+                                                                           CHECKBOX RENEWABLE UPDATE SCRIPT
+                                                                ----------------------------------------------->
+    {{-- <script>
         $(document).ready(function() {
             $('.checkboxRenewable').change(function() {
                 var productId = $(this).attr('data-id')
@@ -580,19 +560,35 @@
                 }
             })
         })
-    </script>
+    </script> --}}
 
 
     <!----------------------------------------------
-                                                                   CHECKBOX IS_CUSTOMIZE UPDATE SCRIPT
-                                                        ----------------------------------------------->
-    <script>
+                                                                           CHECKBOX IS_CUSTOMIZE UPDATE SCRIPT
+                                                                ----------------------------------------------->
+    {{-- <script>
         $(document).ready(function() {
+            var totalSum = 0;
+            var vatAmount = 100;
+            var paymentStatus = 0;
+            var priceValues = [];
+            var totalCustomizationAmount = 0;
+            $('.totalPrice').each(function() {
+                priceValues.push(parseFloat($(this).text()));
+            });
+
+            totalSum = priceValues.reduce(function(acc, value) {
+                return acc + value;
+            }, 0);
+
+            $('#total').val(totalSum.toFixed(2));
+            $('#subtotal').text(totalSum.toFixed(2));
+
             $('.checkboxCustomizable').change(function() {
                 var productId = $(this).attr('data-id')
                 var isChecked = $(this).prop('checked');
                 var customizeDivId = $(this).attr('data-id');
-                // var customizeDescription = ;
+                // console.log(customizeDivId)
 
                 if (isChecked === true & productId === customizeDivId) {
                     $('.customizableDiv[data-id="' + productId + '"]').show();
@@ -601,15 +597,56 @@
                     $('.customizableDiv[data-id="' + productId + '"]').hide();
                 }
 
+
+
+            })
+            $('.customizeAmount, #vat, #paid').on('input', function() {
+                var productId = $(this).attr('data-id');
+                var customizationAmount = [];
+                var vatPercentage = parseFloat($('#vat').val()) || 0;
+                var paidAmount = parseFloat($('#paid').val()) || 0;
+                $('.customizeAmount').each(function() {
+                    var customizeValue = parseFloat($(this).val()) || 0;
+                    customizationAmount.push(customizeValue);
+                });
+
+                totalCustomizationAmount = customizationAmount.reduce(function(acc, value) {
+                    return acc + value;
+                }, 0);
+
+                var vatAmountReduction = totalSum * (vatPercentage / 100);
+                var reducedTotal = totalSum + vatAmountReduction + totalCustomizationAmount;
+                if (paidAmount > reducedTotal) {
+                    paidAmount = reducedTotal;
+                    $('#paid').val(paidAmount.toFixed(2));
+                }
+
+                var remainingBalance = reducedTotal - paidAmount;
+                if (remainingBalance === 0) {
+                    paymentStatus = 1;
+
+                } else if (remainingBalance < reducedTotal && remainingBalance > 0) {
+                    paymentStatus = 2;
+                } else {
+                    paymentStatus = 0;
+                }
+                console.log(paymentStatus)
+                $('#total').val(reducedTotal.toFixed(2));
+                $('#due').val(remainingBalance.toFixed(2));
+                $('#paymentStatus').val(paymentStatus);
+                console.log(productId)
+                console.log(customizationAmount)
+                console.log(totalCustomizationAmount)
+
             })
         })
-    </script>
+    </script> --}}
 
 
     <!----------------------------------------------
-                                                                   UPDATE UNIT PRICE SCRIPT
-                                                        ----------------------------------------------->
-    <script>
+                                                                           UPDATE UNIT PRICE SCRIPT
+                                                                ----------------------------------------------->
+    {{-- <script>
         $(document).ready(function() {
             $('.unitPrice').change(function() {
                 var productId = $(this).attr('data-id')
@@ -634,6 +671,37 @@
                     }
                 });
             })
+        })
+    </script> --}}
+
+
+    <script>
+        $(document).ready(function(){
+            $(".increase-button").on("click", function() {
+            var id = $(this).data("id");
+            var input = $("input[data-id='" + id + "']");
+            var value = parseInt(input.val());
+            var unitPriceId = $('.unitPrice').data("id");
+        var unitPriceValue = parseFloat($('.unitPrice').text());
+            console.log(unitPriceId)
+            console.log(unitPriceValue)
+            value++;
+            input.val(value);
+            // console.log( input.val(value))
+        });
+
+        // Event listener for decrease button
+        $(".decrease-button").on("click", function() {
+            var id = $(this).data("id");
+            var input = $("input[data-id='" + id + "']");
+            var value = parseInt(input.val());
+
+            // Decrease the value if it's greater than 0
+            if (value > 0) {
+                value--;
+                input.val(value);
+            }
+        });
         })
     </script>
 @endpush

@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\OurAchiveController;
 use App\Http\Controllers\Admin\UserReportController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\UserSolutionController;
 use App\Http\Controllers\Employee\EmployeeHomeController;
 use App\Http\Controllers\Employee\ProblemController;
@@ -124,7 +126,31 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::get('/list', [UserReportController::class, 'index'])->name('list');
         });
         Route::group(['as' => 'our-achive.', 'prefix' => 'our-achive'], function () {
-            Route::get('/index', [OurAchiveController::class, 'index'])->name('index');
+            Route::get('/form', [OurAchiveController::class, 'form'])->name('form');
+            Route::post('/store-and-update', [OurAchiveController::class, 'storeAndUpdate'])->name('storeAndUpdate');
+            Route::post('/store-achive-item', [OurAchiveController::class, 'storeAchiveItem'])->name('storeAchiveItem');
+            Route::get('/edit-achive-item/{id}', [OurAchiveController::class, 'editAchiveItem'])->name('editAchiveItem');
+            Route::post('/update-achive-item/{id}', [OurAchiveController::class, 'updateAchiveItem'])->name('updateAchiveItem');
+            Route::get('/delete-achive-item/{id}', [OurAchiveController::class, 'deleteAchiveItem'])->name('deleteAchiveItem');
+        });
+        Route::group(['as' => 'testimonial.', 'prefix' => 'testimonial'], function () {
+            Route::get('/list', [TestimonialController::class, 'index'])->name('index');
+            Route::get('/create', [TestimonialController::class, 'create'])->name('create');
+            Route::post('/store', [TestimonialController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [TestimonialController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [TestimonialController::class, 'update'])->name('update');
+            Route::get('/delete/{id}', [TestimonialController::class, 'delete'])->name('delete');
+        });
+
+        Route::group(['as' => 'service.', 'prefix' => 'service'], function () {
+            Route::get('/index', [ServiceController::class, 'index'])->name('index');
+            Route::post('/create-or-update-service', [ServiceController::class, 'createOrUpdate'])->name('createOrUpdate');
+            Route::get('/service-item-list', [ServiceController::class, 'serviceItemList'])->name('serviceItemList');
+            Route::get('/service-item-create', [ServiceController::class, 'serviceItemCreate'])->name('serviceItemCreate');
+            Route::post('/service-item-store', [ServiceController::class, 'serviceItemStore'])->name('serviceItemStore');
+            Route::get('/service-item-edit/{id}', [ServiceController::class, 'serviceItemEdit'])->name('serviceItemEdit');
+            Route::post('/service-item-update/{id}', [ServiceController::class, 'serviceItemUpdate'])->name('serviceItemUpdate');
+            Route::get('/service-item-delete/{id}', [ServiceController::class, 'serviceItemDelete'])->name('serviceItemDelete');
         });
         Route::group(['as' => 'role.', 'prefix' => 'role'], function () {
             Route::get('/list', [RoleController::class, 'index'])->name('list');

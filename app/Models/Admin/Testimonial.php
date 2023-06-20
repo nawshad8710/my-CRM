@@ -5,11 +5,8 @@ namespace App\Models\Admin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class OurAchieve extends Model
+class Testimonial extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
-
-    protected $fillable = ['title', 'short_description'];
-
 }

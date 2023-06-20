@@ -218,7 +218,7 @@
                         @endif
 
                         <li class="{{Request::is('admin/our-achive*') ? 'active':''}}">
-                            <a href="{{ route('admin.our-achive.index') }}">
+                            <a href="{{ route('admin.our-achive.form') }}">
                                 <i class="fas fa-edit"></i>Our Achive
                             </a>
                         </li>
