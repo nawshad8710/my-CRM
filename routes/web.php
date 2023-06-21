@@ -258,6 +258,7 @@ Route::post('/update-list-product', [FrontendSaleController::class, 'updateList'
 Route::post('/delete-list-product', [FrontendSaleController::class, 'deleteItem'])->name('deleteItem');
 Route::get('/list-product', [FrontendSaleController::class, 'listProduct'])->name('listProduct');
 Route::post('/update-list-renewable', [FrontendSaleController::class, 'updateListRenewable'])->name('updateListRenewable');
+Route::post('/update-list-customize', [FrontendSaleController::class, 'updateListCustomization'])->name('updateListCustomization');
 Route::post('/update-list-unitprice', [FrontendSaleController::class, 'updateListUnitprice'])->name('updateListUnitprice');
 Route::post('/sale-store', [FrontendSaleController::class, 'storeSale'])->name('storeSale');
 Route::get('generate-invoice-pdf', array('as'=> 'generate.invoice.pdf', 'uses' => 'FrontendSaleController@generateInvoicePDF'));

@@ -75,16 +75,6 @@ class SaleController extends Controller
 
 
 
-    // public function updateList(Request $request)
-    // {
-    //     if($request->id && $request->quantity){
-    //         $cart = session()->get('list');
-    //         $cart[$request->id]["quantity"] = $request->quantity;
-    //         session()->put('cart', $cart);
-    //         session()->flash('success', 'Cart updated successfully');
-    //     }
-    // }
-
 
 
     public function listProduct()
@@ -208,6 +198,30 @@ class SaleController extends Controller
         session()->put('list', $list);
         return response()->json([
             'message' => 'Product Renewable updated.',
+            'listItem' => $list,
+        ]);
+    }
+
+
+    public function updateListCustomization(Request $request){
+        $id = $request->id;
+        $action = $request->action;
+        $list = session()->get('list', []);
+
+
+        if (isset($list[$id])) {
+            if ($action === 'true') {
+                $list[$id]['is_customization'] = 1;
+
+            } elseif ($action === 'false') {
+                $list[$id]['is_customization'] = 0;
+
+            }
+        }
+
+        session()->put('list', $list);
+        return response()->json([
+            'message' => 'Product Customization updated.',
             'listItem' => $list,
         ]);
     }
