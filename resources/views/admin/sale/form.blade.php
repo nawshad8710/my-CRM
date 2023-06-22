@@ -4,10 +4,7 @@
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/vendor/summernote/summernote-bs4.min.css') }}">
-    <link
-  href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css"
-  rel="stylesheet"
-/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet" />
     <style>
         .switch.switch-3d .switch-label {
             background-color: #b4b1b1;
@@ -66,7 +63,8 @@
             border: 1px solid lightblue;
             width: 50px;
         }
-        .total-price-part{
+
+        .total-price-part {
             display: flex;
         }
 
@@ -80,15 +78,16 @@
         .customization-part>label {
             margin-bottom: 0px
         }
-        .customizableDiv{
+
+        .customizableDiv {
             padding: 5px;
             margin-top: -15px;
             box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
         }
-        p{
+
+        p {
             margin-bottom: 0px
         }
-
     </style>
 @endpush
 
@@ -126,7 +125,7 @@
                                                         style="margin: 0 auto; width: 100%">
                                                         <div style="width: 100%">
 
-                                                            <input type="text" name="search" id="search"
+                                                            <input type="text"  id="search"
                                                                 class="form-control border-0" placeholder="Search...."
                                                                 style="position: relative">
                                                             <div id="suggestions-dropdown" class="dropdown-menu"
@@ -221,6 +220,8 @@
                                                                 id="flexCheckChecked"
                                                                 @if ($value['is_customization'] === 1) checked @endif
                                                                 data-id="{{ $id }}">
+                                                                <input type="text" name="customizable[]"
+                                                                value="{{ $value['is_customization'] }}" hidden>
                                                             <label for="flexCheckChecked">Customize</label>
                                                         </div>
                                                         <div class="trash-part">
@@ -234,27 +235,32 @@
                                                         </div>
                                                     </div>
 
-                                                    <div style="display: none;"
-                                                        class=" customizableDiv"
+                                                    <div style="display: none;" class=" customizableDiv"
                                                         data-id="{{ $id }}">
                                                         <div class="row">
 
                                                             <div class="col-md-6">
 
                                                                 <div class="form-control ">
-                                                                    <label class="form-label" for="textAreaExample">Description</label>
-                                                                    <textarea name="customizeDescription[]"
-                                                                    data-id="{{ $id }}" class="form-control customizeDescription" id="textAreaExample1" rows="4"></textarea>
+                                                                    <label class="form-label"
+                                                                        for="textAreaExample">Description</label>
+                                                                    <textarea name="customizeDescription[]" data-id="{{ $id }}" class="form-control customizeDescription"
+                                                                        id="textAreaExample1" rows="4">{{ $value['customization']['description'] }}</textarea>
 
-                                                                  </div>
+                                                                </div>
                                                             </div>
                                                             <div class="col-md-6">
 
                                                                 <div class="form-control ">
-                                                                    <label class="form-label" for="form12">Amount</label>
-                                                                    <input data-id="{{ $id }}" name="customizeAmount[]" type="text" id="form12" class="form-control customizeAmount  form-control-sm" />
+                                                                    <label class="form-label"
+                                                                        for="form12">Amount</label>
+                                                                    <input data-id="{{ $id }}"
+                                                                        name="customizeAmount[]" type="text"
+                                                                        id="form12"
+                                                                        class="form-control customizeAmount  form-control-sm"
+                                                                        value="{{ $value['customization']['amount'] }}" />
 
-                                                                  </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -357,8 +363,8 @@
 
 @push('js')
     <!----------------------------------------------
-                                                                                                                            DESCRIPTION EDITOR SCRIPT
-                                                                                                                ----------------------------------------------->
+                                                                                                                                    DESCRIPTION EDITOR SCRIPT
+                                                                                                                        ----------------------------------------------->
     <script src="{{ asset('assets/vendor/summernote/summernote-bs4.min.js') }}"></script>
     <script>
         $(document).ready(function() {
@@ -367,8 +373,8 @@
         });
     </script>
     <!------------------------------------------------------
-                                                                                                            SEARCH PRODUCT, ADD AND UPDATE LIST SCRIPT
-                                                                                                                ----------------------------------------------->
+                                                                                                                    SEARCH PRODUCT, ADD AND UPDATE LIST SCRIPT
+                                                                                                                        ----------------------------------------------->
     <script>
         $('#search').keyup(function() {
             var search = $(this).val();
@@ -439,8 +445,8 @@
 
 
     <!----------------------------------------------
-                                                                                                               DELETE LIST ITEM SCRIPT
-                                                                                                    ----------------------------------------------->
+                                                                                                                       DELETE LIST ITEM SCRIPT
+                                                                                                            ----------------------------------------------->
     <script>
         $(document).ready(function() {
             $(".deleteItem").on('click', function() {
@@ -466,8 +472,8 @@
         })
     </script>
     <!----------------------------------------------
-                                                                                                               CHECKBOX RENEWABLE UPDATE SCRIPT
-                                                                                                    ----------------------------------------------->
+                                                                                                                       CHECKBOX RENEWABLE UPDATE SCRIPT
+                                                                                                            ----------------------------------------------->
     <script>
         $(document).ready(function() {
             $('.checkboxRenewable').change(function() {
@@ -533,14 +539,14 @@
 
 
     <!----------------------------------------------
-                                                                                                               CHECKBOX IS_CUSTOMIZE UPDATE SCRIPT
-                                                                                                    ----------------------------------------------->
+                                                                                                                       CHECKBOX IS_CUSTOMIZE UPDATE SCRIPT
+                                                                                                            ----------------------------------------------->
 
 
 
     <!----------------------------------------------
-                                                                                                               UPDATE UNIT PRICE SCRIPT
-                                                                                                    ----------------------------------------------->
+                                                                                                                       UPDATE UNIT PRICE SCRIPT
+                                                                                                            ----------------------------------------------->
     {{-- <script>
     $(document).ready(function() {
             $('.unitPrice').change(function() {
@@ -568,6 +574,62 @@
             })
         })
 </script> --}}
+
+
+    <script>
+        $(document).ready(function() {
+            $('.customizeDescription').change(function() {
+                var productId = $(this).attr('data-id')
+                var customizeDescription = $(this).val();
+                console.log(productId)
+                console.log(customizeDescription)
+
+                $.ajax({
+                    url: '{{ route('updateListCustomizeDescription') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        id: productId,
+                        description: customizeDescription,
+                    },
+                    success: function(response) {
+                        console.log(response)
+
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            })
+            $('.customizeAmount').change(function() {
+                var productId = $(this).attr('data-id')
+                var customizeAmount = $(this).val();
+                console.log(productId)
+                console.log(customizeAmount)
+
+                $.ajax({
+                    url: '{{ route('updateListCustomizeAmount') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        id: productId,
+                        amount: customizeAmount,
+                    },
+                    success: function(response) {
+                        console.log(response)
+
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            })
+        })
+    </script>
 
 
 
@@ -704,22 +766,34 @@
     <script>
         $(document).ready(function() {
             var totalSum = 0;
+            var totalCustomizeSum = 0;
             var vatAmount = 100;
             var paymentStatus = 0;
             var priceValues = [];
+            var customizePriceValues = [];
             var totalCustomizationAmount = 0;
 
             $('.totalPrice').each(function() {
                 priceValues.push(parseFloat($(this).text()));
             });
+            $('.customizeAmount').each(function() {
+                var customizeValue = parseFloat($(this).val()) || 0;
+                customizePriceValues.push(customizeValue);
+            });
+
+            totalCustomizeSum = customizePriceValues.reduce(function(acc, value) {
+                return acc + value;
+            }, 0);
 
             totalSum = priceValues.reduce(function(acc, value) {
                 return acc + value;
             }, 0);
+            var totalvalue = totalSum + totalCustomizeSum;
 
-            $('#total').val(totalSum.toFixed(2));
+
+            $('#total').val(totalvalue.toFixed(2));
             $('#subtotal').text(totalSum.toFixed(2));
-
+            $('#due').val(totalvalue.toFixed(2));
 
             $('.checkboxCustomizable').each(function() {
                 var productId = $(this).attr('data-id');

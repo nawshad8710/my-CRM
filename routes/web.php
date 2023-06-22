@@ -193,6 +193,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::post('/update/{id}', [CustomerController::class, 'update'])->name('update');
             Route::get('/delete/{id}', [CustomerController::class, 'delete'])->name('delete');
             Route::get('/customer-query-delete/{id}', [CustomerController::class, 'customerQueryDelete'])->name('customerQueryDelete');
+            Route::get('/single-customer-query/{id}', [CustomerController::class, 'singleCustomerQuery'])->name('singleCustomerQuery');
         });
 
     });
@@ -260,6 +261,8 @@ Route::get('/list-product', [FrontendSaleController::class, 'listProduct'])->nam
 Route::post('/update-list-renewable', [FrontendSaleController::class, 'updateListRenewable'])->name('updateListRenewable');
 Route::post('/update-list-customize', [FrontendSaleController::class, 'updateListCustomization'])->name('updateListCustomization');
 Route::post('/update-list-unitprice', [FrontendSaleController::class, 'updateListUnitprice'])->name('updateListUnitprice');
+Route::post('/update-list-customize-description', [FrontendSaleController::class, 'updateListCustomizeDescription'])->name('updateListCustomizeDescription');
+Route::post('/update-list-customize-amount', [FrontendSaleController::class, 'updateListCustomizeAmount'])->name('updateListCustomizeAmount');
 Route::post('/sale-store', [FrontendSaleController::class, 'storeSale'])->name('storeSale');
 Route::get('generate-invoice-pdf', array('as'=> 'generate.invoice.pdf', 'uses' => 'FrontendSaleController@generateInvoicePDF'));
 

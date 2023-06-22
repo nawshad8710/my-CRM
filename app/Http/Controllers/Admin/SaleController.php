@@ -71,6 +71,7 @@ class SaleController extends Controller
                     'email' => optional($customer)->email,
                     'phone' => optional($customer)->phone,
                     'price' => $request->total,
+                    'vat' => $request->vat,
                     'due_amount' => $request->due,
                     'paid_amount' => $request->paid,
                     'payment_method' => $request->payment_method,
@@ -83,6 +84,9 @@ class SaleController extends Controller
                         "quantity" => $request->product_quantity[$index],
                         "price" => $request->product_price[$index],
                         "is_renewable" => $request->renewable[$index],
+                        "is_customizable" => $request->customizable[$index],
+                        "customize_description" => $request->customizeDescription[$index],
+                        "customize_amount" => $request->customizeAmount[$index],
                         "total_price" => $request->product_total_price[$index],
                     ]);
                 }

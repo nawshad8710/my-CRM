@@ -9,6 +9,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use PDF;
+
 class SaleController extends Controller
 {
 
@@ -40,7 +41,7 @@ class SaleController extends Controller
 
     public function searchProduct(Request $request)
     {
-        $products = Product::where('is_renewable',1)->where('title', 'like', '%' . $request->search . '%')->get();
+        $products = Product::where('is_renewable', 1)->where('title', 'like', '%' . $request->search . '%')->get();
         // return view('frontend.sales.index', compact('products'));
         return json_decode($products);
     }
@@ -48,7 +49,7 @@ class SaleController extends Controller
     public function addtoList(Request $request)
     {
         $id = $request->id;
-        $listProduct = Product::where('is_renewable',1)->find($id);
+        $listProduct = Product::where('is_renewable', 1)->find($id);
         $list = session()->get('list', []);
         if (isset($list[$id])) {
             $list[$id]['quantity']++;
@@ -62,6 +63,10 @@ class SaleController extends Controller
                 'price' => $listProduct->price,
                 'renewable' => 0,
                 'is_customization' => 0,
+                'customization' => [
+                    'description' => '',
+                    'amount' => 0,
+                ],
             ];
         }
 
@@ -98,7 +103,7 @@ class SaleController extends Controller
     {
         // dd($request->all());
         $request->validate([]);
-       $sale = Sale::create([
+        $sale = Sale::create([
             'invoice_no' => 'default',
             'customer_id' => 1,
             'user_id' => 16,
@@ -116,7 +121,7 @@ class SaleController extends Controller
             'sale' => $sale,
         ];
 
-        $pdf = PDF::loadView('frontend/sales/myPDF',$data);
+        $pdf = PDF::loadView('frontend/sales/myPDF', $data);
 
         return $pdf->download('nicesnippets.pdf');
         // Toastr::success('Sales Create Successfully', 'Success', ["positionClass" => "toast-top-right"]);
@@ -179,7 +184,8 @@ class SaleController extends Controller
     }
 
 
-    public function updateListRenewable(Request $request){
+    public function updateListRenewable(Request $request)
+    {
         $id = $request->id;
         $action = $request->action;
         $list = session()->get('list', []);
@@ -188,10 +194,8 @@ class SaleController extends Controller
         if (isset($list[$id])) {
             if ($action === 'true') {
                 $list[$id]['renewable'] = 1;
-
             } elseif ($action === 'false') {
                 $list[$id]['renewable'] = 0;
-
             }
         }
 
@@ -203,7 +207,8 @@ class SaleController extends Controller
     }
 
 
-    public function updateListCustomization(Request $request){
+    public function updateListCustomization(Request $request)
+    {
         $id = $request->id;
         $action = $request->action;
         $list = session()->get('list', []);
@@ -212,10 +217,8 @@ class SaleController extends Controller
         if (isset($list[$id])) {
             if ($action === 'true') {
                 $list[$id]['is_customization'] = 1;
-
             } elseif ($action === 'false') {
                 $list[$id]['is_customization'] = 0;
-
             }
         }
 
@@ -227,27 +230,64 @@ class SaleController extends Controller
     }
 
 
-    public function updateListUnitprice(Request $request)
+
+    public function updateListCustomizeDescription(Request $request)
     {
         $id = $request->id;
-        $unitprice = $request->unit_price;
+        $customize_description = $request->description;
 
         $list = session()->get('list', []);
 
-        if (isset($list[$id])) {
+        if (isset($list[$id]['is_customization']) == 1 ) {
 
-                $list[$id]['unit_price'] = $unitprice;
-                $list[$id]['price'] = $list[$id]['unit_price'] * $list[$id]['quantity'];
-
+            $list[$id]['customization']['description'] = $customize_description;
         }
 
         session()->put('list', $list);
-
         return response()->json([
-            'message' => 'Product Unit Price Updated.',
+            'message' => 'Product customize description Updated.',
             'listItem' => $list,
         ]);
     }
+    public function updateListCustomizeAmount(Request $request)
+    {
+        $id = $request->id;
+        $customize_amount = $request->amount;
+
+        $list = session()->get('list', []);
+
+        if (isset($list[$id]['is_customization']) == 1 ) {
+
+            $list[$id]['customization']['amount'] = $customize_amount;
+        }
+
+        session()->put('list', $list);
+        return response()->json([
+            'message' => 'Product customize amount Updated.',
+            'listItem' => $list,
+        ]);
+    }
+
+    // public function updateListUnitprice(Request $request)
+    // {
+    //     $id = $request->id;
+    //     $unitprice = $request->unit_price;
+
+    //     $list = session()->get('list', []);
+
+    //     if (isset($list[$id])) {
+
+    //         $list[$id]['unit_price'] = $unitprice;
+    //         $list[$id]['price'] = $list[$id]['unit_price'] * $list[$id]['quantity'];
+    //     }
+
+    //     session()->put('list', $list);
+
+    //     return response()->json([
+    //         'message' => 'Product Unit Price Updated.',
+    //         'listItem' => $list,
+    //     ]);
+    // }
 
 
     public function generateInvoicePDF()

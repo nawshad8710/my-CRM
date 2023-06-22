@@ -29,7 +29,7 @@
                     <!-- DATA TABLE -->
                     <h3 class="title-5 m-b-35">Customer List</h3>
                     <div class="table-data__tool">
-                        <div class="table-data__tool-left">
+                        {{-- <div class="table-data__tool-left">
                             <div class="rs-select2--light rs-select2--sm">
                                 <select class="js-select2" name="status" id="status">
                                     <option selected="selected" value="">Status</option>
@@ -41,7 +41,7 @@
                                 <div class="dropDownSelect2"></div>
                             </div>
 
-                        </div>
+                        </div> --}}
                         <div class="table-data__tool-right">
                             @if(has_access('create_customer'))
                             <a href="{{ route('admin.customer.create') }}"
@@ -73,17 +73,44 @@
                                         <span class="block-email">{{ $customer->email }}</span>
                                     </td>
                                     <td>{{ $customer->phone }}</td>
-                                    <td>{{$customer->subject }}</td>
+
+                                    <td class="desc">
+                                        <?php
+                                            //$description =  strip_tags(html_entity_decode($user_project->task));
+                                            $description =  $customer->subject;
+                                            if (strlen($description) > 30) {
+
+                                                // truncate string
+                                                $stringCut = substr($description, 0, 30);
+                                                $endPoint = strrpos($stringCut, ' ');
+
+                                                //if the string doesn't contain any space then it will cut without word basis.
+                                                //$desc = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
+                                                $desc = $stringCut;
+                                                $desc .= '...';
+                                            }
+                                        ?>
+                                        @if (strlen($description) > 30)
+                                            {!! $desc !!}
+                                            <a href="#" class="desc-text" onclick="descModalShow({{ $customer->id }})"> <u>View Details</u></a>
+                                        @else
+                                            {!! $customer->subject !!}
+                                        @endif
+                                        <!-- {!! Str::limit($description, $limit = 30, $end = '. . .<a href="#" class="desc-text" onclick="descModalShow()">View Details</a>') !!} -->
+                                        <div id="description{{ $customer->id }}" class="d-none">
+                                            {!! $customer->subject !!}
+                                        </div>
+                                    </td>
 
                                     <td>
                                         <div class="table-data-feature">
 
-                                            {{-- @if(has_access('update_customer'))
-                                            <a href="{{ route('admin.customer.edit', $customer->id) }}" class="item"
-                                                data-toggle="tooltip" data-placement="top" title="Edit">
-                                                <i class="zmdi zmdi-edit"></i>
-                                            </a>
-                                            @endif --}}
+
+                                            <button onclick="viewModalShow({{ $customer->id }})" class="item"
+                                                data-toggle="tooltip" data-placement="top" title="view">
+                                                <i class="zmdi zmdi-eye"></i>
+                                            </button>
+
                                             @if(has_access('delete_customer'))
                                             <button class="item" data-toggle="tooltip" data-placement="top"
                                                 title="Delete" onclick="deleteModalShow({{ $customer->id }})">
@@ -135,6 +162,75 @@
     </div>
 </div>
 <!-- end modal static -->
+
+
+  <!-- modal description -->
+  <div class="modal fade" id="scrollmodal" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="scrollmodalLabel">Query Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="taskDetailsWrapper">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal description -->
+
+
+<!-- view details modal-->
+<div class="modal fade" id="viewdetailsModal" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="scrollmodalLabel">Customer Query Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+               <div class="row">
+                <div class="col-md-12 d-flex justify-content-between">
+                    <div class="">
+                        <p>Customer Name :</p>
+                    <p>Customer Email :</p>
+                    <p>Customer Phone :</p>
+                    </div>
+                    <div class="">
+                        <p id="customerName"></p>
+                    <p id="customerEmail"></p>
+                    <p id="customerPhone"></p>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <hr>
+                    <p>Customer Message:</p>
+<hr>
+                    <p id="customerMessage"></p>
+                </div>
+               </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end view details details modal-->
+
+
+
 @endsection
 
 @push('js')
@@ -154,6 +250,35 @@
             dataType: "JSON",
             success: function (response) {
                 location.reload();
+            },
+            error: function(xhr) {
+               console.log(xhr.statusText);
+            }
+        });
+    }
+
+    function descModalShow(id){
+        this.event.preventDefault();
+        var description = $('#description'+id).html();
+        //alert(description);
+        $("#taskDetailsWrapper").html(description);
+        $("#scrollmodal").modal("show");
+    }
+
+    function viewModalShow(id){
+      $('#viewdetailsModal').modal("show");
+      var url = window.location.origin + "/admin/customer/single-customer-query/"+id;
+      console.log(url)
+      $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "JSON",
+            success: function (response) {
+
+                $('#customerName').text(response.name);
+                $('#customerEmail').text(response.email);
+                $('#customerPhone').text(response.phone);
+                $('#customerMessage').text(response.subject);
             },
             error: function(xhr) {
                console.log(xhr.statusText);

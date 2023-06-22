@@ -15,7 +15,9 @@ class SaleItem extends Model
         'quantity',
         'total_price',
         'is_customizable',
-        'is_renewable'
+        'is_renewable',
+        'customize_amount',
+        'customize_description',
     ];
 
 

@@ -123,7 +123,6 @@ class CustomerController extends Controller
             return 1;
         }
         return 0;
-
     }
     /*
     |--------------------------------------------------------------------------
@@ -140,6 +139,12 @@ class CustomerController extends Controller
             return 1;
         }
         return 0;
+    }
 
+
+    public function singleCustomerQuery($id)
+    {
+        $customerQuery = CustomerQuery::find($id);
+        return json_decode($customerQuery);
     }
 }

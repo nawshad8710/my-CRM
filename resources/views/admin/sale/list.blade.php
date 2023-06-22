@@ -32,14 +32,14 @@
                                 <h3 class="title-5 m-b-35">Sale List</h3>
                                 <div class="table-data__tool">
                                     <div class="table-data__tool-left">
-                                        <div class="rs-select2--light rs-select2--sm">
+                                        {{-- <div class="rs-select2--light rs-select2--sm">
                                             <select class="js-select2" name="status" id="status">
                                                 <option selected="selected" value="">Status</option>
                                                 <option value="1" @isset($_GET['status']) @if($_GET['status']==1) selected @endif @endisset)>Active</option>
                                                 <option value="0" @isset($_GET['status']) @if($_GET['status']==0) selected @endif @endisset)>Inactive</option>
                                             </select>
                                             <div class="dropDownSelect2"></div>
-                                        </div>
+                                        </div> --}}
                                         <!-- <button class="au-btn-filter">
                                             <i class="zmdi zmdi-filter-list"></i>filters</button> -->
                                     </div>
@@ -111,7 +111,7 @@
                                                 @endforeach
                                             @else
                                             <tr class="tr-shadow">
-                                                <td colspan="5" class="text-center">No Sale Found!</td>
+                                                <td colspan="9" class="text-center">No Sale Found!</td>
                                             </tr>
                                             @endif
                                         </tbody>

@@ -169,6 +169,8 @@
                 <th class="w-50">Product Name</th>
                 <th class="w-50">Price</th>
                 <th class="w-50">Qty</th>
+                <th class="w-50">Customize Description</th>
+                <th class="w-50">Customize Amount</th>
                 <th class="w-50">Subtotal</th>
 
             </tr>
@@ -183,6 +185,8 @@
                 </td>
                 <td>{{$products->price}}</td>
                 <td>{{$products->quantity}}</td>
+                <td>{{$products->customize_description}}</td>
+                <td>{{$products->customize_amount}}</td>
                 <td>{{$products->total_price}}</td>
 
             </tr>
@@ -196,6 +200,7 @@
                             {{-- <p>Vat (18%)</p> --}}
                             <p>Paid</p>
                             <p>Due</p>
+                            <p>vat (%)</p>
                             <p>Total</p>
                             <p>Payment Status</p>
                             {{-- <p>Total Payable</p> --}}
@@ -203,6 +208,7 @@
                         <div class="total-right w-15 float-left text-bold" align="right">
                             <p>{{$sale->paid_amount}}</p>
                             <p>{{$sale->due_amount}}</p>
+                            <p>{{$sale->vat}}</p>
                             <p>{{$sale->price}}</p>
                             <p>
                                 @if($sale->payment_status == 0)

@@ -51,7 +51,7 @@
                     <!-- DATA TABLE -->
                     <h3 class="title-5 m-b-35">Problems List</h3>
                     <div class="table-data__tool">
-                        <div class="table-data__tool-left">
+                        {{-- <div class="table-data__tool-left">
                             <div class="rs-select2--light rs-select2--sm">
                                 <select class="js-select2" name="status" id="status">
                                     <option selected="selected" value="">Status</option>
@@ -72,7 +72,7 @@
                             </div>
                             <!-- <button class="au-btn-filter">
                                                 <i class="zmdi zmdi-filter-list"></i>filters</button> -->
-                        </div>
+                        </div> --}}
                         <div class="table-data__tool-right">
 
                             <a href="{{ route('employee.problem.addProblem') }}"
@@ -301,7 +301,7 @@
 
 
 {{-- view solution modal --}}
-<div id="solutionModal" class="modal modal-dialog-scrollable">
+<div id="solutionModal" class="fade modal modal-dialog-scrollable">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -390,7 +390,8 @@
                 modal.hide();
             });
             $("#openSolutionModal").on("click", function() {
-                modal.show();
+                // modal.show();
+                $("#solutionModal").appendTo("body").modal('show');
             });
         });
 </script>
