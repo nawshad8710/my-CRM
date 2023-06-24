@@ -76,7 +76,6 @@
                                 <thead>
                                     <tr>
                                         <th>Project</th>
-                                        <th>User</th>
                                         <th>Task</th>
                                         <th>Description</th>
                                         <th>Date</th>
@@ -90,9 +89,8 @@
                                     @if (count($solutions) > 0)
                                         @foreach ($solutions as $key => $solution)
                                             <tr class="tr-shadow">
-                                                <td>{{ $solution->project->title }}</td>
-                                                <td>{{ $solution->user->name }}</td>
-                                                <td>{!! $solution->user_project->task !!}</td>
+                                                <td>{{ $solution->problem->project->title }}</td>
+                                                <td>{{ $solution->problem->user_project->title }}</td>
                                                 <td class="desc">
                                                     <?php
                                                     //$description =  strip_tags(html_entity_decode($user_project->task));

@@ -78,6 +78,7 @@
                                         <th>Project</th>
                                         <th>User</th>
                                         <th>Task</th>
+                                        <th>Problem Title</th>
                                         <th>Description</th>
                                         <th>Date</th>
                                         {{-- <th>Status</th> --}}
@@ -85,76 +86,64 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (count($solutions) > 0)
+                                    {{-- @if (count($solutions) > 0) --}}
+                                    @if (is_countable($solutions) && count($solutions) > 0) :
                                         @foreach ($solutions as $key => $solution)
-                                            <tr class="tr-shadow">
-                                                <td>{{ $solution->project->title }}</td>
-                                                <td>{{ $solution->user->name }}</td>
-                                                <td>{!! $solution->user_project->task !!}</td>
-                                                <td class="desc">
-                                                    <?php
-                                                    //$description =  strip_tags(html_entity_decode($user_project->task));
-                                                    $description = $solution->description;
-                                                    if (strlen($description) > 30) {
-                                                        // truncate string
-                                                        $stringCut = substr($description, 0, 30);
-                                                        $endPoint = strrpos($stringCut, ' ');
+                                            @if ($solution->problem)
+                                                <tr class="tr-shadow">
+                                                    <td>{{ optional($solution)->problem->project->title }}</td>
+                                                    <td>{{ optional($solution)->problem->user->name }}</td>
+                                                    <td>{{ optional($solution)->problem->user_project->title }}</td>
+                                                    <td>{{ optional($solution)->problem->title }}</td>
+                                                    <td class="desc">
+                                                        <?php
 
-                                                        //if the string doesn't contain any space then it will cut without word basis.
-                                                        //$desc = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
-                                                        $desc = $stringCut;
-                                                        $desc .= '...';
-                                                    }
-                                                    ?>
-                                                    @if (strlen($description) > 30)
-                                                        {!! $desc !!}
-                                                        <a href="#" class="desc-text"
-                                                            onclick="descModalShow({{ $solution->id }})">
-                                                            <u>View Details</u></a>
-                                                    @else
-                                                        {!! $solution->description !!}
-                                                    @endif
-
-                                                    <div id="description{{ $solution->id }}" class="d-none">
-                                                        {!! $solution->description !!}
-                                                    </div>
-                                                </td>
-
-                                                <td>{{ date('d-m-Y H:i a', strtotime($solution->created_at)) }}</td>
-                                                {{-- <td class="text-center">
-                                                    @if ($solution->status == 0)
-                                                        <!-- <span class="status--process">Active</span> -->
-                                                        <span class="badge badge-secondary">Pending</span>
-                                                    @elseif($solution->status == 1)
-                                                        <span class="badge badge-primary">Active</span>
-                                                    @elseif($solution->status == 2)
-                                                        <span class="badge badge-success">Completed</span>
-                                                    @elseif($solution->status == 3)
-                                                        <span class="badge badge-danger">Cancelled</span>
-                                                    @endif
-                                                </td> --}}
-                                                <td>
-                                                    <div class="table-data-feature">
-                                                        @if (has_access('update_solution'))
-                                                            <a href="{{ route('admin.assignment.solutionEdit', $solution->id) }}"
-                                                                class="item" data-toggle="tooltip" data-placement="top"
-                                                                title="Edit">
-                                                                <i class="zmdi zmdi-edit"></i>
-                                                            </a>
+                                                        $description = $solution->description;
+                                                        if (strlen($description) > 30) {
+                                                            $stringCut = substr($description, 0, 30);
+                                                            $endPoint = strrpos($stringCut, ' ');
+                                                            $desc = $stringCut;
+                                                            $desc .= '...';
+                                                        }
+                                                        ?>
+                                                        @if (strlen($description) > 30)
+                                                            {!! $desc !!}
+                                                            <a href="#" class="desc-text"
+                                                                onclick="descModalShow({{ $solution->id }})">
+                                                                <u>View Details</u></a>
+                                                        @else
+                                                            {!! $solution->description !!}
                                                         @endif
-                                                        @if (has_access('delete_solution'))
-                                                            <button class="item" data-toggle="tooltip"
-                                                                data-placement="top" title="Delete"
-                                                                onclick="deleteModalShow({{ $solution->id }})">
-                                                                <i class="zmdi zmdi-delete"></i>
-                                                            </button>
-                                                        @endif
-                                                        <!-- <button class="item" data-toggle="tooltip" data-placement="top" title="More">
-                                                                   <i class="zmdi zmdi-more"></i>
-                                                               </button> -->
-                                                    </div>
-                                                </td>
-                                            </tr>
+
+                                                        <div id="description{{ $solution->id }}" class="d-none">
+                                                            {!! $solution->description !!}
+                                                        </div>
+                                                    </td>
+
+                                                    <td>{{ date('d-m-Y H:i a', strtotime($solution->created_at)) }}</td>
+
+                                                    <td>
+                                                        <div class="table-data-feature">
+                                                            @if (has_access('update_solution'))
+                                                                <a href="{{ route('admin.assignment.solutionEdit', $solution->id) }}"
+                                                                    class="item" data-toggle="tooltip"
+                                                                    data-placement="top" title="Edit">
+                                                                    <i class="zmdi zmdi-edit"></i>
+                                                                </a>
+                                                            @endif
+                                                            @if (has_access('delete_solution'))
+                                                                <button class="item" data-toggle="tooltip"
+                                                                    data-placement="top" title="Delete"
+                                                                    onclick="deleteModalShow({{ $solution->id }})">
+                                                                    <i class="zmdi zmdi-delete"></i>
+                                                                </button>
+                                                            @endif
+
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                            @endif
                                         @endforeach
                                     @else
                                         <tr class="tr-shadow">
@@ -236,7 +225,7 @@
         function deleteData() {
             $("#staticModal").modal("hide");
             var id = $('#deleteDataId').val();
-            var url = "delete/" + id;
+            var url = "solution-delete/" + id;
             console.log(url, id);
             $.ajax({
                 type: "GET",

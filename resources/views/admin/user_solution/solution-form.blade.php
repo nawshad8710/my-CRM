@@ -35,83 +35,24 @@
                                 method="post" enctype="multipart/form-data">
                                 @csrf
 
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="employee_id" class="control-label mb-1">Employee</label>
-                                            <select class="form-control" name="employee_id" id="employee_id">
-                                                <option value="">--Select Employee--</option>
-                                                @foreach ($employees as $key => $employee)
-                                                @isset($solution)
-                                                <option value="{{ $employee->id }}" {{ $solution->user_id==$employee->id
-                                                    ? ' selected' : '' }}>{{ $solution->user->name }}</option>
-                                                @else
-                                                <option value="{{ $employee->id }}">{{ $employee->name }}</option>
-                                                @endisset
-                                                @endforeach
-                                            </select>
-                                            @error('user_id')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-
-                                        <div class="form-group">
-                                            <label for="project_id" class="control-label mb-1">Select Project</label>
-                                            <select class="form-control" name="project_id" id="project_id">
-                                                <option value="">--Select Project--</option>
-                                                @foreach ($projects as $key => $project)
-                                                @isset($solution)
-                                                <option value="{{ $project->id }}" {{ $solution->
-                                                    project_id==$project->id
-                                                    ? ' selected' : '' }}>{{ $solution->project->title }}</option>
-                                                @else
-                                                <option value="{{ $project->id }}">{{ $project->title }}</option>
-                                                @endisset
-                                                @endforeach
-                                            </select>
-                                            @error('user_id')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
 
                                 <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label for="user_project_id" class="control-label mb-1">Task</label>
-                                            <select class="form-control" name="user_project_id" id="user_project_id">
-                                                <option value="">--Select Task--</option>
-                                                @isset($solution)
-                                                @foreach ($tasks as $key => $task)
-                                                <option value="{{ $task->id }}" @isset($solution) @if($task->id ==
-                                                    $solution->user_project_id)
-                                                    selected
-                                                    @endif
-                                                    @endisset>{{ $task->title }}</option>
-                                                @endforeach
-                                                @endisset
-                                            </select>
-                                            @error('user_project_id')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="user_problem_id" class="control-label mb-1">Employee
                                                 Problem</label>
                                             <select class="form-control" name="user_problem_id" id="user_problem_id">
                                                 <option value="">--Select Problem--</option>
+                                                @foreach ($problems as $key => $problem)
+                                                <option value="{{ $problem->id }}">{!! $problem->title !!}</option>
+                                                @endforeach
                                                 @isset($solution)
                                                 @foreach ($problems as $key => $problem)
                                                 <option value="{{ $problem->id }}" @isset($solution) @if($problem->id ==
                                                     $solution->user_problem_id)
                                                     selected
                                                     @endif
-                                                    @endisset>{!! $problem->description !!}</option>
+                                                    @endisset>{!! $problem->title !!}</option>
                                                 @endforeach
                                                 @endisset
                                             </select>
@@ -175,6 +116,34 @@
                                 </div> --}}
                                 <div class="row">
                                     <div class="col-sm-9">
+
+                                        <label for="photo" class="control-label mb-1">Solution Photo</label>
+                                        @isset($solution)
+                                        <div class="row">
+                                            <div class="col-6">
+                                                @foreach($imageNames as $imageName)
+                                                <img class="thumbnail"
+                                                    src="{{ asset('assets/images/uploads/solution/' . $imageName) }}"
+                                                    alt="" width="100Px" height="100px">
+                                                @endforeach
+
+                                            </div>
+                                            <div class="col-6">
+                                                <input name="images[]" type="file"
+                                                    class="form-control @error('images') is-invalid @enderror" multiple>
+                                                @error('images')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+
+                                            </div>
+                                        </div>
+                                        @else
+                                        <input name="images[]" multiple type="file"
+                                            class="form-control @error('images') is-invalid @enderror" required>
+                                        @error('images')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        @endisset
 
                                     </div>
                                     <div class="col-sm-3">

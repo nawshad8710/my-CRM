@@ -15,11 +15,9 @@ class CreateSolutionsTable extends Migration
     {
         Schema::create('solutions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('project_id')->nullable();
-            $table->unsignedBigInteger('user_project_id')->nullable();
-            $table->unsignedBigInteger('user_problem_id')->nullable();
+            $table->unsignedBigInteger('user_problem_id')->constrained('problems')->references('id')->on('problems')->onDelete('cascade')->nullable();
             $table->text('description')->nullable();
+            $table->text('images')->nullable();
             $table->timestamps();
         });
     }

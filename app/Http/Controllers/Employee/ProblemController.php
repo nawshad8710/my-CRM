@@ -34,25 +34,14 @@ class ProblemController extends Controller
         if (!has_access('employee_problem_list')) {
             abort(404);
         }
-        $problems = Problem::where('user_id', Auth()->id())->latest()->get();
-        $solution = collect();
-        foreach ($problems as $problem) {
-            $problemId = $problem->id;
-
-            $problemSolution = Solution::where('user_problem_id', $problemId)->get();
-
-            $solution = $solution->concat($problemSolution);
-        }
-
-        // dd($solution);
-
-
-
+        $problems = Problem::where('user_id', Auth()->id())
+            ->with('solution')
+            ->get();
 
         if (isset($_GET['status'])) {
             $problems = $problems->where('status', $_GET['status']);
         }
-        return view('employee.problem.problem-list', compact('problems','solution'));
+        return view('employee.problem.problem-list', compact('problems'));
     }
 
     /*
@@ -193,11 +182,6 @@ class ProblemController extends Controller
         $problems = Problem::findOrFail($id);
 
         $existingImages = unserialize($problems->images);
-
-
-
-
-
         if ($request->file('images')) {
             $newImages = [];
             $images = $request->file('images');
@@ -265,28 +249,60 @@ class ProblemController extends Controller
     |--------------------------------------------------------------------------
     */
     public function deleteProblem($id)
-    { {
-            if (!has_access('delete_problem')) {
-                abort(404);
-            }
+    {
+        if (!has_access('delete_problem')) {
+            abort(404);
+        }
 
 
-            $problems = Problem::findOrFail($id);
+        $problems = Problem::findOrFail($id);
 
-            if ($problems) {
-                $imageNames = unserialize($problems->images);
-
-                foreach ($imageNames as $imageName) {
-                    $imagePath = public_path('assets/images/uploads/problems') . '/' . $imageName;
+        if ($problems) {
+            $imageNames = unserialize($problems->images);
+            if ($problems->solution) {
+                $imageNamesSolution = unserialize($problems->solution->images);
+                foreach ($imageNamesSolution as $imageName) {
+                    $imagePath = public_path('assets/images/uploads/solution') . '/' . $imageName;
                     if (File::exists($imagePath)) {
                         File::delete($imagePath);
                     }
                 }
-                $problems->delete();
-                Toastr::success('Problems Deleted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
             }
-            return 1;
+            foreach ($imageNames as $imageName) {
+                $imagePath = public_path('assets/images/uploads/problems') . '/' . $imageName;
+                if (File::exists($imagePath)) {
+                    File::delete($imagePath);
+                }
+            }
+            $problems->delete();
+            $problems->solution()->delete();
+            Toastr::success('Problems Deleted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         }
+        return 1;
+    }
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | GET MODAL SOLUTION (METHOD)
+    |--------------------------------------------------------------------------
+    */
+
+    public function getSolution($id)
+    {
+        $solution = Solution::where('id', $id)
+            ->with('problem', 'problem.project', 'problem.user_project')
+            ->first();
+        $solutionImage = unserialize($solution->images);
+        return response()->json([
+            'solution' => $solution,
+            'solutionImage' => $solutionImage,
+        ]);
     }
     /*-----------------end of problems----------------------*/
 }

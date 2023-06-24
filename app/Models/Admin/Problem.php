@@ -24,10 +24,16 @@ class Problem extends Model
         return $this->belongsTo(User::class,'user_id','id');
     }
 
-    
+
     public function user_project()
     {
-        return $this->belongsTo(UserProject::class,'user_id','id');
+        return $this->belongsTo(UserProject::class,'user_project_id','id');
+    }
+
+
+    public function solution()
+    {
+        return $this->hasOne(Solution::class, 'user_problem_id');
     }
 
 

@@ -24,43 +24,15 @@ class SolutionController extends Controller
         if (!has_access('view_solution')) {
             abort(404);
         }
+        $problemId = Problem::query()
+        ->where('user_id', auth()->id())
+        ->pluck('id');
+        $solutions = Solution::whereIn('user_problem_id', $problemId)
+        ->with('problem', 'problem.project', 'problem.user_project')
+        ->get();
 
 
-        $solutions = Solution::where('user_id', Auth()->id())->latest()
-            ->get();
-
-
-        $employees = User::whereHas('role', function ($query) {
-            $query->where('type', 1);
-        })
-            ->with('role')
-            ->where('id',Auth()->id())
-            ->select('id', 'name')
-            ->get();
-
-
-        $problems = collect();
-        foreach ($employees as $employee) {
-            $employeeId = $employee->id;
-
-            $employeeProblems = Problem::where('user_id', $employeeId)->get();
-
-            $problems = $problems->concat($employeeProblems);
-        }
-
-
-        $projects = Project::where('status', '!=', 2)->where('status', '!=', 3)->latest()->get();
-
-        if (isset($_GET['user_id'])) {
-            $solutions = $solutions->where('user_id', $_GET['user_id']);
-        }
-
-        if (isset($_GET['project_id'])) {
-            $solutions = $solutions->where('project_id', $_GET['project_id']);
-        }
-
-
-        return view('employee.solution.solution-list', compact('solutions', 'employees', 'projects', 'problems'));
+        return view('employee.solution.solution-list', compact('solutions'));
     }
 
 

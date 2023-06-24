@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\OurAchiveController;
 use App\Http\Controllers\Admin\UserReportController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\SiteInfoController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\UserSolutionController;
 use App\Http\Controllers\Employee\EmployeeHomeController;
@@ -122,9 +123,27 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::get('/get-task-by-user/{projectId}', [UserSolutionController::class, 'getTaskByUser'])->name('getTaskByUser');
             Route::get('/get-problem-by-user/{id}', [UserSolutionController::class, 'getProblemByUser'])->name('getProblemByUser');
         });
+
+        /*
+        |--------------------------------------------------------------------------
+        | USER REPORT ROUTE FOR ADMIN (ROUTE)
+        |--------------------------------------------------------------------------
+        */
+
         Route::group(['as' => 'report.', 'prefix' => 'report'], function () {
             Route::get('/list', [UserReportController::class, 'index'])->name('list');
         });
+        /*
+        |--------------------------------------------------------------------------
+        | SITE INFO ROUTE FOR ADMIN (ROUTE)
+        |--------------------------------------------------------------------------
+        */
+        Route::group(['as' => 'site-info.', 'prefix' => 'site-info'], function () {
+            Route::get('/index', [SiteInfoController::class, 'index'])->name('index');
+            Route::post('/store', [SiteInfoController::class, 'store'])->name('store');
+        });
+
+
         Route::group(['as' => 'our-achive.', 'prefix' => 'our-achive'], function () {
             Route::get('/form', [OurAchiveController::class, 'form'])->name('form');
             Route::post('/store-and-update', [OurAchiveController::class, 'storeAndUpdate'])->name('storeAndUpdate');
@@ -195,7 +214,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::get('/customer-query-delete/{id}', [CustomerController::class, 'customerQueryDelete'])->name('customerQueryDelete');
             Route::get('/single-customer-query/{id}', [CustomerController::class, 'singleCustomerQuery'])->name('singleCustomerQuery');
         });
-
     });
 });
 
@@ -221,6 +239,7 @@ Route::middleware(['auth', 'employee'])->group(function () {
             Route::get('/edit/{id}', [ProblemController::class, 'editProblem'])->name('editProblem');
             Route::post('/update/{id}', [ProblemController::class, 'updateProblem'])->name('updateProblem');
             Route::get('/delete/{id}', [ProblemController::class, 'deleteProblem'])->name('deleteProblem');
+            Route::get('/get-solution/{id}', [ProblemController::class, 'getSolution'])->name('getSolution');
         });
 
 
@@ -264,7 +283,7 @@ Route::post('/update-list-unitprice', [FrontendSaleController::class, 'updateLis
 Route::post('/update-list-customize-description', [FrontendSaleController::class, 'updateListCustomizeDescription'])->name('updateListCustomizeDescription');
 Route::post('/update-list-customize-amount', [FrontendSaleController::class, 'updateListCustomizeAmount'])->name('updateListCustomizeAmount');
 Route::post('/sale-store', [FrontendSaleController::class, 'storeSale'])->name('storeSale');
-Route::get('generate-invoice-pdf', array('as'=> 'generate.invoice.pdf', 'uses' => 'FrontendSaleController@generateInvoicePDF'));
+Route::get('generate-invoice-pdf', array('as' => 'generate.invoice.pdf', 'uses' => 'FrontendSaleController@generateInvoicePDF'));
 
 
 // contact info

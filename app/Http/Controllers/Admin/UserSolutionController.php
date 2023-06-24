@@ -9,6 +9,8 @@ use App\Models\Admin\Solution;
 use App\Models\Admin\UserProject;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
+use Carbon\Carbon;
+use File;
 use Illuminate\Http\Request;
 
 class UserSolutionController extends Controller
@@ -26,40 +28,11 @@ class UserSolutionController extends Controller
         }
 
 
-        $solutions = Solution::latest()
-            ->get();
+        $solutions = Solution::query()
+        ->with('problem','problem.user','problem.project', 'problem.user_project')
+        ->get();
 
-
-        $employees = User::whereHas('role', function ($query) {
-            $query->where('type', 1);
-        })
-            ->with('role')
-            ->select('id', 'name')
-            ->get();
-
-
-        $problems = collect();
-        foreach ($employees as $employee) {
-            $employeeId = $employee->id;
-
-            $employeeProblems = Problem::where('user_id', $employeeId)->get();
-
-            $problems = $problems->concat($employeeProblems);
-        }
-
-
-        $projects = Project::where('status', '!=', 2)->where('status', '!=', 3)->latest()->get();
-
-        if (isset($_GET['user_id'])) {
-            $solutions = $solutions->where('user_id', $_GET['user_id']);
-        }
-
-        if (isset($_GET['project_id'])) {
-            $solutions = $solutions->where('project_id', $_GET['project_id']);
-        }
-
-
-        return view('admin.user_solution.solution-list', compact('solutions', 'employees', 'projects', 'problems'));
+        return view('admin.user_solution.solution-list', compact('solutions'));
     }
 
 
@@ -77,32 +50,9 @@ class UserSolutionController extends Controller
             abort(404);
         }
 
-        $employees = User::whereHas('role', function ($query) {
-            $query->where('type', 1);
-        })
-            ->with('role')
-            ->select('id', 'name')
-            ->get();
+        $problems = Problem::get();
 
-
-        $problems = collect();
-        foreach ($employees as $employee) {
-            $employeeId = $employee->id;
-
-            $employeeProblems = Problem::where('user_id', $employeeId)
-                ->get();
-
-            $problems = $problems->concat($employeeProblems);
-        }
-
-
-        $projects = Project::where('status', '!=', 2)
-            ->where('status', '!=', 3)
-            ->latest()
-            ->get();
-
-
-        return view('admin.user_solution.solution-form', compact('employees', 'problems', 'projects'));
+        return view('admin.user_solution.solution-form', compact('problems'));
     }
 
 
@@ -120,16 +70,43 @@ class UserSolutionController extends Controller
 
 
         $request->validate([]);
+        $imageNames = [];
 
-        Solution::create([
-            'user_id'               => $request->employee_id,
-            'project_id'            => $request->project_id,
-            'user_project_id'       => $request->user_project_id,
-            'user_problem_id'       => $request->user_problem_id,
-            'description'           => $request->description,
-        ]);
-        Toastr::success('Solution Added Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-        return view('admin.user_solution.solution-list');
+        $images = $request->file('images');
+
+        if ($images && is_array($images)) {
+            foreach ($images as $image) {
+                if ($image && $image->isValid()) {
+                    $currentDate = Carbon::now()->toDateString();
+                    $originalName = $image->getClientOriginalName();
+                    $sanitizedFileName = pathinfo($originalName, PATHINFO_FILENAME);
+                    $imageName = $currentDate . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+
+                    if (!is_dir('assets/images/uploads/solution')) {
+                        mkdir('assets/images/uploads/solution', 0777, true);
+                    }
+
+                    $image->move(public_path('assets/images/uploads/solution'), $imageName);
+
+                    $imageNames[] = $imageName;
+                }
+            }
+        }
+
+        $solution = Solution::where('user_problem_id', $request->user_problem_id)->first();
+        if($solution)
+        {
+            Toastr::warning('Solution Already Added For This Problem!', 'Warning', ["positionClass" => "toast-top-right"]);
+            return back();
+        }else{
+            Solution::create([
+                'user_problem_id'       => $request->user_problem_id,
+                'description'           => $request->description,
+                'images'                => serialize($imageNames),
+            ]);
+            Toastr::success('Solution Added Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+            return redirect()->route('admin.assignment.soluitonIndex');
+        }
     }
 
 
@@ -161,14 +138,16 @@ class UserSolutionController extends Controller
 
             $employeeProblems = Problem::where('user_id', $employeeId)
                 ->get();
-                $employeeTasks = UserProject::where('project_id', $solution->project_id)
-                        ->where('user_id', $employeeId)
-                        ->where('status','!=' ,2)
-                        ->where('status','!=' ,3)
-                        ->latest()
-                        ->get();
+
+            $employeeTasks = UserProject::where('project_id', $solution->project_id)
+                ->where('user_id', $employeeId)
+                ->where('status', '!=', 2)
+                ->where('status', '!=', 3)
+                ->latest()
+                ->get();
 
             $problems = $problems->concat($employeeProblems);
+            // dd($problems);
             $tasks = $tasks->concat($employeeTasks);
         }
 
@@ -181,7 +160,8 @@ class UserSolutionController extends Controller
 
 
         if ($solution) {
-            return view('admin.user_solution.solution-form', compact('solution', 'employees', 'problems','projects','tasks'));
+            $imageNames = unserialize($solution->images);
+            return view('admin.user_solution.solution-form', compact('solution', 'employees', 'problems', 'projects', 'tasks', 'imageNames'));
         }
         return back();
     }
@@ -199,23 +179,58 @@ class UserSolutionController extends Controller
     public function solutionUpdate(Request $request, $id)
     {
         $solution = Solution::find($id);
-        $request->validate([
+        $request->validate([]);
+        $existingImages = unserialize($solution->images);
+        if ($request->file('images')) {
+            $newImages = [];
+            $images = $request->file('images');
+            if ($images && is_array($images)) {
+                foreach ($images as $image) {
 
-        ]);
-        if($solution)
-        {
+                    if ($image && $image->isValid()) {
+                        $currentDate = Carbon::now()->toDateString();
+                        $originalName = $image->getClientOriginalName();
+                        $sanitizedFileName = pathinfo($originalName, PATHINFO_FILENAME);
+                        $imageName = $currentDate . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+
+                        if (!is_dir('assets/images/uploads/solution')) {
+                            mkdir('assets/images/uploads/solution', 0777, true);
+                        }
+
+                        $image->move(public_path('assets/images/uploads/solution'), $imageName);
+
+                        $newImages[] = $imageName;
+                    }
+                }
+            }
+
+            $imagesToDelete = array_diff($existingImages, $newImages);
+            foreach ($imagesToDelete as $imageName) {
+                if (!in_array($imageName, $newImages)) {
+                    $imagePath = public_path('assets/images/uploads/solution') . '/' . $imageName;
+                    if (File::exists($imagePath)) {
+                        File::delete($imagePath);
+                    }
+                }
+            }
+        }
+
+
+        $updatedImages = !empty($newImages) ? $newImages : $existingImages;
+
+        if ($solution) {
             $solution->update([
                 'user_id'               => $request->employee_id,
                 'project_id'            => $request->project_id,
                 'user_project_id'       => $request->user_project_id,
                 'user_problem_id'       => $request->user_problem_id,
                 'description'           => $request->description,
+                'images'                =>  serialize($updatedImages),
             ]);
             Toastr::success('Solution updated Successfully', 'Success', ["positionClass" => "toast-top-right"]);
             return redirect()->route('admin.assignment.soluitonIndex');
         }
         return back();
-
     }
 
 
@@ -228,6 +243,28 @@ class UserSolutionController extends Controller
 
     public function solutionDelete($id)
     {
+        if (!has_access('delete_solution')) {
+            abort(404);
+        }
+
+
+        $soltuion = Solution::findOrFail($id);
+
+        if ($soltuion->images == !null) {
+            $imageNames = unserialize($soltuion->images);
+
+            foreach ($imageNames as $imageName) {
+                $imagePath = public_path('assets/images/uploads/solution') . '/' . $imageName;
+                if (File::exists($imagePath)) {
+                    File::delete($imagePath);
+                }
+            }
+            $soltuion->delete();
+            Toastr::success('solution Deleted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        }
+        $soltuion->delete();
+        Toastr::success('solution Deleted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return 1;
     }
 
 
