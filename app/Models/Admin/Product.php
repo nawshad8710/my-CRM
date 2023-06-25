@@ -15,4 +15,26 @@ class Product extends Model
     {
         return $this->hasMany(SaleItem::class, 'product_id');
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PRODUCT FEATURE (RELATION)
+    |--------------------------------------------------------------------------
+    */
+    public function feature()
+    {
+        return $this->hasMany(ProductFeature::class,'product_id');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | PRODUCT KEY FEATURE (RELATION)
+    |--------------------------------------------------------------------------
+    */
+
+    public function keyFeature()
+    {
+        return $this->hasMany(ProductKeyFeature::class, 'product_id');
+    }
 }

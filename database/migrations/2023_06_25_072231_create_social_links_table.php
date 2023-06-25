@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOurServicesTable extends Migration
+class CreateSocialLinksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateOurServicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('our_services', function (Blueprint $table) {
+        Schema::create('social_links', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->nullable();
-            $table->text('short_description')->nullable();
-            $table->text('long_description')->nullable();
+            $table->string('url')->nullable();
             $table->string('icon')->nullable();
-
+            $table->string('background_color')->nullable();
+            $table->string('foreground_color')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ class CreateOurServicesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('our_services');
+        Schema::dropIfExists('social_links');
     }
 }

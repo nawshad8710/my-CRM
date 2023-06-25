@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Our Service')
+@section('title', 'Industry Serve')
 
 @push('css')
     <style>
@@ -29,13 +29,13 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <!-- DATA TABLE -->
-                                <h3 class="title-5 m-b-35">Service List</h3>
+                                <h3 class="title-5 m-b-35">Industry Serve List</h3>
                                 <div class="table-data__tool">
 
                                     <div class="table-data__tool-right">
 
-                                        <a href="{{ route('admin.service.create') }}" class="au-btn au-btn-icon au-btn--blue au-btn--small">
-                                            <i class="zmdi zmdi-plus"></i>Add Service</a>
+                                        <a href="{{ route('admin.industry-serve.create') }}" class="au-btn au-btn-icon au-btn--blue au-btn--small">
+                                            <i class="zmdi zmdi-plus"></i>Add Item</a>
 
                                     </div>
                                 </div>
@@ -45,21 +45,21 @@
                                             <tr>
                                                 <th>Title</th>
                                                 <th>Icon</th>
-                                                <th>Short Description</th>
-                                                <th>Long Description</th>
+                                                {{-- <th>Short Description</th>
+                                                <th>Long Description</th> --}}
                                                 <th class="text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                           @isset($ourService)
-                                           @if(count($ourService) > 0)
-                                           @foreach($ourService as $key => $service)
+                                           @isset($industryServe)
+                                           @if(count($industryServe) > 0)
+                                           @foreach($industryServe as $key => $industry)
                                            <tr class="tr-shadow">
-                                               <td>{{ $service->title }}</td>
+                                               <td>{{ $industry->title }}</td>
                                                <td>
-                                                   <img src="{{asset('assets/images/uploads/our-service/' . $service->icon)}}" style="width: 50px; height:50px" alt="">
+                                                   <img src="{{asset('assets/images/uploads/industry-serve/' . $industry->icon)}}" style="width: 50px; height:50px" alt="">
                                                </td>
-                                               <td class="desc">
+                                               {{-- <td class="desc">
                                                    <?php
                                                        $description =  strip_tags(html_entity_decode($service->short_description));
                                                        if (strlen($description) > 30) {
@@ -108,17 +108,17 @@
                                                    <div id="long_description{{ $service->id }}" class="d-none">
                                                        {!! $service->long_description !!}
                                                    </div>
-                                               </td>
+                                               </td> --}}
 
                                                <td>
                                                    <div class="table-data-feature">
 
-                                                       <a href="{{ route('admin.service.edit', $service->id) }}" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                       <a href="{{ route('admin.industry-serve.edit', $industry->id) }}" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
                                                            <i class="zmdi zmdi-edit"></i>
                                                        </a>
 
 
-                                                       <button class="item" data-toggle="tooltip" data-placement="top" title="Delete" onclick="deleteModalShow({{ $service->id }})">
+                                                       <button class="item" data-toggle="tooltip" data-placement="top" title="Delete" onclick="deleteModalShow({{ $industry->id }})">
                                                            <i class="zmdi zmdi-delete"></i>
                                                        </button>
 
@@ -128,7 +128,7 @@
                                            @endforeach
                                        @else
                                        <tr class="tr-shadow">
-                                           <td colspan="5" class="text-center">No service Found!</td>
+                                           <td colspan="5" class="text-center">No Industry Serve data Found!</td>
                                        </tr>
                                        @endif
                                            @endisset

@@ -72,6 +72,7 @@ class CategoryController extends Controller
             'status' => $request->status,
         ]);
 
+
         Toastr::success('Category Added Successfully', 'Success', ["positionClass" => "toast-top-right"]);
 
         return redirect()->route('admin.sales.category.list');

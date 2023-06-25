@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class OurServiceItem extends Model
+class ProductKeyFeature extends Model
 {
     use HasFactory;
+    protected $guarded = ['id'];
 }

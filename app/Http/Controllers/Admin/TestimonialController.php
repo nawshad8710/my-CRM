@@ -88,6 +88,8 @@ class TestimonialController extends Controller
             'long_description' => $request->long_description,
             'image' => $imageName,
         ]);
+        Toastr::success('Testimonial updated Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return redirect()->route('admin.testimonial.index');
     }
 
 

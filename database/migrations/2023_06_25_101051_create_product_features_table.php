@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOurServiceItemsTable extends Migration
+class CreateProductFeaturesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,15 @@ class CreateOurServiceItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('our_service_items', function (Blueprint $table) {
+        Schema::create('product_features', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('our_service_id')->constrained('our_services')->cascadeOnDelete();
+            $table->unsignedBigInteger('product_id')->constrained('products')
+                ->references('id')
+                ->on('products')
+                ->onDelete('cascade')
+                ->nullable();
             $table->string('title')->nullable();
             $table->string('icon')->nullable();
-            $table->text('short_description')->nullable();
-            $table->text('long_description')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +33,6 @@ class CreateOurServiceItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('our_service_items');
+        Schema::dropIfExists('product_features');
     }
 }

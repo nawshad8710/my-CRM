@@ -114,37 +114,39 @@
                                                             {!! $testimonial->long_description !!}
                                                         @endif
                                                         <!-- {!! Str::limit($description, $limit = 30, $end = '. . .<a href="#" class="desc-text" onclick="descModalShow()">View Details</a>') !!} -->
-                                                        <div id="long_description{{ $product->id }}" class="d-none">
-                                                            {!! $product->long_description !!}
+                                                        <div id="long_description{{ $testimonial->id }}" class="d-none">
+                                                            {!! $testimonial->long_description !!}
                                                         </div>
                                                     </td>
-                                                    <td class="text-center">
+                                                    <td>
+                                                        <img id="image" src="{{ asset('assets/images/uploads/testimonial/' . $testimonial->image) ?? asset('assets/images/defaultimage.png') }}" height="50px" width="50px" alt="your image" />
+                                                    </td>
+                                                    {{-- <td class="text-center">
                                                         @if($product->status == 0)
                                                             <!-- <span class="status--process">Active</span> -->
                                                             <span class="badge badge-secondary">Inactive</span>
                                                         @elseif($product->status == 1)
                                                             <span class="badge badge-primary">Active</span>
                                                         @endif
-                                                    </td>
+                                                    </td> --}}
                                                     <td>
                                                         <div class="table-data-feature">
-                                                            @if(has_access('products'))
-                                                            <a href="{{ route('admin.sales.product.edit', $product->id) }}" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                            <a href="{{ route('admin.testimonial.edit', $testimonial->id) }}" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
                                                                 <i class="zmdi zmdi-edit"></i>
                                                             </a>
-                                                            @endif
-                                                            @if(has_access('products'))
-                                                            <button class="item" data-toggle="tooltip" data-placement="top" title="Delete" onclick="deleteModalShow({{ $product->id }})">
+
+
+                                                            <button class="item" data-toggle="tooltip" data-placement="top" title="Delete" onclick="deleteModalShow({{ $testimonial->id }})">
                                                                 <i class="zmdi zmdi-delete"></i>
                                                             </button>
-                                                            @endif
+
                                                         </div>
                                                     </td>
                                                 </tr>
                                                 @endforeach
                                             @else
                                             <tr class="tr-shadow">
-                                                <td colspan="5" class="text-center">No Product Found!</td>
+                                                <td colspan="5" class="text-center">No Testimonial Found!</td>
                                             </tr>
                                             @endif
                                         </tbody>

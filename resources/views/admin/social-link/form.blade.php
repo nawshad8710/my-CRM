@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Service Form')
+@section('title', 'Social Link Form')
 
 @push('css')
 <link rel="stylesheet" href="{{ asset('assets/vendor/summernote/summernote-bs4.min.css') }}">
@@ -28,64 +28,69 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-title">
-                                            <h3 class="text-center title-2">@isset($testimonial) Update @else Add New @endisset Testimonial</h3>
+                                            <h3 class="text-center title-2">@isset($socialLink) Update @else Add New @endisset Social Link</h3>
                                         </div>
                                         <hr>
-                                        <form action="@isset($testimonial){{ route('admin.testimonial.update', $testimonial->id) }}@else{{ route('admin.testimonial.store') }}@endisset" method="post" enctype="multipart/form-data">
+                                        <form action="@isset($socialLink){{ route('admin.social-link.update', $socialLink->id) }}@else{{ route('admin.social-link.store') }}@endisset" method="post" enctype="multipart/form-data">
                                             @csrf
                                             <div class="row">
                                                 <div class="col-6">
                                                     <div class="form-group">
-                                                        <label for="name" class="control-label mb-1">Name</label>
-                                                        <input id="name" name="name" type="text" class="form-control @error('name') is-invalid @enderror" value="{{ $testimonial->name ?? old('name') }}" required>
-                                                        @error('name')
+                                                        <label for="url" class="control-label mb-1">Url</label>
+                                                        <input id="url" name="url" type="text" class="form-control @error('url') is-invalid @enderror" value="{{ $socialLink->url ?? old('url') }}" required>
+                                                        @error('url')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <label for="designation" class="control-label mb-1">Designation</label>
-                                                        <input id="designation" name="designation" type="text" class="form-control @error('designation') is-invalid @enderror" value="{{ $testimonial->designation ?? old('designation') }}" required>
-                                                        @error('designation')
+                                                        <label for="background_color" class="control-label mb-1">Background Color</label>
+                                                        <input id="background_color" name="background_color" type="color" class="form-control @error('background_color') is-invalid @enderror" value="{{ $socialLink->background_color ?? old('background_color') }}" >
+                                                        @error('background_color')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
                                                     <div class="form-group">
-                                                      @isset($testimonial)
-                                                      <img id="image" src="{{ asset('assets/images/uploads/testimonial/' . $testimonial->image) ?? asset('assets/images/defaultimage.png') }}" height="50px" width="50px" alt="your image" />
-                                                      @endisset
-                                                      <img id="image" src="{{ asset('assets/images/defaultimage.png') }}" height="50px" width="50px" alt="your image" />
-                                                        <label for="image" class="control-label mb-1">Image</label>
-                                                        <input id="image" name="image" type="file" class="form-control @error('image') is-invalid @enderror" >
-                                                        @error('image')
+                                                        <label for="icon" class="control-label mb-1">Icon Code</label>
+                                                        <input id="icon" name="icon" type="text" class="form-control @error('icon') is-invalid @enderror" value="{{ $socialLink->icon ?? old('icon') }}" >
+                                                        @error('icon')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+
+
+                                                    <div class="form-group">
+                                                        <label for="foreground_color" class="control-label mb-1">Foreground Color</label>
+                                                        <input id="foreground_color" name="foreground_color" type="color" class="form-control @error('foreground_color') is-invalid @enderror" value="{{ $socialLink->foreground_color ?? old('foreground_color') }}" >
+                                                        @error('foreground_color')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group has-success">
+                                            {{-- <div class="form-group has-success">
                                                 <label for="short_description" class="control-label mb-1">Short Description</label>
-                                                <textarea name="short_description" id="short_description" rows="5" class="form-control @error('short_description') is-invalid @enderror">{{ $testimonial->short_description ?? old('short_description') }}</textarea>
+                                                <textarea name="short_description" id="short_description" rows="5" class="form-control @error('short_description') is-invalid @enderror">{{ $service->short_description ?? old('short_description') }}</textarea>
                                                 @error('short_description')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                             <div class="form-group has-success">
                                                 <label for="long_description" class="control-label mb-1">Long Description</label>
-                                                <textarea name="long_description" id="long_description" rows="5" class="form-control @error('long_description') is-invalid @enderror">{{ $testimonial->long_description ?? old('long_description') }}</textarea>
+                                                <textarea name="long_description" id="long_description" rows="5" class="form-control @error('long_description') is-invalid @enderror">{{ $service->long_description ?? old('long_description') }}</textarea>
                                                 @error('long_description')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
-                                            </div>
+                                            </div> --}}
 
                                             <div class="row">
                                                 <div class="col-sm-9">
 
                                                 </div>
                                                 <div class="col-sm-3">
-                                                    <input id="payment-button" type="submit" class="btn btn-lg btn-info btn-block" value="@isset($testimonial) Update @else Submit @endisset">
+                                                    <input id="payment-button" type="submit" class="btn btn-lg btn-info btn-block" value="@isset($socialLink) Update @else Submit @endisset">
                                                 </div>
                                             </div>
                                         </form>

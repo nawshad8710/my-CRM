@@ -3,15 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin\OurService;
-use App\Models\OurServiceItem;
+use App\Models\Admin\IndustryServe;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class ServiceController extends Controller
+class IndustryServeController extends Controller
 {
-
     /*
     |--------------------------------------------------------------------------
     | INDEX (METHOD)
@@ -19,8 +17,8 @@ class ServiceController extends Controller
     */
     public function index()
     {
-        $data['ourService'] = OurService::get();
-        return view('admin.service.index', $data);
+        $data['industryServe'] = IndustryServe::get();
+        return view('admin.industry-serve.index', $data);
     }
 
     /*
@@ -30,16 +28,17 @@ class ServiceController extends Controller
     */
     public function create()
     {
-        return view('admin.service.form');
+        return view('admin.industry-serve.form');
     }
+
     /*
     |--------------------------------------------------------------------------
     | STORE (METHOD)
     |--------------------------------------------------------------------------
     */
+
     public function store(Request $request)
     {
-        // dd($request->all());
         $request->validate([]);
         $iconName = '';
         $icon = $request->file('icon');
@@ -48,22 +47,19 @@ class ServiceController extends Controller
             $iconName   = $currentDate . '-' . uniqid() . '.' . $icon->getClientOriginalExtension();
 
 
-            if (!file_exists('assets/images/uploads/our-service')) {
-                mkdir('assets/images/uploads/our-service', 0777, true);
+            if (!file_exists('assets/images/uploads/industry-serve')) {
+                mkdir('assets/images/uploads/industry-serve', 0777, true);
             }
-            $icon->move(public_path('assets/images/uploads/our-service'), $iconName);
+            $icon->move(public_path('assets/images/uploads/industry-serve'), $iconName);
         }
 
-        OurService::create(
-            [
-                'title' => $request->title,
-                'short_description' => $request->short_description,
-                'long_description' => $request->long_description,
-                'icon' => $iconName,
-            ]
-        );
-        Toastr::success('Our Service Created Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-        return redirect()->route('admin.service.index');
+        IndustryServe::create([
+
+            'title' => $request->title,
+            'icon' => $iconName
+        ]);
+        Toastr::success('Industry Serve Created Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return redirect()->route('admin.industry-serve.index');
     }
 
 
@@ -72,52 +68,52 @@ class ServiceController extends Controller
     | EDIT (METHOD)
     |--------------------------------------------------------------------------
     */
+
+
     public function edit($id)
     {
-        $data['service'] = OurService::findOrFail($id);
-        return view('admin.service.form', $data);
+        $data['industryServe'] = IndustryServe::find($id);
+        return view('admin.industry-serve.form', $data);
     }
+
 
     /*
     |--------------------------------------------------------------------------
     | UPDATE (METHOD)
     |--------------------------------------------------------------------------
     */
+
     public function update(Request $request, $id)
     {
         $request->validate([]);
-        $service = OurService::findOrFail($id);
-        $iconName = $service->icon; // Get the current icon name
+        $industryServe = IndustryServe::findOrFail($id);
+        $iconName = $industryServe->icon; // Get the current icon name
 
         $icon = $request->file('icon');
         if ($icon) {
             $currentDate = Carbon::now()->toDateString();
             $newIconName = $currentDate . '-' . uniqid() . '.' . $icon->getClientOriginalExtension();
 
-            if (!file_exists('assets/images/uploads/our-service')) {
-                mkdir('assets/images/uploads/our-service', 0777, true);
+            if (!file_exists('assets/images/uploads/industry-serve')) {
+                mkdir('assets/images/uploads/industry-serve', 0777, true);
             }
 
-            $icon->move(public_path('assets/images/uploads/our-service'), $newIconName);
+            $icon->move(public_path('assets/images/uploads/industry-serve'), $newIconName);
 
             // Delete the previous icon file
-            if ($iconName && file_exists(public_path('assets/images/uploads/our-service/' . $iconName))) {
-                unlink(public_path('assets/images/uploads/our-service/' . $iconName));
+            if ($iconName && file_exists(public_path('assets/images/uploads/industry-serve/' . $iconName))) {
+                unlink(public_path('assets/images/uploads/industry-serve/' . $iconName));
             }
 
             $iconName = $newIconName; // Update the icon name
         }
-        $service->update([
+        $industryServe->update([
             'title'                     => $request->title,
-            'short_description'         => $request->short_description,
-            'long_description'          => $request->long_description,
             'icon'                      =>  $iconName
         ]);
-        Toastr::success('Our Service Updated Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-        return redirect()->route('admin.service.index');
-
+        Toastr::success('Industry Serve Updated Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return redirect()->route('admin.industry-serve.index');
     }
-
 
     /*
     |--------------------------------------------------------------------------
@@ -127,16 +123,16 @@ class ServiceController extends Controller
 
     public function delete($id)
     {
-        $ourService = OurService::findOrFail($id);
-        if ($ourService->icon) {
-            $iconPath = public_path($ourService->icon);
+        $industryServe =  IndustryServe::find($id);
+        if ($industryServe->icon) {
+            $iconPath = public_path($industryServe->icon);
             if (file_exists($iconPath)) {
                 unlink($iconPath);
             } else {
-                $ourService->delete();
+                $industryServe->delete();
             }
-            $ourService->delete();
-            Toastr::success('Our Serive Deleted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+            $industryServe->delete();
+            Toastr::success('Industry Serve Deleted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
             return 1;
         }
         return 0;

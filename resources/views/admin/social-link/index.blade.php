@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Our Service')
+@section('title', 'Social Link')
 
 @push('css')
     <style>
@@ -29,13 +29,13 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <!-- DATA TABLE -->
-                                <h3 class="title-5 m-b-35">Service List</h3>
+                                <h3 class="title-5 m-b-35">Social Link List</h3>
                                 <div class="table-data__tool">
 
                                     <div class="table-data__tool-right">
 
-                                        <a href="{{ route('admin.service.create') }}" class="au-btn au-btn-icon au-btn--blue au-btn--small">
-                                            <i class="zmdi zmdi-plus"></i>Add Service</a>
+                                        <a href="{{ route('admin.social-link.create') }}" class="au-btn au-btn-icon au-btn--blue au-btn--small">
+                                            <i class="zmdi zmdi-plus"></i>Add Social Link</a>
 
                                     </div>
                                 </div>
@@ -43,82 +43,32 @@
                                     <table class="table table-data2">
                                         <thead>
                                             <tr>
-                                                <th>Title</th>
-                                                <th>Icon</th>
-                                                <th>Short Description</th>
-                                                <th>Long Description</th>
+                                                <th>url</th>
+                                                <th>Icon Code</th>
+                                                <th>Background Color</th>
+                                                <th>Foreground Color</th>
                                                 <th class="text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                           @isset($ourService)
-                                           @if(count($ourService) > 0)
-                                           @foreach($ourService as $key => $service)
+                                           @isset($socialLinks)
+                                           @if(count($socialLinks) > 0)
+                                           @foreach($socialLinks as $key => $socialLink)
                                            <tr class="tr-shadow">
-                                               <td>{{ $service->title }}</td>
-                                               <td>
-                                                   <img src="{{asset('assets/images/uploads/our-service/' . $service->icon)}}" style="width: 50px; height:50px" alt="">
-                                               </td>
-                                               <td class="desc">
-                                                   <?php
-                                                       $description =  strip_tags(html_entity_decode($service->short_description));
-                                                       if (strlen($description) > 30) {
-
-                                                           // truncate string
-                                                           $stringCut = substr($description, 0, 30);
-                                                           $endPoint = strrpos($stringCut, ' ');
-
-                                                           //if the string doesn't contain any space then it will cut without word basis.
-                                                           $desc = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
-                                                           $desc .= '...';
-                                                       }
-                                                   ?>
-                                                   @if (strlen($description) > 30)
-                                                       {{ $desc }}
-                                                       <a href="#" class="desc-text" onclick="shortDescModalShow({{ $serivice->id }})"> <u>View Details</u></a>
-                                                   @else
-                                                       {!! $service->short_description !!}
-                                                   @endif
-                                                   <!-- {!! Str::limit($description, $limit = 30, $end = '. . .<a href="#" class="desc-text" onclick="descModalShow()">View Details</a>') !!} -->
-                                                   <div id="short_description{{ $service->id }}" class="d-none">
-                                                       {!! $service->short_description !!}
-                                                   </div>
-                                               </td>
-                                               <td class="desc">
-                                                   <?php
-                                                       $description =  strip_tags(html_entity_decode($service->long_description));
-                                                       if (strlen($description) > 30) {
-
-                                                           // truncate string
-                                                           $stringCut = substr($description, 0, 30);
-                                                           $endPoint = strrpos($stringCut, ' ');
-
-                                                           //if the string doesn't contain any space then it will cut without word basis.
-                                                           $desc = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
-                                                           $desc .= '...';
-                                                       }
-                                                   ?>
-                                                   @if (strlen($description) > 30)
-                                                       {{ $desc }}
-                                                       <a href="#" class="desc-text" onclick="longDescModalShow({{ $service->id }})"> <u>View Details</u></a>
-                                                   @else
-                                                       {!! $service->long_description !!}
-                                                   @endif
-                                                   <!-- {!! Str::limit($description, $limit = 30, $end = '. . .<a href="#" class="desc-text" onclick="descModalShow()">View Details</a>') !!} -->
-                                                   <div id="long_description{{ $service->id }}" class="d-none">
-                                                       {!! $service->long_description !!}
-                                                   </div>
-                                               </td>
+                                               <td>{{ $socialLink->url }}</td>
+                                               <td>{{$socialLink->icon}}</td>
+                                               <td>{{$socialLink->background_color}}</td>
+                                               <td>{{$socialLink->foreground_color}}</td>
 
                                                <td>
                                                    <div class="table-data-feature">
 
-                                                       <a href="{{ route('admin.service.edit', $service->id) }}" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                       <a href="{{ route('admin.social-link.edit', $socialLink->id) }}" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
                                                            <i class="zmdi zmdi-edit"></i>
                                                        </a>
 
 
-                                                       <button class="item" data-toggle="tooltip" data-placement="top" title="Delete" onclick="deleteModalShow({{ $service->id }})">
+                                                       <button class="item" data-toggle="tooltip" data-placement="top" title="Delete" onclick="deleteModalShow({{ $socialLink->id }})">
                                                            <i class="zmdi zmdi-delete"></i>
                                                        </button>
 
@@ -128,7 +78,7 @@
                                            @endforeach
                                        @else
                                        <tr class="tr-shadow">
-                                           <td colspan="5" class="text-center">No service Found!</td>
+                                           <td colspan="5" class="text-center">No Social Link Found!</td>
                                        </tr>
                                        @endif
                                            @endisset

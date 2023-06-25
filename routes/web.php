@@ -11,11 +11,13 @@ use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\AssignedProjectController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\IndustryServeController;
 use App\Http\Controllers\Admin\OurAchiveController;
 use App\Http\Controllers\Admin\UserReportController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SiteInfoController;
+use App\Http\Controllers\Admin\SocialLinkController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\UserSolutionController;
 use App\Http\Controllers\Employee\EmployeeHomeController;
@@ -143,6 +145,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::post('/store', [SiteInfoController::class, 'store'])->name('store');
         });
 
+        /*
+        |--------------------------------------------------------------------------
+        | OUR ACHEVE ROUTE FOR ADMIN (ROUTE)
+        |--------------------------------------------------------------------------
+        */
 
         Route::group(['as' => 'our-achive.', 'prefix' => 'our-achive'], function () {
             Route::get('/form', [OurAchiveController::class, 'form'])->name('form');
@@ -152,6 +159,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::post('/update-achive-item/{id}', [OurAchiveController::class, 'updateAchiveItem'])->name('updateAchiveItem');
             Route::get('/delete-achive-item/{id}', [OurAchiveController::class, 'deleteAchiveItem'])->name('deleteAchiveItem');
         });
+
+        /*
+        |--------------------------------------------------------------------------
+        | TESTIMONIAL ROUTE FOR ADMIN (ROUTE)
+        |--------------------------------------------------------------------------
+        */
         Route::group(['as' => 'testimonial.', 'prefix' => 'testimonial'], function () {
             Route::get('/list', [TestimonialController::class, 'index'])->name('index');
             Route::get('/create', [TestimonialController::class, 'create'])->name('create');
@@ -160,17 +173,49 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::post('/update/{id}', [TestimonialController::class, 'update'])->name('update');
             Route::get('/delete/{id}', [TestimonialController::class, 'delete'])->name('delete');
         });
-
+        /*
+        |--------------------------------------------------------------------------
+        | SERVICE ROUTE FOR ADMIN (ROUTE)
+        |--------------------------------------------------------------------------
+        */
         Route::group(['as' => 'service.', 'prefix' => 'service'], function () {
             Route::get('/index', [ServiceController::class, 'index'])->name('index');
-            Route::post('/create-or-update-service', [ServiceController::class, 'createOrUpdate'])->name('createOrUpdate');
-            Route::get('/service-item-list', [ServiceController::class, 'serviceItemList'])->name('serviceItemList');
-            Route::get('/service-item-create', [ServiceController::class, 'serviceItemCreate'])->name('serviceItemCreate');
-            Route::post('/service-item-store', [ServiceController::class, 'serviceItemStore'])->name('serviceItemStore');
-            Route::get('/service-item-edit/{id}', [ServiceController::class, 'serviceItemEdit'])->name('serviceItemEdit');
-            Route::post('/service-item-update/{id}', [ServiceController::class, 'serviceItemUpdate'])->name('serviceItemUpdate');
-            Route::get('/service-item-delete/{id}', [ServiceController::class, 'serviceItemDelete'])->name('serviceItemDelete');
+            Route::get('/create',[ServiceController::class, 'create'])->name('create');
+            Route::post('/store',[ServiceController::class, 'store'])->name('store');
+            Route::get('/edit/{id}',[ServiceController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}',[ServiceController::class, 'update'])->name('update');
+            Route::get('/delete/{id}',[ServiceController::class, 'delete'])->name('delete');
+
         });
+        /*
+        |--------------------------------------------------------------------------
+        | INDUSTRY SERVE ROUTE FOR ADMIN (ROUTE)
+        |--------------------------------------------------------------------------
+        */
+        Route::group(['as' => 'industry-serve.', 'prefix' => 'industry-serve'], function () {
+            Route::get('/index', [IndustryServeController::class, 'index'])->name('index');
+            Route::get('/create',[IndustryServeController::class, 'create'])->name('create');
+            Route::post('/store',[IndustryServeController::class, 'store'])->name('store');
+            Route::get('/edit/{id}',[IndustryServeController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}',[IndustryServeController::class, 'update'])->name('update');
+            Route::get('/delete/{id}',[IndustryServeController::class, 'delete'])->name('delete');
+
+        });
+        /*
+        |--------------------------------------------------------------------------
+        | SOCIAL LINK ROUTE FOR ADMIN (ROUTE)
+        |--------------------------------------------------------------------------
+        */
+        Route::group(['as' => 'social-link.', 'prefix' => 'social-link'], function () {
+            Route::get('/index', [SocialLinkController::class, 'index'])->name('index');
+            Route::get('/create',[SocialLinkController::class, 'create'])->name('create');
+            Route::post('/store',[SocialLinkController::class, 'store'])->name('store');
+            Route::get('/edit/{id}',[SocialLinkController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}',[SocialLinkController::class, 'update'])->name('update');
+            Route::get('/delete/{id}',[SocialLinkController::class, 'delete'])->name('delete');
+
+        });
+
         Route::group(['as' => 'role.', 'prefix' => 'role'], function () {
             Route::get('/list', [RoleController::class, 'index'])->name('list');
             Route::get('/user-list', [RoleController::class, 'userList'])->name('userList');
