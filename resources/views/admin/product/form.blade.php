@@ -19,6 +19,30 @@
             height: 25px;
             width: 25px;
         }
+
+        .feature-div {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+
+        .image-div {
+            border: 1px solid;
+        }
+
+        .title-div {
+            border: 1px solid;
+            margin-left: 20px;
+            padding: 3px;
+        }
+
+        .remove-button-div>button {
+            margin-left: 20px;
+            /* background: red; */
+            color: red;
+            padding: 3px
+        }
     </style>
 @endpush
 
@@ -109,13 +133,13 @@
                                                     <option value="1"
                                                         @isset($product) {{ $product->status == 1
                                                             ? '
-                                                                                                                                                                    selected'
+                                                                                                                                                                                                                            selected'
                                                             : '' }} @endisset>
                                                         Active</option>
                                                     <option value="0"
                                                         @isset($product) {{ $product->status == 0
                                                             ? '
-                                                                                                                                                                    selected'
+                                                                                                                                                                                                                            selected'
                                                             : '' }} @endisset>
                                                         Inactive</option>
                                                 </select>
@@ -136,21 +160,109 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @isset($product)
+                                        <img src="{{ asset('assets/images/uploads/product/upper-video-thumbnail/' . $product->upper_video_thumbnail) }}"
+                                            alt="" style="width:100px; height: 100px">
+                                    @endisset
+                                    <div class="row">
 
+                                        <div class="col-md-6 mt-4">
+
+                                            <div class="form-control">
+                                                <label for="upper_video_thumbnail" class="control-label mb-1">Upper Video
+                                                    Thumbnail</label>
+                                                <input id="upper_video_thumbnail" name="upper_video_thumbnail"
+                                                    type="file"
+                                                    class="form-control @error('upper_video_thumbnail') is-invalid @enderror">
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="upper_video_link" class="control-label mb-1">Upper Video
+                                                    Link</label>
+                                                <input id="upper_video_link" name="upper_video_link" type="text"
+                                                    class="form-control @error('upper_video_link') is-invalid @enderror"
+                                                    value="{{ $product->upper_video_link ?? old('upper_video_link') }}"
+                                                    required>
+                                                @error('price')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 mt-4 mb-4">
+                                            @isset($product)
+                                                <img src="{{ asset('assets/images/uploads/product/lower-video-thumbnail/' . $product->lower_video_thumbnail) }}"
+                                                    alt="" style="width:100px; height: 100px">
+                                            @endisset
+                                        </div>
+
+                                        <div class="col-md-6">
+
+                                            <div class="form-control">
+                                                <label for="lower_video_thumbnail" class="control-label mb-1">Lower Video
+                                                    Thumbnail</label>
+                                                <input id="lower_video_thumbnail" name="lower_video_thumbnail"
+                                                    type="file"
+                                                    class="form-control @error('lower_video_thumbnail') is-invalid @enderror">
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="lower_video_link" class="control-label mb-1">Lower Video
+                                                    Link</label>
+                                                <input id="lower_video_link" name="lower_video_link" type="text"
+                                                    class="form-control @error('upper_video_link') is-invalid @enderror"
+                                                    value="{{ $product->lower_video_link ?? old('lower_video_link') }}"
+                                                    required>
+                                                @error('price')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    {{-- demo feature  --}}
+                                    {{-- <div class="feature-div">
+                                        <div class="image-div">
+                                            <input type="file" name="" id="">
+                                        </div>
+
+                                        <div class="title-div">
+
+                                            <input type="text" placeholder="Title" name="" id="" >
+                                        </div>
+                                        <div class="remove-button-div">
+                                            <button type="button">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </div>
+                                    </div> --}}
                                     {{-- features --}}
                                     <h4>Features</h4>
-                                    <button id="add-feature-button" type="button" class="btn btn-success mb-3"
-                                        style="margin-left: 10px">Add Field</button>
+                                    <button onclick="addOption()" id="add-feature-button" type="button"
+                                        class="btn btn-success mb-3" style="margin-left: 10px">Add Field</button>
                                     <div class="row featureField">
-                                        @isset($product_feature)
-                                            @foreach ($product_feature as $key => $feature)
-                                            <div class="col-6"></div>
-                                            <div class="col-6">
-                                                <img class="thumbnail example-image"
-                                                    src="{{ asset('assets/images/uploads/product/feature/' . optional($feature)->icon) }}"
-                                                    alt="" width="100Px" height="100px" data-lightbox="example-1">
-                                            </div>
-                                                <div class="col-6 ">
+                                        @isset($product->feature)
+                                            @foreach ($product->feature as $key => $feature)
+                                                <input type="hidden" name="feature_id[]" value="{{ $feature->id }}">
+                                                <div class="col-5"></div>
+                                                <div class="col-5">
+                                                    <img class="thumbnail example-image"
+                                                        src="{{ asset('assets/images/uploads/product/feature/' . optional($feature)->icon) }}"
+                                                        alt="" width="100Px" height="100px"
+                                                        data-lightbox="example-1">
+                                                </div>
+                                                <div class="col-5 ">
                                                     <div class="form-group">
                                                         <label for="feature_title" class="control-label mb-1">Title</label>
                                                         <input id="feature_title" name="feature_title[]" type="text"
@@ -162,10 +274,17 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-6">
+                                                <div class="col-5">
                                                     <label for="images" class="control-label mb-1">Image</label>
                                                     <input id="images" name="images[]" type="file"
                                                         class="form-control @error('images') is-invalid @enderror">
+                                                    <input type="hidden" class="is-currect-option-default-value"
+                                                        name="images[]" value="0"
+                                                        {{ $feature->icon ? 'disabled' : '' }} />
+                                                </div>
+                                                <div class="col-2">
+                                                    <button type="button"
+                                                        onclick="RemoveItem({{ $feature->id }})">Remove</button>
                                                 </div>
                                             @endforeach
                                         @endisset
@@ -174,12 +293,14 @@
                                     </div>
                                     {{-- key features --}}
                                     <h4 class="mb-2" style="color: black">Key Features</h4>
-                                    <button id="add-field-button" type="button" class="btn btn-success mb-3"
+                                    <button onclick="addKeyFeature()" type="button" class="btn btn-success mb-3"
                                         style="margin-left: 10px">Add Field</button>
                                     <div class="row mb-2 example">
                                         <div class="col-md-6 keyFeatureField">
-                                            @isset($product_key_feature)
-                                                @foreach ($product_key_feature as $key => $key_feature)
+                                            @isset($product->keyFeature)
+                                                @foreach ($product->keyFeature as $key => $key_feature)
+                                                    <input type="hidden" name="key_feature_id[]"
+                                                        value="{{ $key_feature->id }}">
                                                     <div class="form-group">
 
                                                         <input id="key_features_title" placeholder="Title"
@@ -226,38 +347,70 @@
     </script>
 
     <script>
-        $(document).ready(function() {
-            $('#add-field-button').click(function() {
-                var newField = `<div class="form-group">
+        const RemoveItem = (id) => {
+            console.log(id)
 
-                    <input id="key_features_title" placeholder="Title" name="key_features_title[]" type="text" class="form-control @error('title') is-invalid @enderror">
+            var url = window.location.origin + '/admin/sales/product/feature/delete/' + id;
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "json",
+                success: function(data) {
+                    location.reload();
+                    console.log(data)
+
+                }
+            });
+        }
+
+
+
+        const removeOption = () => {
+            var $obj = $('.Option');
+            $obj.remove();
+            console.log($obj);
+        }
+
+        const addOption = () => {
+
+            var newFeatureField = `<div class="col-6 Option">
+                        <div class="form-group">
+                            <label for="feature_title" class="control-label mb-1">Title</label>
+                            <input id="feature_title" name="feature_title[]" type="text"
+                                class="form-control @error('feature_title') is-invalid @enderror">
+                            @error('feature_title')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-6 Option">
+                        <label for="images" class="control-label mb-1">Image</label>
+                        <input id="images" name="images[]" type="file"
+                            class="form-control @error('images') is-invalid @enderror">
+                    </div>
+                    <buttton class="Option" onclick="removeOption(this)">remove</button>`;
+            $('.featureField').append(newFeatureField);
+
+        }
+
+
+        const removeKeyFeature = () => {
+            var keyObj = $('.keyFeature');
+            keyObj.remove();
+        }
+
+
+        const addKeyFeature = () => {
+            var newField = `<div class="form-group keyFeature">
+
+                <input id="key_features_title" placeholder="Title" name="key_features_title[]" type="text" class="form-control @error('title') is-invalid @enderror">
                     @error('key_features_title')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-</div>`;
-                $('.keyFeatureField').append(newField);
-            });
-
-
-
-            $('#add-feature-button').click(function() {
-                var newFeatureField = `<div class="col-6 ">
-                                        <div class="form-group">
-                                            <label for="feature_title" class="control-label mb-1">Title</label>
-                                            <input id="feature_title" name="feature_title[]" type="text"
-                                                class="form-control @error('feature_title') is-invalid @enderror">
-                                            @error('feature_title')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="images" class="control-label mb-1">Image</label>
-                                        <input id="images" name="images[]" type="file"
-                                            class="form-control @error('images') is-invalid @enderror">
-                                    </div>`;
-                $('.featureField').append(newFeatureField);
-            });
-        });
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+                </div>
+                <buttton class="keyFeature" onclick="removeKeyFeature(this)">remove</button>
+                `;
+            $('.keyFeatureField').append(newField);
+        };
     </script>
 @endpush

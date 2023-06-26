@@ -249,7 +249,10 @@
                 Request::is('admin/social-link/index') ||
                 Request::is('admin/testimonial/list') ||
                 Request::is('admin/industry-serve/index') ||
-                Request::is('admin/our-achive/form')
+                Request::is('admin/our-achive/form') ||
+                Request::is('admin/terms-and-condition/index') ||
+                Request::is('admin/cookie-policy/index') ||
+                Request::is('admin/privacy-policy/index')
                     ? 'active'
                     : '' }}">
                     <a class="js-arrow" href="#">
@@ -260,7 +263,10 @@
                             Request::is('admin/social-link/index') ||
                             Request::is('admin/testimonial/list') ||
                             Request::is('admin/industry-serve/index') ||
-                            Request::is('admin/our-achive/form')
+                            Request::is('admin/our-achive/form') ||
+                            Request::is('admin/terms-and-condition/index') ||
+                Request::is('admin/cookie-policy/index') ||
+                Request::is('admin/privacy-policy/index')
                                 ? 'up'
                                 : '' }}">
                             <i class="fas fa-angle-down"></i>
@@ -272,6 +278,9 @@
                                 Request::is('admin/social-link/index') ||
                                 Request::is('admin/testimonial/list') ||
                                 Request::is('admin/industry-serve/index') ||
+                                Request::is('admin/terms-and-condition/index') ||
+                Request::is('admin/cookie-policy/index') ||
+                Request::is('admin/privacy-policy/index') ||
                                 Request::is('admin/our-achive/form')) style="display: block;" @endif>
 
                         <li class="{{ Request::is('admin/site-info/index') ? 'active' : '' }}">
@@ -299,6 +308,21 @@
                         <li class="{{ Request::is('admin/our-achive/form') ? 'active' : '' }}">
                             <a href="{{ route('admin.our-achive.form') }}">
                                 <i class="fas fa-edit"></i>Our Achive
+                            </a>
+                        </li>
+                        <li class="{{ Request::is('admin/terms-and-condition/index') ? 'active' : '' }}">
+                            <a href="{{ route('admin.terms-and-condition.index') }}">
+                                <i class="fas fa-edit"></i>Terms And Conditions
+                            </a>
+                        </li>
+                        <li class="{{ Request::is('admin/cookie-policy/index') ? 'active' : '' }}">
+                            <a href="{{ route('admin.cookie-policy.index') }}">
+                                <i class="fas fa-edit"></i>Cookie Policy
+                            </a>
+                        </li>
+                        <li class="{{ Request::is('admin/privacy-policy/index') ? 'active' : '' }}">
+                            <a href="{{ route('admin.privacy-policy.index') }}">
+                                <i class="fas fa-edit"></i>Privacy Policy
                             </a>
                         </li>
 

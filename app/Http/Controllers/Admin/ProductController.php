@@ -71,19 +71,56 @@ class ProductController extends Controller
         } else {
             $request->is_renewable = 1;
         }
+        $upperThumbnail = '';
+        $lowerThumbnail = '';
+
+        $upperVideoThumbnail = $request->file('upper_video_thumbnail');
+        $lowerVideoThumbnail = $request->file('lower_video_thumbnail');
+
+        if ($upperVideoThumbnail) {
+            $currentDate = Carbon::now()->toDateString();
+
+            $upperVideoThumbnailName = $currentDate . '-' . uniqid() . '.' . $upperVideoThumbnail->getClientOriginalExtension();
+
+            if (!file_exists('assets/images/uploads/product/upper-video-thumbnail')) {
+                mkdir('assets/images/uploads/product/upper-video-thumbnail', 0777, true);
+            }
+
+            $upperVideoThumbnail->move(public_path('assets/images/uploads/product/upper-video-thumbnail'), $upperVideoThumbnailName);
+
+            $upperThumbnail = $upperVideoThumbnailName;
+        }
+        if ($lowerVideoThumbnail) {
+            $currentDate = Carbon::now()->toDateString();
+
+            $lowerVideoThumbnailName = $currentDate . '-' . uniqid() . '.' . $lowerVideoThumbnail->getClientOriginalExtension();
+
+            if (!file_exists('assets/images/uploads/product/lower-video-thumbnail')) {
+                mkdir('assets/images/uploads/product/lower-video-thumbnail', 0777, true);
+            }
+
+            $lowerVideoThumbnail->move(public_path('assets/images/uploads/product/lower-video-thumbnail'), $lowerVideoThumbnailName);
+
+            $lowerThumbnail = $lowerVideoThumbnailName;
+        }
+
 
         $product = Product::create([
-            'title' => $request->title,
-            'short_description' => $request->short_description,
-            'long_description' => $request->long_description,
-            'status' => $request->status,
-            'category_id' => $request->category_id,
-            'price' => $request->price,
-            'is_renewable' => $request->is_renewable,
+            'title'                     => $request->title,
+            'short_description'         => $request->short_description,
+            'long_description'          => $request->long_description,
+            'status'                    => $request->status,
+            'category_id'               => $request->category_id,
+            'price'                     => $request->price,
+            'is_renewable'              => $request->is_renewable,
+            'upper_video_thumbnail'     => $upperThumbnail,
+            'lower_video_thumbnail'     => $lowerThumbnail,
+            'upper_video_link'          => $request->upper_video_link,
+            'lower_video_link'          => $request->lower_video_link
         ]);
 
 
-        foreach ($request->key_features_title as $index => $title) {
+        foreach ($request->key_features_title ?? [] as $index => $title) {
             $product_key_feature = $product->keyFeature()->create([
                 "title" => $title,
 
@@ -110,7 +147,7 @@ class ProductController extends Controller
             }
         }
 
-        foreach ($request->feature_title as $index => $featureTitle) {
+        foreach ($request->feature_title ?? [] as $index => $featureTitle) {
             $product_feature = $product->feature()->create([
                 "title" => $featureTitle,
                 "icon" => $iconNames[$index],
@@ -151,10 +188,8 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
 
         if ($product) {
-            $product_feature = ProductFeature::where('product_id', $product->id)->get();
-            $product_key_feature = ProductKeyFeature::where('product_id', $product->id)->get();
             $categories = Category::where('status', 1)->latest()->get();
-            return view('admin.product.form', compact('product', 'categories', 'product_feature', 'product_key_feature'));
+            return view('admin.product.form', compact('product', 'categories'));
         }
         Toastr::error('Product not found', 'error', ["positionClass" => "toast-top-right"]);
         return back();
@@ -169,6 +204,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         $validated = $request->validate([
             'title' => 'required|max:100',
             'short_description' => 'nullable|max:255',
@@ -191,32 +227,85 @@ class ProductController extends Controller
 
         $product = Product::findOrFail($id);
 
-        if ($product) {
-            $product->update([
-                'title' => $request->title,
-                'short_description' => $request->short_description,
-                'long_description' => $request->long_description,
-                'status' => $request->status,
-                'category_id' => $request->category_id,
-                'price' => $request->price,
-                'is_renewable' => $request->is_renewable,
-            ]);
+        $upperVideoThumbnailName = $product->upper_video_thumbnail; // Get the current icon name
+        $lowerVideoThumbnailName = $product->lower_video_thumbnail; // Get the current icon name
 
-            foreach ($request->key_features_title as $index => $title) {
-                $product_key_feature = $product->keyFeature()->updateOrCreate([
-                    "title" => $title,
+        $upperVideoThumbnail = $request->file('upper_video_thumbnail');
+        $lowerVideoThumbnail = $request->file('lower_video_thumbnail');
+        if ($upperVideoThumbnail) {
+            $currentDate = Carbon::now()->toDateString();
+            $newUpperVideoThumbnailName = $currentDate . '-' . uniqid() . '.' . $upperVideoThumbnail->getClientOriginalExtension();
 
-                ]);
+            if (!file_exists('assets/images/uploads/product/upper-video-thumbnail')) {
+                mkdir('assets/images/uploads/product/upper-video-thumbnail', 0777, true);
             }
 
-            $existingIconNames = $product->feature->pluck('icon')->toArray();
-            $iconName = $existingIconNames; // Get the current icon name
+            $upperVideoThumbnail->move(public_path('assets/images/uploads/product/upper-video-thumbnail'), $newUpperVideoThumbnailName);
+
+            // Delete the previous icon file
+            if ($upperVideoThumbnailName && file_exists(public_path('assets/images/uploads/product/upper-video-thumbnail/' . $upperVideoThumbnailName))) {
+                unlink(public_path('assets/images/uploads/product/upper-video-thumbnail/' . $upperVideoThumbnailName));
+            }
+
+            $upperVideoThumbnailName = $newUpperVideoThumbnailName;
+        }
+        if ($lowerVideoThumbnail) {
+            $currentDate = Carbon::now()->toDateString();
+            $newLowerVideoThumbnailName = $currentDate . '-' . uniqid() . '.' . $lowerVideoThumbnail->getClientOriginalExtension();
+
+            if (!file_exists('assets/images/uploads/product/lower-video-thumbnail')) {
+                mkdir('assets/images/uploads/product/lower-video-thumbnail', 0777, true);
+            }
+
+            $lowerVideoThumbnail->move(public_path('assets/images/uploads/product/lower-video-thumbnail'), $newLowerVideoThumbnailName);
+
+            // Delete the previous icon file
+            if ($lowerVideoThumbnailName && file_exists(public_path('assets/images/uploads/product/lower-video-thumbnail/' . $lowerVideoThumbnailName))) {
+                unlink(public_path('assets/images/uploads/product/lower-video-thumbnail/' . $lowerVideoThumbnailName));
+            }
+
+            $lowerVideoThumbnailName = $newLowerVideoThumbnailName;
+        }
+
+        if ($product) {
+            $product->update([
+                'title'                     => $request->title,
+                'short_description'         => $request->short_description,
+                'long_description'          => $request->long_description,
+                'status'                    => $request->status,
+                'category_id'               => $request->category_id,
+                'price'                     => $request->price,
+                'is_renewable'              => $request->is_renewable,
+                'upper_video_thumbnail'     => $upperVideoThumbnailName,
+                'lower_video_thumbnail'     => $lowerVideoThumbnailName,
+                'upper_video_link'          => $request->upper_video_link,
+                'lower_video_link'          => $request->lower_video_link
+
+            ]);
+
+            foreach ($request->key_features_title ?? [] as $index => $title) {
+                $key_feature_id = isset($request->key_feature_id[$index]) ? $request->key_feature_id[$index] : null;
+                $product_key_feature = $product->keyFeature()->updateOrCreate(
+                    [
+                        'id' => $key_feature_id
+                    ],
+                    [
+                        "title" => $title,
+
+                    ]
+                );
+            }
+
+            $iconNames = [];
 
             $icons = $request->file('images');
+
             if ($icons) {
                 $currentDate = Carbon::now()->toDateString();
 
-                foreach ($icons as $icon) {
+                $existingIcons = $product->feature()->pluck('icon')->toArray();
+
+                foreach ($icons as $index => $icon) {
                     $iconName = $currentDate . '-' . uniqid() . '.' . $icon->getClientOriginalExtension();
 
                     if (!file_exists('assets/images/uploads/product/feature')) {
@@ -224,19 +313,30 @@ class ProductController extends Controller
                     }
 
                     $icon->move(public_path('assets/images/uploads/product/feature'), $iconName);
-                    if ($iconName && file_exists(public_path('assets/images/uploads/product/feature/' . $iconName))) {
-                        unlink(public_path('assets/images/uploads/product/feature/' . $iconName));
+
+                    if (isset($existingIcons[$index]) && $existingIcons[$index]) {
+                        $existingIconPath = public_path('assets/images/uploads/product/feature') . '/' . $existingIcons[$index];
+                        if (file_exists($existingIconPath)) {
+                            unlink($existingIconPath);
+                        }
                     }
-                    $iconNames[] = $iconName;
+
+                    $iconNames[$index] = $iconName;
                 }
             }
 
-            foreach ($request->feature_title as $index => $featureTitle) {
-                $product_feature = $product->feature()->update([
-                    "title" => $featureTitle,
-                    "icon" => $iconNames[$index],
+            foreach ($request->feature_title ?? [] as $index => $featureTitle) {
+                $feature_id = isset($request->feature_id[$index]) ? $request->feature_id[$index] : null;
+                $product_feature = $product->feature()->updateOrCreate(
+                    [
+                        'id' => $feature_id
+                    ],
+                    [
+                        "title" => $featureTitle,
+                        "icon" => $iconNames[$index] ?? $product->feature[$index]->icon ?? 0,
 
-                ]);
+                    ]
+                );
             }
 
 
@@ -269,5 +369,22 @@ class ProductController extends Controller
             return 1;
         }
         return 0;
+    }
+
+
+
+    public function deleteFeature($id)
+    {
+        $productFeature = ProductFeature::find($id);
+        if($productFeature->icon){
+            $existingIconPath = public_path('assets/images/uploads/product/feature') . '/' . $productFeature->icon;
+            if (file_exists($existingIconPath)) {
+                unlink($existingIconPath);
+            }
+            $productFeature->delete();
+        }else{
+            $productFeature->delete();
+        };
+        return json_decode($productFeature);
     }
 }

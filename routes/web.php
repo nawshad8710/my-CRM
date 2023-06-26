@@ -10,14 +10,17 @@ use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\AssignedProjectController;
+use App\Http\Controllers\Admin\CookiesPolicyController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\IndustryServeController;
 use App\Http\Controllers\Admin\OurAchiveController;
+use App\Http\Controllers\Admin\PrivacyPolicyController;
 use App\Http\Controllers\Admin\UserReportController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SiteInfoController;
 use App\Http\Controllers\Admin\SocialLinkController;
+use App\Http\Controllers\Admin\TermsAndConditionController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\UserSolutionController;
 use App\Http\Controllers\Employee\EmployeeHomeController;
@@ -65,6 +68,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::get('/product/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
             Route::post('/product/update/{id}', [ProductController::class, 'update'])->name('product.update');
             Route::get('/product/delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
+            Route::get('/product/feature/delete/{id}', [ProductController::class, 'deleteFeature'])->name('deleteFeature');
 
             Route::get('/product-plan/list', [ProductPlanController::class, 'index'])->name('productplan.list');
             Route::get('/product-plan/add', [ProductPlanController::class, 'create'])->name('productplan.add');
@@ -180,12 +184,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
         */
         Route::group(['as' => 'service.', 'prefix' => 'service'], function () {
             Route::get('/index', [ServiceController::class, 'index'])->name('index');
-            Route::get('/create',[ServiceController::class, 'create'])->name('create');
-            Route::post('/store',[ServiceController::class, 'store'])->name('store');
-            Route::get('/edit/{id}',[ServiceController::class, 'edit'])->name('edit');
-            Route::post('/update/{id}',[ServiceController::class, 'update'])->name('update');
-            Route::get('/delete/{id}',[ServiceController::class, 'delete'])->name('delete');
-
+            Route::get('/create', [ServiceController::class, 'create'])->name('create');
+            Route::post('/store', [ServiceController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [ServiceController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [ServiceController::class, 'update'])->name('update');
+            Route::get('/delete/{id}', [ServiceController::class, 'delete'])->name('delete');
         });
         /*
         |--------------------------------------------------------------------------
@@ -194,12 +197,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
         */
         Route::group(['as' => 'industry-serve.', 'prefix' => 'industry-serve'], function () {
             Route::get('/index', [IndustryServeController::class, 'index'])->name('index');
-            Route::get('/create',[IndustryServeController::class, 'create'])->name('create');
-            Route::post('/store',[IndustryServeController::class, 'store'])->name('store');
-            Route::get('/edit/{id}',[IndustryServeController::class, 'edit'])->name('edit');
-            Route::post('/update/{id}',[IndustryServeController::class, 'update'])->name('update');
-            Route::get('/delete/{id}',[IndustryServeController::class, 'delete'])->name('delete');
-
+            Route::get('/create', [IndustryServeController::class, 'create'])->name('create');
+            Route::post('/store', [IndustryServeController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [IndustryServeController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [IndustryServeController::class, 'update'])->name('update');
+            Route::get('/delete/{id}', [IndustryServeController::class, 'delete'])->name('delete');
         });
         /*
         |--------------------------------------------------------------------------
@@ -208,13 +210,47 @@ Route::middleware(['auth', 'admin'])->group(function () {
         */
         Route::group(['as' => 'social-link.', 'prefix' => 'social-link'], function () {
             Route::get('/index', [SocialLinkController::class, 'index'])->name('index');
-            Route::get('/create',[SocialLinkController::class, 'create'])->name('create');
-            Route::post('/store',[SocialLinkController::class, 'store'])->name('store');
-            Route::get('/edit/{id}',[SocialLinkController::class, 'edit'])->name('edit');
-            Route::post('/update/{id}',[SocialLinkController::class, 'update'])->name('update');
-            Route::get('/delete/{id}',[SocialLinkController::class, 'delete'])->name('delete');
-
+            Route::get('/create', [SocialLinkController::class, 'create'])->name('create');
+            Route::post('/store', [SocialLinkController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [SocialLinkController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [SocialLinkController::class, 'update'])->name('update');
+            Route::get('/delete/{id}', [SocialLinkController::class, 'delete'])->name('delete');
         });
+
+        /*
+        |--------------------------------------------------------------------------
+        | TERMS AND CONDITION ROUTE FOR ADMIN (ROUTE)
+        |--------------------------------------------------------------------------
+        */
+        Route::group(['as' => 'terms-and-condition.', 'prefix' => 'terms-and-condition'], function () {
+            Route::get('/index', [TermsAndConditionController::class, 'index'])->name('index');
+            Route::post('/store', [TermsAndConditionController::class, 'store'])->name('store');
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | COOKIE POLICY ROUTE FOR ADMIN (ROUTE)
+        |--------------------------------------------------------------------------
+        */
+        Route::group(['as' => 'cookie-policy.', 'prefix' => 'cookie-policy'], function () {
+            Route::get('/index', [CookiesPolicyController::class, 'index'])->name('index');
+            Route::post('/store', [CookiesPolicyController::class, 'store'])->name('store');
+        });
+        /*
+        |--------------------------------------------------------------------------
+        | PRIVACY POLICY ROUTE FOR ADMIN (ROUTE)
+        |--------------------------------------------------------------------------
+        */
+        Route::group(['as' => 'privacy-policy.', 'prefix' => 'privacy-policy'], function () {
+            Route::get('/index', [PrivacyPolicyController::class, 'index'])->name('index');
+            Route::post('/store', [PrivacyPolicyController::class, 'store'])->name('store');
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | ROLE ROUTE FOR ADMIN (ROUTE)
+        |--------------------------------------------------------------------------
+        */
 
         Route::group(['as' => 'role.', 'prefix' => 'role'], function () {
             Route::get('/list', [RoleController::class, 'index'])->name('list');
