@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AboutController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\HomeController;
@@ -10,10 +11,13 @@ use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\AssignedProjectController;
+use App\Http\Controllers\Admin\CareerController;
 use App\Http\Controllers\Admin\CookiesPolicyController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\IndustryServeController;
 use App\Http\Controllers\Admin\OurAchiveController;
+use App\Http\Controllers\Admin\OurClientController;
+use App\Http\Controllers\Admin\OurTeamController;
 use App\Http\Controllers\Admin\PrivacyPolicyController;
 use App\Http\Controllers\Admin\UserReportController;
 use App\Http\Controllers\Admin\RoleController;
@@ -244,6 +248,52 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::group(['as' => 'privacy-policy.', 'prefix' => 'privacy-policy'], function () {
             Route::get('/index', [PrivacyPolicyController::class, 'index'])->name('index');
             Route::post('/store', [PrivacyPolicyController::class, 'store'])->name('store');
+        });
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ABOUT ROUTE FOR ADMIN (ROUTE)
+        |--------------------------------------------------------------------------
+        */
+        Route::group(['as' => 'about.', 'prefix' => 'about'], function () {
+            Route::get('/index', [AboutController::class, 'index'])->name('index');
+            Route::post('/store', [AboutController::class, 'store'])->name('store');
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | OUR CLIENT ROUTE FOR ADMIN (ROUTE)
+        |--------------------------------------------------------------------------
+        */
+        Route::group(['as' => 'our-client.', 'prefix' => 'our-client'], function () {
+            Route::get('/index', [OurClientController::class, 'index'])->name('index');
+            Route::get('/create', [OurClientController::class, 'create'])->name('create');
+            Route::post('/store', [OurClientController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [OurClientController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [OurClientController::class, 'update'])->name('update');
+        });
+        /*
+        |--------------------------------------------------------------------------
+        | CAREER ROUTE FOR ADMIN (ROUTE)
+        |--------------------------------------------------------------------------
+        */
+        Route::group(['as' => 'career.', 'prefix' => 'career'], function () {
+            Route::get('/index', [CareerController::class, 'index'])->name('index');
+            Route::post('/store', [CareerController::class, 'store'])->name('store');
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | OUR TEAM ROUTE FOR ADMIN (ROUTE)
+        |--------------------------------------------------------------------------
+        */
+        Route::group(['as' => 'our-team.', 'prefix' => 'our-team'], function () {
+            Route::get('/index', [OurTeamController::class, 'index'])->name('index');
+            Route::get('/create', [OurTeamController::class, 'create'])->name('create');
+            Route::post('/store', [OurTeamController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [OurTeamController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [OurTeamController::class, 'update'])->name('update');
         });
 
         /*

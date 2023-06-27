@@ -86,18 +86,18 @@
                                                         @endif
                                                     </td>
                                                     <td class="desc">
-                                                        <?php 
+                                                        <?php
                                                             $description =  strip_tags(html_entity_decode($product_plan->description));
                                                             if (strlen($description) > 30) {
 
                                                                 // truncate string
                                                                 $stringCut = substr($description, 0, 30);
                                                                 $endPoint = strrpos($stringCut, ' ');
-                                                            
+
                                                                 //if the string doesn't contain any space then it will cut without word basis.
                                                                 $desc = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
                                                                 $desc .= '...';
-                                                            }                                                            
+                                                            }
                                                         ?>
                                                         @if (strlen($description) > 30)
                                                             {{ $desc }}
@@ -186,7 +186,7 @@
 						</div>
 						<div class="modal-body">
 							<div id="product_planDetailsWrapper">
-								
+
                             </div>
 						</div>
 						<div class="modal-footer">
@@ -248,6 +248,6 @@
             location = url;
         }
 
-    });   
+    });
 </script>
 @endpush
