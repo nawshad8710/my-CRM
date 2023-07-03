@@ -8,6 +8,7 @@ use App\Models\Admin\OurTeam;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Mockery\Undefined;
 
 class OurTeamController extends Controller
 {
@@ -19,7 +20,7 @@ class OurTeamController extends Controller
 
     public function index()
     {
-        $data['ourTeam'] = OurTeam::first();
+        $data['ourTeams'] = OurTeam::get();
         return view('admin.our-team.index', $data);
     }
 
@@ -43,6 +44,7 @@ class OurTeamController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate([]);
 
 
@@ -111,12 +113,12 @@ class OurTeamController extends Controller
 
             $image->move(public_path('assets/images/uploads/our-team'), $newImageName);
 
-            // Delete the previous icon file
+
             if ($imageName && file_exists(public_path('assets/images/uploads/our-team/' . $imageName))) {
                 unlink(public_path('assets/images/uploads/our-team/' . $imageName));
             }
 
-            $imageName = $newImageName; // Update the icon name
+            $imageName = $newImageName;
         }
 
         $ourTeam->update([
@@ -140,10 +142,14 @@ class OurTeamController extends Controller
     public function delete($id)
     {
         $ourTeam = OurTeam::find($id);
-        if ($ourTeam->image) {
-            $imagePath = public_path($ourTeam->image);
-            if (file_exists($imagePath)) {
-                unlink($imagePath);
+        if ($ourTeam) {
+
+            // dd($ourTeam->image);
+            if ( $ourTeam->image !== "") {
+                $imagePath = public_path('assets/images/uploads/our-team/' . $ourTeam->image);
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
             } else {
                 $ourTeam->delete();
             }

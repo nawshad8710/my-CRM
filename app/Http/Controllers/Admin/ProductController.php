@@ -387,4 +387,14 @@ class ProductController extends Controller
         };
         return json_decode($productFeature);
     }
+
+
+    public function deleteKeyFeature($id)
+    {
+        $productKeyFeature = ProductKeyFeature::find($id);
+
+            $productKeyFeature->delete();
+
+        return json_decode($productKeyFeature);
+    }
 }

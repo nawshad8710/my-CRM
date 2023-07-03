@@ -64,11 +64,11 @@
                                                        $description =  strip_tags(html_entity_decode($service->short_description));
                                                        if (strlen($description) > 30) {
 
-                                                           // truncate string
+
                                                            $stringCut = substr($description, 0, 30);
                                                            $endPoint = strrpos($stringCut, ' ');
 
-                                                           //if the string doesn't contain any space then it will cut without word basis.
+
                                                            $desc = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
                                                            $desc .= '...';
                                                        }
@@ -89,11 +89,11 @@
                                                        $description =  strip_tags(html_entity_decode($service->long_description));
                                                        if (strlen($description) > 30) {
 
-                                                           // truncate string
+
                                                            $stringCut = substr($description, 0, 30);
                                                            $endPoint = strrpos($stringCut, ' ');
 
-                                                           //if the string doesn't contain any space then it will cut without word basis.
+
                                                            $desc = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
                                                            $desc .= '...';
                                                        }

@@ -114,118 +114,6 @@
                                                                     @endif
 
 
-                                                                    {{-- Edit Modal --}}
-                                                                    <div class="modal fade" id="editModal" tabindex="-1"
-                                                                        role="dialog" aria-labelledby="staticModalLabel"
-                                                                        aria-hidden="true" data-backdrop="static">
-                                                                        <div class="modal-dialog modal-lg" role="document">
-                                                                            <div class="modal-content">
-                                                                                <form id="updatedfrom" action="{{route('admin.our-achive.updateAchiveItem', $ourAchiveItem->id)}}" method="POST" enctype="multipart/form-data">
-
-                                                                                    @csrf
-
-                                                                                    <div class="modal-header">
-                                                                                        <h5 class="modal-title"
-                                                                                            id="staticModalLabel">Edit
-                                                                                            Achive Item</h5>
-                                                                                        <button type="button"
-                                                                                            class="close"
-                                                                                            data-dismiss="modal"
-                                                                                            aria-label="Close">
-                                                                                            <span
-                                                                                                aria-hidden="true">&times;</span>
-                                                                                        </button>
-                                                                                    </div>
-                                                                                    <div class="modal-body">
-                                                                                        <div class="conter">
-
-                                                                                            <div class="row">
-                                                                                                <div class="col-md-6">
-                                                                                                    <div class="form-group">
-                                                                                                        <label
-                                                                                                            for="title"
-                                                                                                            class="control-label mb-1">Heading</label>
-                                                                                                        <input
-                                                                                                            id="headingTitle"
-                                                                                                            name="title"
-                                                                                                            type="text"
-                                                                                                            class="form-control @error('title') is-invalid @enderror"
-                                                                                                            value="{{ optional($ourAchiveItem)->title }}"
-                                                                                                            required>
-                                                                                                        @error('title')
-                                                                                                            <div
-                                                                                                                class="invalid-feedback">
-                                                                                                                {{ $message }}
-                                                                                                            </div>
-                                                                                                        @enderror
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div class="col-md-6">
-                                                                                                    <div class="form-group">
-                                                                                                        <label
-                                                                                                            for="sub_title"
-                                                                                                            class="control-label mb-1">Sub
-                                                                                                            Heading</label>
-                                                                                                        <input
-                                                                                                            id="sub_heading_title"
-                                                                                                            name="sub_title"
-                                                                                                            type="text"
-                                                                                                            class="form-control @error('sub_title') is-invalid @enderror"
-                                                                                                            value="{{ optional($ourAchiveItem)->sub_title }}"
-                                                                                                            required>
-                                                                                                        @error('sub_title')
-                                                                                                            <div
-                                                                                                                class="invalid-feedback">
-                                                                                                                {{ $message }}
-                                                                                                            </div>
-                                                                                                        @enderror
-                                                                                                    </div>
-                                                                                                </div>
-
-                                                                                                <div class="col-md-6">
-                                                                                                    <img class="thumbnail example-image"
-                                                                                                    src="{{ asset('assets/images/uploads/our-achive/' . $ourAchiveItem->icon) }}"
-                                                                                                    alt="" width="100Px" height="100px"
-                                                                                                    data-lightbox="example-1">
-                                                                                                    <img id="frame"
-                                                                                                        src=""
-                                                                                                        class="img-fluid" />
-                                                                                                    <div class="mb-5">
-                                                                                                        <label
-                                                                                                            for="icon"
-                                                                                                            class="form-label">Upload
-                                                                                                            Icon</label>
-                                                                                                        <input
-                                                                                                            class="form-control"
-                                                                                                            name="icon"
-                                                                                                            type="file"
-                                                                                                            id="formFile"
-                                                                                                            onchange="preview()">
-                                                                                                        <button
-                                                                                                            onclick="clearImage()"
-                                                                                                            class="btn btn-danger mt-3">Remove</button>
-                                                                                                    </div>
-
-                                                                                                </div>
-                                                                                            </div>
-
-
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="modal-footer">
-                                                                                        <button type="submit"
-                                                                                            class="btn btn-success">Submit</button>
-                                                                                        <button type="button"
-                                                                                            class="btn btn-secondary"
-                                                                                            data-dismiss="modal">Cancel</button>
-                                                                                    </div>
-                                                                                </form>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-
-
                                                                     @if (has_access('delete_assigned_task'))
                                                                         <button class="item" data-toggle="tooltip"
                                                                             data-placement="top" title="Delete"
@@ -390,6 +278,115 @@
     </div>
 
 
+     {{-- Edit Modal --}}
+     <div class="modal fade" id="editModal" tabindex="-1"
+     role="dialog" aria-labelledby="staticModalLabel"
+     aria-hidden="true" data-backdrop="static">
+     <div class="modal-dialog modal-lg" role="document">
+         <div class="modal-content">
+             <form id="updatedfrom" action="#" method="POST" enctype="multipart/form-data">
+
+                 @csrf
+
+                 <div class="modal-header">
+                     <h5 class="modal-title"
+                         id="staticModalLabel">Edit
+                         Achive Item</h5>
+                     <button type="button"
+                         class="close"
+                         data-dismiss="modal"
+                         aria-label="Close">
+                         <span
+                             aria-hidden="true">&times;</span>
+                     </button>
+                 </div>
+                 <div class="modal-body">
+                     <div class="conter">
+
+                         <div class="row">
+                             <div class="col-md-6">
+                                 <div class="form-group">
+                                     <label
+                                         for="title"
+                                         class="control-label mb-1">Heading</label>
+                                     <input
+                                         id="headingTitle"
+                                         name="title"
+                                         type="text"
+                                         class="form-control itemTitle @error('title') is-invalid @enderror"
+                                         value=""
+                                         required>
+                                     @error('title')
+                                         <div
+                                             class="invalid-feedback">
+                                             {{ $message }}
+                                         </div>
+                                     @enderror
+                                 </div>
+                             </div>
+                             <div class="col-md-6">
+                                 <div class="form-group">
+                                     <label
+                                         for="sub_title"
+                                         class="control-label mb-1">Sub
+                                         Heading</label>
+                                     <input
+                                         id="sub_heading_title"
+                                         name="sub_title"
+                                         type="text"
+                                         class="form-control itemSubtitle @error('sub_title') is-invalid @enderror"
+                                         value=""
+                                         required>
+                                     @error('sub_title')
+                                         <div
+                                             class="invalid-feedback">
+                                             {{ $message }}
+                                         </div>
+                                     @enderror
+                                 </div>
+                             </div>
+
+                             <div class="col-md-6">
+                                 <div class="itemImage">
+
+                                 </div>
+                                 <img id="frame"
+                                     src=""
+                                     class="img-fluid" />
+                                 <div class="mb-5">
+                                     <label
+                                         for="icon"
+                                         class="form-label">Upload
+                                         Icon</label>
+                                     <input
+                                         class="form-control"
+                                         name="icon"
+                                         type="file"
+                                         id="formFile"
+                                         onchange="preview()">
+                                     <button
+                                         onclick="clearImage()"
+                                         class="btn btn-danger mt-3">Remove</button>
+                                 </div>
+
+                             </div>
+                         </div>
+
+
+                     </div>
+                 </div>
+                 <div class="modal-footer">
+                     <button type="submit"
+                         class="btn btn-success">Submit</button>
+                     <button type="button"
+                         class="btn btn-secondary"
+                         data-dismiss="modal">Cancel</button>
+                 </div>
+             </form>
+         </div>
+     </div>
+ </div>
+
 
 
     {{-- delete data modal --}}
@@ -478,9 +475,39 @@
 
         function editModalShow(id) {
             var id = id;
+            var form = $('#updatedfrom');
 
             $('#editModal').appendTo("body").modal('show');
+            var url = window.location.origin + "/admin/our-achive/edit-achive-item/" + id;
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "JSON",
+                success: function(response) {
+                    var icon = response.icon;
+                    var title = response.title;
+                    var ItemUpdateurl = "{{route('admin.our-achive.updateAchiveItem', '')}}"+"/"+response.id;
+                    form.attr('action', ItemUpdateurl);
+                    var subtitle = response.sub_title;
+                   var iconhtml = `<img class="" src="{{ asset('assets/images/uploads/our-achive/${icon}') }}"
+                                        alt="image-1" style="height:150px; max-width: 200px;  ">`;
 
+
+                    $('.itemImage').html(iconhtml);
+
+                    $('.itemTitle').val(title);
+                    $('.itemSubtitle').val(subtitle);
+                    console.log(response);
+                    var formActionUrl = form.attr('action');
+                    console.log(ItemUpdateurl);
+                    console.log(formActionUrl);
+
+
+                },
+                error: function(xhr) {
+                    console.log(xhr.statusText);
+                }
+            });
         }
     </script>
 @endpush

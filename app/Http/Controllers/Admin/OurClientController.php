@@ -18,7 +18,7 @@ class OurClientController extends Controller
 
     public function index()
     {
-        $data['ourClient'] = Client::get();
+        $data['ourClients'] = Client::get();
         return view('admin.our-client.index',  $data);
     }
 
@@ -136,10 +136,14 @@ class OurClientController extends Controller
     public function delete($id)
     {
         $ourClient = Client::find($id);
-        if ($ourClient->logo) {
-            $imagePath = public_path($ourClient->logo);
-            if (file_exists($imagePath)) {
-                unlink($imagePath);
+        if ($ourClient) {
+
+            // dd($ourTeam->image);
+            if ( $ourClient->logo !== "") {
+                $imagePath = public_path('assets/images/uploads/our-client/' . $ourClient->logo);
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
             } else {
                 $ourClient->delete();
             }

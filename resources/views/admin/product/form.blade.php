@@ -133,13 +133,13 @@
                                                     <option value="1"
                                                         @isset($product) {{ $product->status == 1
                                                             ? '
-                                                                                                                                                                                                                            selected'
+                                                                                                                                                                                                                                                                                                                                            selected'
                                                             : '' }} @endisset>
                                                         Active</option>
                                                     <option value="0"
                                                         @isset($product) {{ $product->status == 0
                                                             ? '
-                                                                                                                                                                                                                            selected'
+                                                                                                                                                                                                                                                                                                                                            selected'
                                                             : '' }} @endisset>
                                                         Inactive</option>
                                                 </select>
@@ -251,43 +251,48 @@
                                     <h4>Features</h4>
                                     <button onclick="addOption()" id="add-feature-button" type="button"
                                         class="btn btn-success mb-3" style="margin-left: 10px">Add Field</button>
-                                    <div class="row featureField">
+                                    <div class="featureField">
+                                       <div class="row">
                                         @isset($product->feature)
-                                            @foreach ($product->feature as $key => $feature)
-                                                <input type="hidden" name="feature_id[]" value="{{ $feature->id }}">
-                                                <div class="col-5"></div>
-                                                <div class="col-5">
-                                                    <img class="thumbnail example-image"
-                                                        src="{{ asset('assets/images/uploads/product/feature/' . optional($feature)->icon) }}"
-                                                        alt="" width="100Px" height="100px"
-                                                        data-lightbox="example-1">
+                                        @foreach ($product->feature as $key => $feature)
+                                            <input type="hidden" name="feature_id[]" value="{{ $feature->id }}">
+                                            <div class="col-5"></div>
+                                            <div class="col-5">
+                                                <img class="thumbnail example-image"
+                                                    src="{{ asset('assets/images/uploads/product/feature/' . optional($feature)->icon) }}"
+                                                    alt="" width="100Px" height="100px"
+                                                    data-lightbox="example-1">
+                                            </div>
+                                            <div class="col-5 ">
+                                                <div class="form-group">
+                                                    <label for="feature_title" class="control-label mb-1">Title</label>
+                                                    <input id="feature_title" name="feature_title[]" type="text"
+                                                        class="form-control @error('feature_title') is-invalid @enderror"
+                                                        value="{{ $feature->title ?? old('feature_title') }}">
+                                                    @error('feature_title')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
                                                 </div>
-                                                <div class="col-5 ">
-                                                    <div class="form-group">
-                                                        <label for="feature_title" class="control-label mb-1">Title</label>
-                                                        <input id="feature_title" name="feature_title[]" type="text"
-                                                            class="form-control @error('feature_title') is-invalid @enderror"
-                                                            value="{{ $feature->title ?? old('feature_title') }}">
-                                                        @error('feature_title')
-                                                            <div class="invalid-feedback">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-                                                </div>
+                                            </div>
 
-                                                <div class="col-5">
-                                                    <label for="images" class="control-label mb-1">Image</label>
-                                                    <input id="images" name="images[]" type="file"
-                                                        class="form-control @error('images') is-invalid @enderror">
-                                                    <input type="hidden" class="is-currect-option-default-value"
-                                                        name="images[]" value="0"
-                                                        {{ $feature->icon ? 'disabled' : '' }} />
-                                                </div>
-                                                <div class="col-2">
-                                                    <button type="button"
-                                                        onclick="RemoveItem({{ $feature->id }})">Remove</button>
-                                                </div>
-                                            @endforeach
-                                        @endisset
+                                            <div class="col-5">
+                                                <label for="images" class="control-label mb-1">Image</label>
+                                                <input id="images" name="images[]" type="file"
+                                                    class="form-control @error('images') is-invalid @enderror">
+                                                <input type="hidden" class="is-currect-option-default-value"
+                                                    name="images[]" value="0"
+                                                    {{ $feature->icon ? 'disabled' : '' }} />
+                                            </div>
+                                            <div class="col-2" style="margin: 36px auto">
+                                                <button type="button"
+                                                    style="background: crimson;
+                                                color: white;
+                                                padding: inherit;"
+                                                    onclick="RemoveItem({{ $feature->id }})">Remove</button>
+                                            </div>
+                                        @endforeach
+                                    @endisset
+                                       </div>
 
 
                                     </div>
@@ -296,12 +301,12 @@
                                     <button onclick="addKeyFeature()" type="button" class="btn btn-success mb-3"
                                         style="margin-left: 10px">Add Field</button>
                                     <div class="row mb-2 example">
-                                        <div class="col-md-6 keyFeatureField">
+                                        <div class=" keyFeatureField">
                                             @isset($product->keyFeature)
                                                 @foreach ($product->keyFeature as $key => $key_feature)
                                                     <input type="hidden" name="key_feature_id[]"
                                                         value="{{ $key_feature->id }}">
-                                                    <div class="form-group">
+                                                    <div class="form-group d-flex">
 
                                                         <input id="key_features_title" placeholder="Title"
                                                             name="key_features_title[]" type="text"
@@ -310,7 +315,13 @@
                                                         @error('key_features_title')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
+                                                        <button type="button"
+                                                        style="background: crimson;
+                                                    color: white;
+                                                    padding: inherit;"
+                                                        onclick="RemoveKeyFeature({{ $key_feature->id }})">Remove</button>
                                                     </div>
+
                                                 @endforeach
                                             @endisset
                                         </div>
@@ -363,54 +374,78 @@
             });
         }
 
+        const RemoveKeyFeature = (id) => {
+            console.log(id)
+
+            var url = window.location.origin + '/admin/sales/product/key-feature/delete/' + id;
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "json",
+                success: function(data) {
+                    location.reload();
+                    console.log(data)
+
+                }
+            });
+        }
 
 
-        const removeOption = () => {
-            var $obj = $('.Option');
+
+        const removeOption = (index) => {
+            var $obj = $('.Option').eq(index);
             $obj.remove();
             console.log($obj);
         }
 
         const addOption = () => {
+            var index = $('.Option').length; // Get the current number of options
 
-            var newFeatureField = `<div class="col-6 Option">
-                        <div class="form-group">
-                            <label for="feature_title" class="control-label mb-1">Title</label>
-                            <input id="feature_title" name="feature_title[]" type="text"
-                                class="form-control @error('feature_title') is-invalid @enderror">
-                            @error('feature_title')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="col-6 Option">
-                        <label for="images" class="control-label mb-1">Image</label>
-                        <input id="images" name="images[]" type="file"
-                            class="form-control @error('images') is-invalid @enderror">
-                    </div>
-                    <buttton class="Option" onclick="removeOption(this)">remove</button>`;
+            var newFeatureField = `<div class="Option row">
+        <div class="col-5">
+        <div class="form-group">
+            <label for="feature_title_${index}" class="control-label mb-1">Title</label>
+            <input id="feature_title_${index}" name="feature_title[]" type="text" class="form-control @error('feature_title') is-invalid @enderror">
+            @error('feature_title')
+            <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+    </div>
+    <div class="col-5 ">
+        <label for="images_${index}" class="control-label mb-1">Image</label>
+        <input id="images_${index}" name="images[]" type="file" class="form-control @error('images') is-invalid @enderror">
+    </div>
+    <div class="col-2 " style="margin: auto">
+        <button style="background: crimson; color: white; padding: 5px 20px;" class="" onclick="removeOption(${index})">remove</button>
+    </div>
+        </div>`;
+
             $('.featureField').append(newFeatureField);
-
         }
 
 
-        const removeKeyFeature = () => {
-            var keyObj = $('.keyFeature');
-            keyObj.remove();
-        }
 
+        const removeKeyFeature = (index) => {
+    var keyObj = $('.keyFeature').eq(index);
+    keyObj.remove();
+    console.log(keyObj);
+}
 
-        const addKeyFeature = () => {
-            var newField = `<div class="form-group keyFeature">
+const addKeyFeature = () => {
+    var index = $('.keyFeature').length; // Get the current number of key features
 
-                <input id="key_features_title" placeholder="Title" name="key_features_title[]" type="text" class="form-control @error('title') is-invalid @enderror">
-                    @error('key_features_title')
-                <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-                </div>
-                <buttton class="keyFeature" onclick="removeKeyFeature(this)">remove</button>
-                `;
-            $('.keyFeatureField').append(newField);
-        };
+    var newField = `<div class="form-group keyFeature d-flex">
+        <input id="key_features_title_${index}" placeholder="Title" name="key_features_title[]" type="text" class="form-control @error('title') is-invalid @enderror">
+        @error('key_features_title')
+        <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+        <button class="" style="    background: crimson;
+    color: white;
+    padding: 5px;" onclick="removeKeyFeature(${index})">remove</button>
+    </div>`;
+
+    $('.keyFeatureField').append(newField);
+};
+
     </script>
 @endpush

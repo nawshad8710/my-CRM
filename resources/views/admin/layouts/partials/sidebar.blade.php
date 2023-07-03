@@ -252,7 +252,11 @@
                 Request::is('admin/our-achive/form') ||
                 Request::is('admin/terms-and-condition/index') ||
                 Request::is('admin/cookie-policy/index') ||
-                Request::is('admin/privacy-policy/index')
+                Request::is('admin/privacy-policy/index') ||
+                Request::is('admin/about/index') ||
+                Request::is('admin/our-client/index') ||
+                Request::is('admin/career/index') ||
+                Request::is('admin/our-team/index')
                     ? 'active'
                     : '' }}">
                     <a class="js-arrow" href="#">
@@ -265,8 +269,12 @@
                             Request::is('admin/industry-serve/index') ||
                             Request::is('admin/our-achive/form') ||
                             Request::is('admin/terms-and-condition/index') ||
-                Request::is('admin/cookie-policy/index') ||
-                Request::is('admin/privacy-policy/index')
+                            Request::is('admin/cookie-policy/index') ||
+                            Request::is('admin/privacy-policy/index') ||
+                            Request::is('admin/about/index') ||
+                            Request::is('admin/our-client/index') ||
+                            Request::is('admin/career/index') ||
+                            Request::is('admin/our-team/index')
                                 ? 'up'
                                 : '' }}">
                             <i class="fas fa-angle-down"></i>
@@ -279,10 +287,18 @@
                                 Request::is('admin/testimonial/list') ||
                                 Request::is('admin/industry-serve/index') ||
                                 Request::is('admin/terms-and-condition/index') ||
-                Request::is('admin/cookie-policy/index') ||
-                Request::is('admin/privacy-policy/index') ||
-                                Request::is('admin/our-achive/form')) style="display: block;" @endif>
+                                Request::is('admin/cookie-policy/index') ||
+                                Request::is('admin/privacy-policy/index') ||
+                                Request::is('admin/our-achive/form') ||
+                                Request::is('admin/about/index') ||
+                                Request::is('admin/our-client/index') ||
+                                Request::is('admin/career/index') ||
+                                Request::is('admin/our-team/index')) style="display: block;" @endif>
 
+                        <li class="{{ Request::is('admin/about/index') ? 'active' : '' }}">
+                            <a href="{{ route('admin.about.index') }}">
+                                <i class="fas fa-tasks"></i>About</a>
+                        </li>
                         <li class="{{ Request::is('admin/site-info/index') ? 'active' : '' }}">
                             <a href="{{ route('admin.site-info.index') }}">
                                 <i class="fas fa-tasks"></i>Site Infos</a>
@@ -323,6 +339,21 @@
                         <li class="{{ Request::is('admin/privacy-policy/index') ? 'active' : '' }}">
                             <a href="{{ route('admin.privacy-policy.index') }}">
                                 <i class="fas fa-edit"></i>Privacy Policy
+                            </a>
+                        </li>
+                        <li class="{{ Request::is('admin/our-client/index') ? 'active' : '' }}">
+                            <a href="{{ route('admin.our-client.index') }}">
+                                <i class="fas fa-edit"></i>Our Client
+                            </a>
+                        </li>
+                        <li class="{{ Request::is('admin/career/index') ? 'active' : '' }}">
+                            <a href="{{ route('admin.career.index') }}">
+                                <i class="fas fa-edit"></i>career
+                            </a>
+                        </li>
+                        <li class="{{ Request::is('admin/our-team/index') || Request::is('admin/our-team/create')  ? 'active' : '' }}">
+                            <a href="{{ route('admin.our-team.index') }}">
+                                <i class="fas fa-edit"></i>Our Team
                             </a>
                         </li>
 

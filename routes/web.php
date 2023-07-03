@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\AssignedProjectController;
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CareerController;
 use App\Http\Controllers\Admin\CookiesPolicyController;
 use App\Http\Controllers\Admin\CustomerController;
@@ -27,6 +28,7 @@ use App\Http\Controllers\Admin\SocialLinkController;
 use App\Http\Controllers\Admin\TermsAndConditionController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\UserSolutionController;
+use App\Http\Controllers\Admin\WhyChooseUsController;
 use App\Http\Controllers\Employee\EmployeeHomeController;
 use App\Http\Controllers\Employee\ProblemController;
 use App\Http\Controllers\Employee\UserProjectController;
@@ -73,6 +75,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::post('/product/update/{id}', [ProductController::class, 'update'])->name('product.update');
             Route::get('/product/delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
             Route::get('/product/feature/delete/{id}', [ProductController::class, 'deleteFeature'])->name('deleteFeature');
+            Route::get('/product/key-feature/delete/{id}', [ProductController::class, 'deleteKeyFeature'])->name('deleteKeyFeature');
 
             Route::get('/product-plan/list', [ProductPlanController::class, 'index'])->name('productplan.list');
             Route::get('/product-plan/add', [ProductPlanController::class, 'create'])->name('productplan.add');
@@ -272,6 +275,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::post('/store', [OurClientController::class, 'store'])->name('store');
             Route::get('/edit/{id}', [OurClientController::class, 'edit'])->name('edit');
             Route::post('/update/{id}', [OurClientController::class, 'update'])->name('update');
+            Route::get('/delete/{id}', [OurClientController::class, 'delete'])->name('delete');
         });
         /*
         |--------------------------------------------------------------------------
@@ -294,7 +298,34 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::post('/store', [OurTeamController::class, 'store'])->name('store');
             Route::get('/edit/{id}', [OurTeamController::class, 'edit'])->name('edit');
             Route::post('/update/{id}', [OurTeamController::class, 'update'])->name('update');
+            Route::get('/delete/{id}', [OurTeamController::class, 'delete'])->name('delete');
         });
+
+        /*
+        |--------------------------------------------------------------------------
+        | BANNER ROUTE FOR ADMIN (ROUTE)
+        |--------------------------------------------------------------------------
+        */
+
+        Route::group(['as' => 'banner.', 'prefix' => 'banner'], function () {
+            Route::get('/index', [BannerController::class, 'index'])->name('index');
+            Route::post('/store-and-update', [BannerController::class, 'storeAndUpdate'])->name('storeAndUpdate');
+        });
+        /*
+        |--------------------------------------------------------------------------
+        | WHY CHOOSE US ROUTE FOR ADMIN (ROUTE)
+        |--------------------------------------------------------------------------
+        */
+
+        Route::group(['as' => 'why-choose-us.', 'prefix' => 'why-choose-us'], function () {
+            Route::get('/index', [WhyChooseUsController::class, 'index'])->name('index');
+            Route::get('/create', [WhyChooseUsController::class, 'create'])->name('create');
+            Route::post('/store', [WhyChooseUsController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [WhyChooseUsController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [WhyChooseUsController::class, 'update'])->name('update');
+            Route::get('/delete/{id}', [WhyChooseUsController::class, 'delete'])->name('delete');
+        });
+
 
         /*
         |--------------------------------------------------------------------------

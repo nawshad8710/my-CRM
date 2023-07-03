@@ -1,4 +1,7 @@
 @extends('admin.layouts.app')
+@php
+    $siteInfo = optional(\App\Models\Admin\SiteInfo::find(1));
+@endphp
 
 @section('title', 'Sale Form')
 
@@ -125,7 +128,7 @@
                                                         style="margin: 0 auto; width: 100%">
                                                         <div style="width: 100%">
 
-                                                            <input type="text"  id="search"
+                                                            <input type="text" id="search"
                                                                 class="form-control border-0" placeholder="Search...."
                                                                 style="position: relative">
                                                             <div id="suggestions-dropdown" class="dropdown-menu"
@@ -220,7 +223,7 @@
                                                                 id="flexCheckChecked"
                                                                 @if ($value['is_customization'] === 1) checked @endif
                                                                 data-id="{{ $id }}">
-                                                                <input type="text" name="customizable[]"
+                                                            <input type="text" name="customizable[]"
                                                                 value="{{ $value['is_customization'] }}" hidden>
                                                             <label for="flexCheckChecked">Customize</label>
                                                         </div>
@@ -296,7 +299,7 @@
                                                             <div
                                                                 class="border d-flex justify-content-between align-items-center">
                                                                 <input class="border-0 text-capitalize" id="vat"
-                                                                    name="vat" style="width:100%" type="text">
+                                                                    name="vat" style="width:100%" type="text" value="{{optional($siteInfo)->vat}}">
                                                                 <button class="bg-primary text-white border-0 px-2"
                                                                     disabled>%</button>
                                                             </div>
@@ -362,9 +365,8 @@
 @endsection
 
 @push('js')
-    <!----------------------------------------------
-                                                                                                                                    DESCRIPTION EDITOR SCRIPT
-                                                                                                                        ----------------------------------------------->
+    {{-- Description editor script --}}
+
     <script src="{{ asset('assets/vendor/summernote/summernote-bs4.min.js') }}"></script>
     <script>
         $(document).ready(function() {
@@ -372,9 +374,9 @@
             $('#long_description').summernote();
         });
     </script>
-    <!------------------------------------------------------
-                                                                                                                    SEARCH PRODUCT, ADD AND UPDATE LIST SCRIPT
-                                                                                                                        ----------------------------------------------->
+
+    {{-- SEARCH PRODUCT, ADD AND UPDATE LIST SCRIPT --}}
+
     <script>
         $('#search').keyup(function() {
             var search = $(this).val();
@@ -444,9 +446,9 @@
     </script>
 
 
-    <!----------------------------------------------
-                                                                                                                       DELETE LIST ITEM SCRIPT
-                                                                                                            ----------------------------------------------->
+    {{-- DELETE LIST ITEM SCRIPT --}}
+
+
     <script>
         $(document).ready(function() {
             $(".deleteItem").on('click', function() {
@@ -471,9 +473,9 @@
 
         })
     </script>
-    <!----------------------------------------------
-                                                                                                                       CHECKBOX RENEWABLE UPDATE SCRIPT
-                                                                                                            ----------------------------------------------->
+
+    {{-- CHECKBOX RENEWABLE UPDATE SCRIPT --}}
+
     <script>
         $(document).ready(function() {
             $('.checkboxRenewable').change(function() {
@@ -537,16 +539,10 @@
         })
     </script>
 
-
-    <!----------------------------------------------
-                                                                                                                       CHECKBOX IS_CUSTOMIZE UPDATE SCRIPT
-                                                                                                            ----------------------------------------------->
+{{-- CHECKBOX IS_CUSTOMIZE UPDATE SCRIPT --}}
 
 
-
-    <!----------------------------------------------
-                                                                                                                       UPDATE UNIT PRICE SCRIPT
-                                                                                                            ----------------------------------------------->
+{{-- UPDATE UNIT PRICE SCRIPT --}}
     {{-- <script>
     $(document).ready(function() {
             $('.unitPrice').change(function() {
@@ -578,7 +574,7 @@
 
     <script>
         $(document).ready(function() {
-            $('.customizeDescription').change(function() {
+            $('.customizeDescription').keyup(function() {
                 var productId = $(this).attr('data-id')
                 var customizeDescription = $(this).val();
                 console.log(productId)
@@ -603,7 +599,7 @@
                     }
                 });
             })
-            $('.customizeAmount').change(function() {
+            $('.customizeAmount').keyup(function() {
                 var productId = $(this).attr('data-id')
                 var customizeAmount = $(this).val();
                 console.log(productId)
@@ -636,7 +632,7 @@
 
     <script>
         $(document).ready(function() {
-            // Increase button click event
+
             $('.increase-button').on('click', function() {
                 var productId = $(this).data('id');
                 var quantityInput = $('input[data-id="' + productId + '"].productQuantity');
@@ -649,7 +645,7 @@
                 updateTotalPrice(productId, 'increase');
             });
 
-            // Decrease button click event
+
             $('.decrease-button').on('click', function() {
                 var productId = $(this).data('id');
                 var quantityInput = $('input[data-id="' + productId + '"].productQuantity');
@@ -663,10 +659,11 @@
                 }
             });
 
-            // Function to update the total price
+
             function updateTotalPrice(productId, action) {
                 var priceValues = [];
                 var totalSum = 0;
+                var vatPercentage = parseFloat($('#vat').val()) || 0;
                 var quantity = parseInt($('input[data-id="' + productId + '"].productQuantity').val());
                 var unitPrice = parseFloat($('input[data-id="' + productId + '"].unitPrice').val());
                 var totalPrice = quantity * unitPrice;
@@ -679,14 +676,16 @@
                 totalSum = priceValues.reduce(function(acc, value) {
                     return acc + value;
                 }, 0);
-                $('#total').val(totalSum.toFixed(2));
+                var vatAmountReduction = totalSum * (vatPercentage / 100);
+                var totalValue = totalSum + vatAmountReduction;
+                $('#total').val(totalValue.toFixed(2));
                 $('#subtotal').text(totalSum.toFixed(2));
-                $('#due').val(totalSum.toFixed(2));
+                $('#due').val(totalValue.toFixed(2));
                 $('.checkboxCustomizable').change(function() {
                     var productId = $(this).attr('data-id')
                     var isChecked = $(this).prop('checked');
                     var customizeDivId = $(this).attr('data-id');
-                    // console.log(customizeDivId)
+
 
                     if (isChecked === true & productId === customizeDivId) {
                         $('.customizableDiv[data-id="' + productId + '"]').show();
@@ -767,7 +766,7 @@
         $(document).ready(function() {
             var totalSum = 0;
             var totalCustomizeSum = 0;
-            var vatAmount = 100;
+            var vatPercentage = parseFloat($('#vat').val()) || 0;
             var paymentStatus = 0;
             var priceValues = [];
             var customizePriceValues = [];
@@ -788,12 +787,14 @@
             totalSum = priceValues.reduce(function(acc, value) {
                 return acc + value;
             }, 0);
-            var totalvalue = totalSum + totalCustomizeSum;
+            var vatAmountReduction = totalSum * (vatPercentage / 100);
+            var totalvalue = totalSum + totalCustomizeSum +vatAmountReduction;
 
 
             $('#total').val(totalvalue.toFixed(2));
             $('#subtotal').text(totalSum.toFixed(2));
             $('#due').val(totalvalue.toFixed(2));
+            // $('#vat').val(totalvalue.toFixed(2));
 
             $('.checkboxCustomizable').each(function() {
                 var productId = $(this).attr('data-id');

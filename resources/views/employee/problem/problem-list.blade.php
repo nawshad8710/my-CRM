@@ -38,6 +38,9 @@
             height: auto;
             /* Maintain the aspect ratio */
         }
+
+
+
     </style>
 @endpush
 
@@ -139,10 +142,9 @@
                                                     @php
                                                         $imageNames = unserialize($problem->images);
                                                     @endphp
-                                                    @foreach ($imageNames as $index => $imageName)
-                                                        {{-- <img class="thumbnail example-image"
-                                            src="{{ asset('assets/images/uploads/problems/' . $imageName) }}" alt=""
-                                            width="100Px" height="100px" data-lightbox="example-1"> --}}
+                                                    <div class="d-flex">
+                                                        @foreach ($imageNames as $index => $imageName)
+
                                                         <a class="demo"
                                                             href="{{ asset('assets/images/uploads/problems/' . $imageName) }}"
                                                             data-lightbox="example">
@@ -153,6 +155,8 @@
 
                                                         </a>
                                                     @endforeach
+                                                    </div>
+
                                                     {{-- @dd($problem->solution->); --}}
                                                 </td>
                                                 <td>{{ date('d-m-Y H:i a', strtotime($problem->created_at)) }}</td>
@@ -271,7 +275,7 @@
     {{-- view solution modal --}}
     <div id="solutionModal" class="fade modal modal-dialog-scrollable">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content" style="width:max-content">
                 <div class="modal-header">
                     <h5 class="modal-title">View Solution</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -375,11 +379,11 @@
                         var images = solutionImage[i];
                         var imageview = `<a class="demo"
                                                 href="{{ asset('assets/images/uploads/solution/${images}') }}"
-                                                            data-lightbox="example" style="height:400px; max-width: 100% !important;">
+                                                            data-lightbox="example" style="height:400px; max-width: 800px; ">
 
                                                             <img class="example-image"
                                                                 src="{{ asset('assets/images/uploads/solution/${images}') }}"
-                                                                alt="image-1" style="height:400px; max-width: 100% !important;">
+                                                                alt="image-1" style="height:400px; max-width: 800px;  ">
 
                                                         </a>`;
                                                         imageResult += imageview;
@@ -397,4 +401,6 @@
             });
         }
     </script>
+
+
 @endpush

@@ -121,14 +121,18 @@ class OurAchiveController extends Controller
         $ourAchive = OurAchieveItem::findOrFail($id);
 
         if ($ourAchive) {
-            $iconPath = public_path($ourAchive->icon);
-            if (file_exists($iconPath)) {
-                unlink($iconPath);
+
+            // dd($ourTeam->image);
+            if ( $ourAchive->icon !== "") {
+                $imagePath = public_path('assets/images/uploads/our-achive/' . $ourAchive->icon);
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
             } else {
                 $ourAchive->delete();
             }
             $ourAchive->delete();
-            Toastr::success('Our Achive Deleted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+            Toastr::success('Our Achive item Deleted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
             return 1;
         }
         return 0;

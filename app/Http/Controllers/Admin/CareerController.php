@@ -24,24 +24,68 @@ class CareerController extends Controller
 
     /*
     |--------------------------------------------------------------------------
+    | CREATE (METHOD)
+    |--------------------------------------------------------------------------
+    */
+    public function create()
+    {
+        return view('');
+    }
+    /*
+    |--------------------------------------------------------------------------
     | STORE (METHOD)
     |--------------------------------------------------------------------------
     */
 
     public function store(Request $request)
     {
-        $request->validate([]);
-        Career::createOrUpdate(
+        // dd($request->all());
+        $request->validate([
+            'short_description' => 'required',
+            'long_description' => 'required'
+        ]);
+        Career::updateOrCreate(
             [
                 'id' => 1
             ],
             [
-                'short_description' => $request->short_description,
-                'long_descripiton' => $request->long_description
+                'title' => $request->input('title'),
+                'short_description' => $request->input('short_description'),
+                'long_description' => $request->input('long_description')
             ]
         );
         Toastr::success('Career Updated Successfully', 'Success', ["positionClass" => "toast-top-right"]);
 
-        return back();
+        return redirect()->back();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | EDIT (METHOD)
+    |--------------------------------------------------------------------------
+    */
+    public function edit($id)
+    {
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | UPDATE (METHOD)
+    |--------------------------------------------------------------------------
+    */
+    public function update(Request $request, $id)
+    {
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Delete (METHOD)
+    |--------------------------------------------------------------------------
+    */
+    public function delete($id)
+    {
+
     }
 }
