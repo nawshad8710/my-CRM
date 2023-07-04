@@ -90,7 +90,7 @@ class SiteInfoController extends Controller
                 'address'               => $request->address,
                 'google_map_url'        => $request->google_map_url,
                 'copyright_text'        => $request->copyright_text,
-                'meta_keyword'          => $request->copyright_text,
+                'meta_keyword'          => $request->meta_keyword,
                 'meta_description'      => $request->meta_description,
                 'vat'                   => $request->vat,
                 'logo'                  => $logoName,

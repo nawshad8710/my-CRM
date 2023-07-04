@@ -12,4 +12,9 @@ class OurAchieve extends Model
 
     protected $fillable = ['title', 'short_description'];
 
+    public function achiveItem()
+    {
+        return $this->hasOne(OurAchieveItem::class, 'our_achieve_id');
+    }
+
 }

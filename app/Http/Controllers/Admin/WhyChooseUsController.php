@@ -125,4 +125,34 @@ class WhyChooseUsController extends Controller
         Toastr::success('Why Choose Us Updated Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return redirect()->route('admin.why-choose-us.index');
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | DELETE (METHOD)
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function delete($id)
+    {
+        $whyChooseUs = WhyChooseUs::find($id);
+        if ($whyChooseUs) {
+
+            // dd($ourTeam->image);
+            if ( $whyChooseUs->icon !== "") {
+                $imagePath = public_path('assets/images/uploads/why-choose-us/' . $whyChooseUs->icon);
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            } else {
+                $whyChooseUs->delete();
+            }
+            $whyChooseUs->delete();
+            Toastr::success('Why Choose Us Deleted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+            return 1;
+        }
+        return 0;
+    }
+
+
 }

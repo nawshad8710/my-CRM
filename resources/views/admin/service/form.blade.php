@@ -94,7 +94,7 @@
 <script src="{{ asset('assets/vendor/summernote/summernote-bs4.min.js') }}"></script>
 <script>
      $(document).ready(function () {
-        $('#short_description').summernote();
+        // $('#short_description').summernote();
         $('#long_description').summernote();
      });
 </script>

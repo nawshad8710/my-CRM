@@ -33,7 +33,7 @@ class BannerController extends Controller
     {
         $request->validate([]);
         $banner = Banner::first();
-        $imageName = $banner->image || '';
+        $imageName = optional($banner)->image;
 
         $image = $request->file('image');
         if ($image) {

@@ -35,6 +35,7 @@ use App\Http\Controllers\Employee\UserProjectController;
 use App\Http\Controllers\Employee\ReportController;
 use App\Http\Controllers\Employee\SolutionController;
 use App\Http\Controllers\Frontend\CustomerQueryController;
+use App\Http\Controllers\Frontend\HomeController as FrontendHomeController;
 use App\Http\Controllers\Frontend\SaleController as FrontendSaleController;
 
 /*
@@ -48,7 +49,7 @@ use App\Http\Controllers\Frontend\SaleController as FrontendSaleController;
 |
 */
 
-Route::get('/', [HomeController::class, 'index'])->name('index');
+Route::get('/admin', [HomeController::class, 'index'])->name('index');
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
@@ -362,7 +363,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
         /*
         |--------------------------------------------------------------------------
-        | CUSTOMER (ROUTE)
+        | CUSTOMER ROUTE FOR ADMIN (ROUTE)
         |--------------------------------------------------------------------------
         */
         Route::group(['as' => 'customer.', 'prefix' => 'customer'], function () {
@@ -428,9 +429,16 @@ Route::middleware(['auth', 'employee'])->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| FRONTEND ROUTE
+| FRONTEND ROUTE START
 |--------------------------------------------------------------------------
 */
+
+Route::get('/', [FrontendHomeController::class, 'index'])->name('index');
+Route::get('/terms-and-condition', [FrontendHomeController::class, 'termsCondition'])->name('termsCondition');
+Route::get('/privacy-policy', [FrontendHomeController::class, 'privacyPolicy'])->name('privacyPolicy');
+
+
+
 
 Route::get('/sale', [FrontendSaleController::class, 'index'])->name('index');
 Route::get('/search-product', [FrontendSaleController::class, 'searchProduct'])->name('searchProduct');

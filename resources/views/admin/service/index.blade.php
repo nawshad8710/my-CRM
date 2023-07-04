@@ -75,7 +75,7 @@
                                                    ?>
                                                    @if (strlen($description) > 30)
                                                        {{ $desc }}
-                                                       <a href="#" class="desc-text" onclick="shortDescModalShow({{ $serivice->id }})"> <u>View Details</u></a>
+                                                       <a href="#" class="desc-text" onclick="shortDescModalShow({{ $service->id }})"> <u>View Details</u></a>
                                                    @else
                                                        {!! $service->short_description !!}
                                                    @endif

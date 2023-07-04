@@ -256,7 +256,9 @@
                 Request::is('admin/about/index') ||
                 Request::is('admin/our-client/index') ||
                 Request::is('admin/career/index') ||
-                Request::is('admin/our-team/index')
+                Request::is('admin/our-team/index') ||
+                Request::is('admin/banner/index') ||
+                Request::is('admin/why-choose-us/index')
                     ? 'active'
                     : '' }}">
                     <a class="js-arrow" href="#">
@@ -274,7 +276,9 @@
                             Request::is('admin/about/index') ||
                             Request::is('admin/our-client/index') ||
                             Request::is('admin/career/index') ||
-                            Request::is('admin/our-team/index')
+                            Request::is('admin/our-team/index') ||
+                            Request::is('admin/banner/index') ||
+                Request::is('admin/why-choose-us/index')
                                 ? 'up'
                                 : '' }}">
                             <i class="fas fa-angle-down"></i>
@@ -293,8 +297,15 @@
                                 Request::is('admin/about/index') ||
                                 Request::is('admin/our-client/index') ||
                                 Request::is('admin/career/index') ||
-                                Request::is('admin/our-team/index')) style="display: block;" @endif>
+                                Request::is('admin/our-team/index') ||
+                                Request::is('admin/banner/index') ||
+                Request::is('admin/why-choose-us/index')
+                                ) style="display: block;" @endif>
 
+                        <li class="{{ Request::is('admin/banner/index') ? 'active' : '' }}">
+                            <a href="{{ route('admin.banner.index') }}">
+                                <i class="fas fa-tasks"></i>Banner</a>
+                        </li>
                         <li class="{{ Request::is('admin/about/index') ? 'active' : '' }}">
                             <a href="{{ route('admin.about.index') }}">
                                 <i class="fas fa-tasks"></i>About</a>
@@ -349,6 +360,11 @@
                         <li class="{{ Request::is('admin/career/index') ? 'active' : '' }}">
                             <a href="{{ route('admin.career.index') }}">
                                 <i class="fas fa-edit"></i>career
+                            </a>
+                        </li>
+                        <li class="{{ Request::is('admin/why-choose-us/index') ? 'active' : '' }}">
+                            <a href="{{ route('admin.why-choose-us.index') }}">
+                                <i class="fas fa-edit"></i>Why Choose Us
                             </a>
                         </li>
                         <li class="{{ Request::is('admin/our-team/index') || Request::is('admin/our-team/create')  ? 'active' : '' }}">
