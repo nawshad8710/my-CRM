@@ -158,6 +158,15 @@
                                                     Renewable Product
                                                 </label>
                                             </div>
+                                            <div class="form-check mb-4">
+                                                <label for="is_menu" class="control-label mb-1"></label>
+                                                <input class="form-check-input" type="checkbox" value="1"
+                                                    name="is_menu" id="flexCheckDefault"
+                                                    @isset($product) {{ $product->is_menu == 1 ? ' checked' : '' }} @endisset>
+                                                <label class="form-check-label ml-2 mt-1" for="flexCheckDefault">
+                                                    Add to Menu
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                     @isset($product)

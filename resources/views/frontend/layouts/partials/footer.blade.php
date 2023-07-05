@@ -42,7 +42,7 @@
                              <p><a href="{{route('termsCondition')}}">Terms & Condition</a></p>
                              <p><a href="{{route('privacyPolicy')}}">Privacy Policy</a></p>
                              <p><a href="./about.html">About Us</a></p>
-                             <p><a href="./team.html">Our Team</a></p>
+                             <p><a href="{{route('ourTeam')}}">Our Team</a></p>
                          </div>
                      </div>
                  </div>
@@ -67,7 +67,7 @@
                              @foreach ($socialLinks as $key => $socialLink)
                                  <li>
                                      <a href="{{ $socialLink->url }}" target="_blank"><i
-                                             class="fa-brands fa-facebook-f"></i></a>
+                                             class="{{$socialLink->icon}}"></i></a>
                                  </li>
                              @endforeach
                          @endisset

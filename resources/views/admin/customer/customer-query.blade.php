@@ -42,14 +42,7 @@
                             </div>
 
                         </div> --}}
-                        <div class="table-data__tool-right">
-                            @if(has_access('create_customer'))
-                            <a href="{{ route('admin.customer.create') }}"
-                                class="au-btn au-btn-icon au-btn--blue au-btn--small">
-                                <i class="zmdi zmdi-plus"></i>Add Customer</a>
-                            @endif
 
-                        </div>
                     </div>
                     <div class="table-responsive table-responsive-data2">
                         <table class="table table-data2">

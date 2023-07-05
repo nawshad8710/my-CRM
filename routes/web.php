@@ -436,6 +436,12 @@ Route::middleware(['auth', 'employee'])->group(function () {
 Route::get('/', [FrontendHomeController::class, 'index'])->name('index');
 Route::get('/terms-and-condition', [FrontendHomeController::class, 'termsCondition'])->name('termsCondition');
 Route::get('/privacy-policy', [FrontendHomeController::class, 'privacyPolicy'])->name('privacyPolicy');
+Route::get('/our-team', [FrontendHomeController::class, 'ourTeam'])->name('ourTeam');
+Route::get('/product/{slug}', [FrontendHomeController::class, 'singleProduct'])->name('singleProduct');
+Route::get('/service/{slug}', [FrontendHomeController::class, 'singleService'])->name('singleService');
+Route::get('/contact-page',[FrontendHomeController::class, 'contactPage'])->name('contactPage');
+Route::post('/contact-page/store',[FrontendHomeController::class, 'contactPageStore'])->name('contactPageStore');
+
 
 
 
@@ -457,5 +463,5 @@ Route::get('generate-invoice-pdf', array('as' => 'generate.invoice.pdf', 'uses' 
 
 
 // contact info
-Route::get('/contact', [CustomerQueryController::class, 'index'])->name('index');
+
 Route::post('/contact-store', [CustomerQueryController::class, 'store'])->name('store');

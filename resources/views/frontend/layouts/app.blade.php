@@ -2,7 +2,8 @@
 <html lang="en">
     @php
     $siteInfo = optional(\App\Models\Admin\SiteInfo::find(1));
-    $socialLinks = optional(\App\Models\Admin\SocialLink::get());
+
+
     @endphp
 <head>
      <!-- Required meta tags-->
@@ -16,7 +17,7 @@
 </head>
 
 <body>
-
+    {{-- @include('sweetalert::alert') --}}
     <!-- header section -->
   @include('frontend.layouts.partials.header')
     <!-- header section end -->

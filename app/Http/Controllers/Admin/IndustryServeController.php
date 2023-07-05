@@ -72,7 +72,7 @@ class IndustryServeController extends Controller
 
     public function edit($id)
     {
-        $data['industryServe'] = IndustryServe::find($id);
+        $data['industryServe'] = IndustryServe::findOrFail($id);
         return view('admin.industry-serve.form', $data);
     }
 

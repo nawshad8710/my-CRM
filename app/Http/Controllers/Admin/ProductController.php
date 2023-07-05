@@ -12,6 +12,7 @@ use Toastr;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -107,6 +108,8 @@ class ProductController extends Controller
 
         $product = Product::create([
             'title'                     => $request->title,
+            'is_menu'                   => $request->is_menu,
+            'slug'                      => Str::slug($request->title),
             'short_description'         => $request->short_description,
             'long_description'          => $request->long_description,
             'status'                    => $request->status,
@@ -270,6 +273,8 @@ class ProductController extends Controller
         if ($product) {
             $product->update([
                 'title'                     => $request->title,
+                'is_menu'                   => $request->is_menu,
+                'slug'                      => Str::slug($request->title),
                 'short_description'         => $request->short_description,
                 'long_description'          => $request->long_description,
                 'status'                    => $request->status,

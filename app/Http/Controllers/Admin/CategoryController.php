@@ -9,6 +9,7 @@ use Toastr;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -67,6 +68,7 @@ class CategoryController extends Controller
 
         Category::create([
             'name' => $request->name,
+            'slug' => Str::slug($request->name),
             'short_description' => $request->short_description,
             'long_description' => $request->long_description,
             'status' => $request->status,
@@ -137,6 +139,7 @@ class CategoryController extends Controller
 
             $category->update([
                 'name' => $request->name,
+                'slug' => Str::slug($request->name),
                 'short_description' => $request->short_description,
                 'long_description' => $request->long_description,
                 'status' => $request->status,
