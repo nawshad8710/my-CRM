@@ -4,7 +4,7 @@
         <div class="why_choose_wrapper">
             <!-- why_choose_image -->
             <div class="why_choose_image">
-                <img src="assets/image/holder/banner.png" alt="">
+                <img src="{{asset('assets/images/chooseusbanner.png')}}" alt="">
             </div>
             <!-- why_choose_content -->
             <div class="why_choose_content">

@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\AssignedProjectController;
 use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\CareerController;
 use App\Http\Controllers\Admin\CookiesPolicyController;
 use App\Http\Controllers\Admin\CustomerController;
@@ -25,6 +26,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SiteInfoController;
 use App\Http\Controllers\Admin\SocialLinkController;
+use App\Http\Controllers\Admin\TechnologyController;
 use App\Http\Controllers\Admin\TermsAndConditionController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\UserSolutionController;
@@ -326,6 +328,34 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::post('/update/{id}', [WhyChooseUsController::class, 'update'])->name('update');
             Route::get('/delete/{id}', [WhyChooseUsController::class, 'delete'])->name('delete');
         });
+        /*
+        |--------------------------------------------------------------------------
+        | BLOG ROUTE FOR ADMIN (ROUTE)
+        |--------------------------------------------------------------------------
+        */
+
+        Route::group(['as' => 'blog.', 'prefix' => 'blog'], function () {
+            Route::get('/index', [BlogController::class, 'index'])->name('index');
+            Route::get('/create', [BlogController::class, 'create'])->name('create');
+            Route::post('/store', [BlogController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [BlogController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [BlogController::class, 'update'])->name('update');
+            Route::get('/delete/{id}', [BlogController::class, 'delete'])->name('delete');
+        });
+        /*
+        |--------------------------------------------------------------------------
+        | TECHNOLOGY ROUTE FOR ADMIN (ROUTE)
+        |--------------------------------------------------------------------------
+        */
+
+        Route::group(['as' => 'technology.', 'prefix' => 'technology'], function () {
+            Route::get('/index', [TechnologyController::class, 'index'])->name('index');
+            Route::get('/create', [TechnologyController::class, 'create'])->name('create');
+            Route::post('/store', [TechnologyController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [TechnologyController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [TechnologyController::class, 'update'])->name('update');
+            Route::get('/delete/{id}', [TechnologyController::class, 'delete'])->name('delete');
+        });
 
 
         /*
@@ -433,7 +463,7 @@ Route::middleware(['auth', 'employee'])->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', [FrontendHomeController::class, 'index'])->name('index');
+Route::get('/', [FrontendHomeController::class, 'homePage'])->name('homePage');
 Route::get('/terms-and-condition', [FrontendHomeController::class, 'termsCondition'])->name('termsCondition');
 Route::get('/privacy-policy', [FrontendHomeController::class, 'privacyPolicy'])->name('privacyPolicy');
 Route::get('/our-team', [FrontendHomeController::class, 'ourTeam'])->name('ourTeam');
@@ -441,6 +471,7 @@ Route::get('/product/{slug}', [FrontendHomeController::class, 'singleProduct'])-
 Route::get('/service/{slug}', [FrontendHomeController::class, 'singleService'])->name('singleService');
 Route::get('/contact-page',[FrontendHomeController::class, 'contactPage'])->name('contactPage');
 Route::post('/contact-page/store',[FrontendHomeController::class, 'contactPageStore'])->name('contactPageStore');
+Route::get('/about-page',[FrontendHomeController::class, 'aboutPage'])->name('aboutPage');
 
 
 

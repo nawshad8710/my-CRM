@@ -92,6 +92,27 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                        <div class="col-6">
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    @isset($product)
+                                                        <img id="product_icon"
+                                                            src="{{ asset('assets/images/uploads/product/icon/' . $product->icon) ?? asset('assets/images/defaultimage.png') }}"
+                                                            height="50px" width="50px" alt="your image" />
+                                                    @endisset
+                                                    <img id="product_icon"
+                                                        src="{{ asset('assets/images/defaultimage.png') }}" height="50px"
+                                                        width="50px" alt="your image" />
+                                                    <label for="product_icon" class="control-label mb-1">Icon /
+                                                        Image</label>
+                                                    <input id="product_icon" name="product_icon" type="file"
+                                                        class="form-control @error('product_icon') is-invalid @enderror">
+                                                    @error('product_icon')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="form-group has-success">
                                         <label for="short_description" class="control-label mb-1">Short Description</label>
@@ -133,13 +154,13 @@
                                                     <option value="1"
                                                         @isset($product) {{ $product->status == 1
                                                             ? '
-                                                                                                                                                                                                                                                                                                                                            selected'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            selected'
                                                             : '' }} @endisset>
                                                         Active</option>
                                                     <option value="0"
                                                         @isset($product) {{ $product->status == 0
                                                             ? '
-                                                                                                                                                                                                                                                                                                                                            selected'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            selected'
                                                             : '' }} @endisset>
                                                         Inactive</option>
                                                 </select>
@@ -158,13 +179,22 @@
                                                     Renewable Product
                                                 </label>
                                             </div>
-                                            <div class="form-check mb-4">
+                                            <div class="form-check">
                                                 <label for="is_menu" class="control-label mb-1"></label>
                                                 <input class="form-check-input" type="checkbox" value="1"
                                                     name="is_menu" id="flexCheckDefault"
                                                     @isset($product) {{ $product->is_menu == 1 ? ' checked' : '' }} @endisset>
                                                 <label class="form-check-label ml-2 mt-1" for="flexCheckDefault">
                                                     Add to Menu
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-4">
+                                                <label for="is_page" class="control-label mb-1"></label>
+                                                <input class="form-check-input" type="checkbox" value="1"
+                                                    name="is_page" id="flexCheckDefault"
+                                                    @isset($product) {{ $product->is_page == 1 ? ' checked' : '' }} @endisset>
+                                                <label class="form-check-label ml-2 mt-1" for="flexCheckDefault">
+                                                    Add to Page
                                                 </label>
                                             </div>
                                         </div>
@@ -261,47 +291,48 @@
                                     <button onclick="addOption()" id="add-feature-button" type="button"
                                         class="btn btn-success mb-3" style="margin-left: 10px">Add Field</button>
                                     <div class="featureField">
-                                       <div class="row">
-                                        @isset($product->feature)
-                                        @foreach ($product->feature as $key => $feature)
-                                            <input type="hidden" name="feature_id[]" value="{{ $feature->id }}">
-                                            <div class="col-5"></div>
-                                            <div class="col-5">
-                                                <img class="thumbnail example-image"
-                                                    src="{{ asset('assets/images/uploads/product/feature/' . optional($feature)->icon) }}"
-                                                    alt="" width="100Px" height="100px"
-                                                    data-lightbox="example-1">
-                                            </div>
-                                            <div class="col-5 ">
-                                                <div class="form-group">
-                                                    <label for="feature_title" class="control-label mb-1">Title</label>
-                                                    <input id="feature_title" name="feature_title[]" type="text"
-                                                        class="form-control @error('feature_title') is-invalid @enderror"
-                                                        value="{{ $feature->title ?? old('feature_title') }}">
-                                                    @error('feature_title')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                            </div>
+                                        <div class="row">
+                                            @isset($product->feature)
+                                                @foreach ($product->feature as $key => $feature)
+                                                    <input type="hidden" name="feature_id[]" value="{{ $feature->id }}">
+                                                    <div class="col-5"></div>
+                                                    <div class="col-5">
+                                                        <img class="thumbnail example-image"
+                                                            src="{{ asset('assets/images/uploads/product/feature/' . optional($feature)->icon) }}"
+                                                            alt="" width="100Px" height="100px"
+                                                            data-lightbox="example-1">
+                                                    </div>
+                                                    <div class="col-5 ">
+                                                        <div class="form-group">
+                                                            <label for="feature_title"
+                                                                class="control-label mb-1">Title</label>
+                                                            <input id="feature_title" name="feature_title[]" type="text"
+                                                                class="form-control @error('feature_title') is-invalid @enderror"
+                                                                value="{{ $feature->title ?? old('feature_title') }}">
+                                                            @error('feature_title')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
 
-                                            <div class="col-5">
-                                                <label for="images" class="control-label mb-1">Image</label>
-                                                <input id="images" name="images[]" type="file"
-                                                    class="form-control @error('images') is-invalid @enderror">
-                                                <input type="hidden" class="is-currect-option-default-value"
-                                                    name="images[]" value="0"
-                                                    {{ $feature->icon ? 'disabled' : '' }} />
-                                            </div>
-                                            <div class="col-2" style="margin: 36px auto">
-                                                <button type="button"
-                                                    style="background: crimson;
+                                                    <div class="col-5">
+                                                        <label for="images" class="control-label mb-1">Image</label>
+                                                        <input id="images" name="images[]" type="file"
+                                                            class="form-control @error('images') is-invalid @enderror">
+                                                        <input type="hidden" class="is-currect-option-default-value"
+                                                            name="images[]" value="0"
+                                                            {{ $feature->icon ? 'disabled' : '' }} />
+                                                    </div>
+                                                    <div class="col-2" style="margin: 36px auto">
+                                                        <button type="button"
+                                                            style="background: crimson;
                                                 color: white;
                                                 padding: inherit;"
-                                                    onclick="RemoveItem({{ $feature->id }})">Remove</button>
-                                            </div>
-                                        @endforeach
-                                    @endisset
-                                       </div>
+                                                            onclick="RemoveItem({{ $feature->id }})">Remove</button>
+                                                    </div>
+                                                @endforeach
+                                            @endisset
+                                        </div>
 
 
                                     </div>
@@ -325,12 +356,11 @@
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
                                                         <button type="button"
-                                                        style="background: crimson;
+                                                            style="background: crimson;
                                                     color: white;
                                                     padding: inherit;"
-                                                        onclick="RemoveKeyFeature({{ $key_feature->id }})">Remove</button>
+                                                            onclick="RemoveKeyFeature({{ $key_feature->id }})">Remove</button>
                                                     </div>
-
                                                 @endforeach
                                             @endisset
                                         </div>
@@ -435,15 +465,15 @@
 
 
         const removeKeyFeature = (index) => {
-    var keyObj = $('.keyFeature').eq(index);
-    keyObj.remove();
-    console.log(keyObj);
-}
+            var keyObj = $('.keyFeature').eq(index);
+            keyObj.remove();
+            console.log(keyObj);
+        }
 
-const addKeyFeature = () => {
-    var index = $('.keyFeature').length; // Get the current number of key features
+        const addKeyFeature = () => {
+            var index = $('.keyFeature').length; // Get the current number of key features
 
-    var newField = `<div class="form-group keyFeature d-flex">
+            var newField = `<div class="form-group keyFeature d-flex">
         <input id="key_features_title_${index}" placeholder="Title" name="key_features_title[]" type="text" class="form-control @error('title') is-invalid @enderror">
         @error('key_features_title')
         <div class="invalid-feedback">{{ $message }}</div>
@@ -453,8 +483,7 @@ const addKeyFeature = () => {
     padding: 5px;" onclick="removeKeyFeature(${index})">remove</button>
     </div>`;
 
-    $('.keyFeatureField').append(newField);
-};
-
+            $('.keyFeatureField').append(newField);
+        };
     </script>
 @endpush

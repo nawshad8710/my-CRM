@@ -41,7 +41,7 @@
                          <div class="location_info">
                              <p><a href="{{route('termsCondition')}}">Terms & Condition</a></p>
                              <p><a href="{{route('privacyPolicy')}}">Privacy Policy</a></p>
-                             <p><a href="./about.html">About Us</a></p>
+                             <p><a href="{{route('aboutPage')}}">About Us</a></p>
                              <p><a href="{{route('ourTeam')}}">Our Team</a></p>
                          </div>
                      </div>

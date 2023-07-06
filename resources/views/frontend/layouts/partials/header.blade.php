@@ -6,7 +6,7 @@
             <!-- logo -->
             <div class="logo_inner">
                 <!-- logo image -->
-                <a href="https://classicit.com.bd" class="logo_image">
+                <a href="{{route('homePage')}}" class="logo_image">
                     <img src="{{ asset('assets/images/uploads/site-info/logo/' . $siteInfo->logo) }}" alt="">
                 </a>
             </div>
@@ -19,7 +19,7 @@
                         <!-- header_nav_item -->
                         <li class="header_nav_item">
                             <!-- header_nav_link -->
-                            <a href="https://classicit.com.bd" class="header_nav_link">Home</a>
+                            <a href="{{route('homePage')}}" class="header_nav_link">Home</a>
                         </li>
                         <!-- header_nav_item -->
                         <li class="header_nav_item About_nav_item">
@@ -40,10 +40,10 @@
                             <div class="short_nav">
                                 <ul class="short_nav_list">
                                     <li class="short_nav_item">
-                                        <a href="./about" class="short_nav_link">Our Company</a>
+                                        <a href="{{route('aboutPage')}}" class="short_nav_link">Our Company</a>
                                     </li>
                                     <li class="short_nav_item">
-                                        <a href="./team" class="short_nav_link">Our Team</a>
+                                        <a href="{{route('ourTeam')}}" class="short_nav_link">Our Team</a>
                                     </li>
                                 </ul>
                             </div>
@@ -76,7 +76,7 @@
                                     <a href="{{route('singleProduct', $product->slug)}}" class="subnavlist_link">
                                         <!-- subnav image -->
                                         <div class="subnav_image">
-                                            <img src="assets/image/service/school_management.png"
+                                            <img src="{{asset('assets/images/uploads/product/icon/' . $product->icon)}}"
                                                 alt="">
                                         </div>
                                         <!-- subnav content -->
@@ -124,7 +124,7 @@
                                         <a href="{{route('singleService',$category->slug)}}" class="subnavlist_link">
                                             <!-- subnav image -->
                                             <div class="subnav_image">
-                                                <img src="assets/image/service/web.png" alt="">
+                                                <img src="{{asset('assets/images/uploads/category/icon/' . $category->icon)}}" alt="">
                                             </div>
                                             <!-- subnav content -->
                                             <div class="subnav_content">

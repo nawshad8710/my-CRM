@@ -40,6 +40,23 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="form-group">
+                                                @isset($category)
+                                                    <img id="icon"
+                                                        src="{{ asset('assets/images/uploads/category/icon/' . $category->icon) ?? asset('assets/images/defaultimage.png') }}"
+                                                        height="50px" width="50px" alt="your image" />
+                                                @endisset
+                                                <img id="icon"
+                                                    src="{{ asset('assets/images/defaultimage.png') }}" height="50px"
+                                                    width="50px" alt="your image" />
+                                                <label for="icon" class="control-label mb-1">Icon /
+                                                    Image</label>
+                                                <input id="icon" name="icon" type="file"
+                                                    class="form-control @error('icon') is-invalid @enderror">
+                                                @error('icon')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
                                             <div class="form-group has-success">
                                                 <label for="short_description" class="control-label mb-1">Short Description</label>
                                                 <textarea name="short_description" id="short_description" rows="5" class="form-control @error('short_description') is-invalid @enderror">{{ $category->short_description ?? old('short_description') }}</textarea>

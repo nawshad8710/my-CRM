@@ -18,7 +18,7 @@
         @include('frontend.components.service')
 
         <!-- our product -->
-       @include('frontend.components.product')
+       @include('frontend.components.creative-product')
         <!-- our product end -->
 
         <!-- testimonial -->

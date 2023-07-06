@@ -17,6 +17,7 @@ use App\Models\Admin\Testimonial;
 use App\Models\Admin\WhyChooseUs;
 use App\Models\CustomerQuery;
 use Illuminate\Http\Request;
+use Alert;
 
 
 class HomeController extends Controller
@@ -26,15 +27,13 @@ class HomeController extends Controller
     | INDEX (METHOD)
     |--------------------------------------------------------------------------
     */
-    public function index()
+    public function homePage()
     {
         $data['banner'] = Banner::first();
         $data['achive'] = OurAchieve::first();
         $data['achiveItems'] = OurAchieveItem::get();
         $data['ourServices'] = OurService::get();
         $data['testimonials'] = Testimonial::get();
-        $data['whyChooseUsItems'] = WhyChooseUs::get();
-        $data['ourClients'] = Client::get();
         return view('frontend.pages.home-page.index', $data);
     }
 
@@ -87,8 +86,9 @@ class HomeController extends Controller
     */
     public function singleService($slug)
     {
-        $data['singleService'] = Category::where('slug', $slug)->first();
-        return view('frontend.pages.single-services.index', $data);
+        $singleService = Category::where('slug', $slug)->first();
+        $singleServiceProducts = Product::where('is_page', 1)->where('category_id', $singleService->id)->get();
+        return view('frontend.pages.single-services.index', compact('singleService', 'singleServiceProducts'));
     }
 
     /*
@@ -112,7 +112,7 @@ class HomeController extends Controller
             'name' => 'required',
             'email' => 'required|email',
             'phone' => 'required',
-            'subject' => 'required',
+            'message' => 'required',
         ]);
 
         CustomerQuery::create([
@@ -121,7 +121,7 @@ class HomeController extends Controller
             'phone'     => $request->phone,
             'subject'   => $request->message,
         ]);
-        // Alert::success('Success!', 'Submit Message');
+        Alert::success('Success!', 'Submit Message');
 
 
         return redirect()->back();
@@ -129,5 +129,14 @@ class HomeController extends Controller
 
 
 
+    /*
+    |--------------------------------------------------------------------------
+    |  ABOUT PAGE (METHOD)
+    |--------------------------------------------------------------------------
+    */
 
+    public function aboutPage()
+    {
+        return view('frontend.pages.about.index');
+    }
 }

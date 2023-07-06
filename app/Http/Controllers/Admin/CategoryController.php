@@ -66,8 +66,28 @@ class CategoryController extends Controller
             $request->status = 1;
         }
 
+        $icon = '';
+
+        $categoryIcon = $request->file('icon');
+
+
+        if ($categoryIcon) {
+            $currentDate = Carbon::now()->toDateString();
+
+            $iconName = $currentDate . '-' . uniqid() . '.' . $categoryIcon->getClientOriginalExtension();
+
+            if (!file_exists('assets/images/uploads/category/icon')) {
+                mkdir('assets/images/uploads/category/icon', 0777, true);
+            }
+
+            $categoryIcon->move(public_path('assets/images/uploads/category/icon'), $iconName);
+
+            $icon = $iconName;
+        }
+
         Category::create([
             'name' => $request->name,
+            'icon' => $icon,
             'slug' => Str::slug($request->name),
             'short_description' => $request->short_description,
             'long_description' => $request->long_description,
@@ -130,6 +150,28 @@ class CategoryController extends Controller
 
         $category = Category::findOrFail($id);
 
+        $iconName = $category->icon; // Get the current icon name
+
+
+        $categoryIcon = $request->file('icon');
+
+        if ($categoryIcon) {
+            $currentDate = Carbon::now()->toDateString();
+            $newIconName = $currentDate . '-' . uniqid() . '.' . $categoryIcon->getClientOriginalExtension();
+
+            if (!file_exists('assets/images/uploads/category/icon')) {
+                mkdir('assets/images/uploads/category/icon', 0777, true);
+            }
+
+            $categoryIcon->move(public_path('assets/images/uploads/category/icon'), $newIconName);
+
+            // Delete the previous icon file
+            if ($iconName && file_exists(public_path('assets/images/uploads/category/icon/' . $iconName))) {
+                unlink(public_path('assets/images/uploads/category/icon/' . $iconName));
+            }
+
+            $iconName = $newIconName;
+        }
         if($category){
             if(!$request->status || $request->status == NULL){
                 $request->status = 0;
@@ -139,6 +181,7 @@ class CategoryController extends Controller
 
             $category->update([
                 'name' => $request->name,
+                'icon' => $iconName,
                 'slug' => Str::slug($request->name),
                 'short_description' => $request->short_description,
                 'long_description' => $request->long_description,

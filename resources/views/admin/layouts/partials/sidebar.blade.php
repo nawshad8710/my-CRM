@@ -258,6 +258,8 @@
                 Request::is('admin/career/index') ||
                 Request::is('admin/our-team/index') ||
                 Request::is('admin/banner/index') ||
+                Request::is('admin/blog/index') ||
+                Request::is('admin/technology/index') ||
                 Request::is('admin/why-choose-us/index')
                     ? 'active'
                     : '' }}">
@@ -278,6 +280,8 @@
                             Request::is('admin/career/index') ||
                             Request::is('admin/our-team/index') ||
                             Request::is('admin/banner/index') ||
+                            Request::is('admin/blog/index') ||
+                            Request::is('admin/technology/index') ||
                 Request::is('admin/why-choose-us/index')
                                 ? 'up'
                                 : '' }}">
@@ -299,6 +303,8 @@
                                 Request::is('admin/career/index') ||
                                 Request::is('admin/our-team/index') ||
                                 Request::is('admin/banner/index') ||
+                                Request::is('admin/blog/index') ||
+                                Request::is('admin/technology/index') ||
                 Request::is('admin/why-choose-us/index')
                                 ) style="display: block;" @endif>
 
@@ -331,6 +337,10 @@
                         <li class="{{ Request::is('admin/industry-serve/index') ? 'active' : '' }}">
                             <a href="{{ route('admin.industry-serve.index') }}">
                                 <i class="fas fa-tasks"></i>Industry We Serve</a>
+                        </li>
+                        <li class="{{ Request::is('admin/technology/index') ? 'active' : '' }}">
+                            <a href="{{ route('admin.technology.index') }}">
+                                <i class="fas fa-tasks"></i>technology</a>
                         </li>
                         <li class="{{ Request::is('admin/our-achive/form') ? 'active' : '' }}">
                             <a href="{{ route('admin.our-achive.form') }}">
@@ -365,6 +375,11 @@
                         <li class="{{ Request::is('admin/why-choose-us/index') ? 'active' : '' }}">
                             <a href="{{ route('admin.why-choose-us.index') }}">
                                 <i class="fas fa-edit"></i>Why Choose Us
+                            </a>
+                        </li>
+                        <li class="{{ Request::is('admin/blog/index') ? 'active' : '' }}">
+                            <a href="{{ route('admin.blog.index') }}">
+                                <i class="fas fa-edit"></i>Blogs
                             </a>
                         </li>
                         <li class="{{ Request::is('admin/our-team/index') || Request::is('admin/our-team/create')  ? 'active' : '' }}">

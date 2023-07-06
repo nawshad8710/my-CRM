@@ -31,7 +31,7 @@
                          <div class="banner_service_item">
                              <!-- image -->
                              <div class="banner_service_image">
-                                 <img src="assets/image/service/2d3d.png" alt="">
+                                 <img src="{{asset('assets/images/banner/2d3d.png')}}" alt="">
                              </div>
                              <!-- content -->
                              <div class="banner_service_content">
@@ -43,7 +43,7 @@
                          <div class="banner_service_item">
                              <!-- image -->
                              <div class="banner_service_image">
-                                 <img src="assets/image/service/softdev.png" alt="">
+                                 <img src="{{asset('assets/images/banner/softdev.png')}}" alt="">
                              </div>
                              <!-- content -->
                              <div class="banner_service_content">
@@ -55,7 +55,7 @@
                          <div class="banner_service_item">
                              <!-- image -->
                              <div class="banner_service_image">
-                                 <img src="assets/image/service/digital.png" alt="">
+                                 <img src="{{asset('assets/images/banner/digital.png')}}" alt="">
                              </div>
                              <!-- content -->
                              <div class="banner_service_content">

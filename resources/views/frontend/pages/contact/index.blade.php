@@ -23,7 +23,7 @@
                     <div class="contact_wrapper">
                         <!-- contact image -->
                         <div class="contact_image">
-                            <img src="assets/image/holder/Asset 1-8.png" alt="">
+                            <img src="{{asset('assets/images/contactPage.png')}}" alt="">
                         </div>
                         <!-- contatc info -->
                         <div class="contact_form">
@@ -62,7 +62,7 @@
                                     <!-- form item -->
                                     <div class="form_inner">
                                         <!-- title -->
-                                        <label for="">Subject</label>
+                                        <label for="">Message</label>
                                         <textarea name="message" class="input_control"></textarea>
                                         @error('message')
                                             <span class="text-danger">{{ $message }}</span>
@@ -82,90 +82,7 @@
         <!-- cotact end -->
 
         <!-- choose -->
-        <div class="why_choose section_padding">
-            <div class="container">
-                <!-- why_choose_wrapper -->
-                <div class="why_choose_wrapper">
-                    <!-- why_choose_image -->
-                    <div class="why_choose_image">
-                        <img src="assets/image/holder/banner.png" alt="">
-                    </div>
-                    <!-- why_choose_content -->
-                    <div class="why_choose_content">
-                        <!-- section ttile -->
-                        <div class="section_title text-start mw-100">
-                            <!-- title heading -->
-                            <h1 class="section_heading">Why Speacial<span> Classic IT?</span></h1>
-                            <!-- section text -->
-                            <p class="section_text">We can help you Uplift your Business and Boost your Revenue using Latest
-                                Technological Solutions. Instead of feeding unnecessary services and implementations that
-                                increases your cost, we provide only just the solution that’s best for your business.</p>
-                        </div>
-                        <!-- text -->
-                        <div class="why_choose_inner">
-                            <!-- why_choose_box -->
-                            <div class="why_choose_box">
-                                <!-- image -->
-                                <div class="why_bxchoose_image">
-                                    <img src="assets/image/holder/qa.png" alt="">
-                                </div>
-                                <!-- right -->
-                                <div class="why_choose_right">
-                                    <p class="why_choose_title">Communication</p>
-                                    <p class="why_choose_text">
-                                        Effective communication is arguably the number one skill required software.
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- why_choose_box -->
-                            <div class="why_choose_box">
-                                <!-- image -->
-                                <div class="why_bxchoose_image">
-                                    <img src="assets/image/holder/w3.png" alt="">
-                                </div>
-                                <!-- right -->
-                                <div class="why_choose_right">
-                                    <p class="why_choose_title">Experience</p>
-                                    <p class="why_choose_text">
-                                        We are more experienced that allows creating a finished solution.
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- why_choose_box -->
-                            <div class="why_choose_box">
-                                <!-- image -->
-                                <div class="why_bxchoose_image">
-                                    <img src="assets/image/holder/project.png" alt="">
-                                </div>
-                                <!-- right -->
-                                <div class="why_choose_right">
-                                    <p class="why_choose_title">Safe &amp; Secure</p>
-                                    <p class="why_choose_text">
-                                        We follow robust data security strategies will protect an organization’s
-                                        information.
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- why_choose_box -->
-                            <div class="why_choose_box">
-                                <!-- image -->
-                                <div class="why_bxchoose_image">
-                                    <img src="assets/image/holder/w1.png" alt="">
-                                </div>
-                                <!-- right -->
-                                <div class="why_choose_right">
-                                    <p class="why_choose_title">Passion for Testing</p>
-                                    <p class="why_choose_text">
-                                        We test regularly can ensure the level of quality that encourages the diligence o
-                                        find bugs
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+      @include('frontend.components.why-choose-us')
         <!-- choose end -->
     </main>
 @endsection

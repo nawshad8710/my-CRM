@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Models\Admin\Category;
+use App\Models\Admin\Client;
 use App\Models\Admin\IndustryServe;
 use App\Models\Admin\Product;
 use App\Models\Admin\SocialLink;
+use App\Models\Admin\WhyChooseUs;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -39,10 +41,16 @@ class AppServiceProvider extends ServiceProvider
 
         // industry we serve
         $industryServeGlobal = IndustryServe::get();
+        // why choose us for globally
+        $whyChooseUsItems = WhyChooseUs::get();
+        // our client for globally
+        $ourClients = Client::get();
 
         View::share('products', $products);
         View::share('socialLinks', $socialLinks);
         View::share('productCategories', $productCategories);
         View::share('industryServeGlobal', $industryServeGlobal);
+        View::share('whyChooseUsItems', $whyChooseUsItems);
+        View::share('ourClients', $ourClients);
     }
 }

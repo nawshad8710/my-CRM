@@ -74,9 +74,11 @@ class ProductController extends Controller
         }
         $upperThumbnail = '';
         $lowerThumbnail = '';
+        $productIcon = '';
 
         $upperVideoThumbnail = $request->file('upper_video_thumbnail');
         $lowerVideoThumbnail = $request->file('lower_video_thumbnail');
+        $productIconRequest = $request->file('product_icon');
 
         if ($upperVideoThumbnail) {
             $currentDate = Carbon::now()->toDateString();
@@ -104,11 +106,25 @@ class ProductController extends Controller
 
             $lowerThumbnail = $lowerVideoThumbnailName;
         }
+        if ($productIconRequest) {
+            $currentDate = Carbon::now()->toDateString();
+
+            $productIconName = $currentDate . '-' . uniqid() . '.' . $productIconRequest->getClientOriginalExtension();
+
+            if (!file_exists('assets/images/uploads/product/icon')) {
+                mkdir('assets/images/uploads/product/icon', 0777, true);
+            }
+
+            $productIconRequest->move(public_path('assets/images/uploads/product/icon'), $productIconName);
+
+            $productIcon = $productIconName;
+        }
 
 
         $product = Product::create([
             'title'                     => $request->title,
             'is_menu'                   => $request->is_menu,
+            'is_page'                   => $request->is_page,
             'slug'                      => Str::slug($request->title),
             'short_description'         => $request->short_description,
             'long_description'          => $request->long_description,
@@ -118,6 +134,7 @@ class ProductController extends Controller
             'is_renewable'              => $request->is_renewable,
             'upper_video_thumbnail'     => $upperThumbnail,
             'lower_video_thumbnail'     => $lowerThumbnail,
+            'icon'                      => $productIcon,
             'upper_video_link'          => $request->upper_video_link,
             'lower_video_link'          => $request->lower_video_link
         ]);
@@ -232,9 +249,11 @@ class ProductController extends Controller
 
         $upperVideoThumbnailName = $product->upper_video_thumbnail; // Get the current icon name
         $lowerVideoThumbnailName = $product->lower_video_thumbnail; // Get the current icon name
+        $productIconName = $product->icon; // Get the current icon name
 
         $upperVideoThumbnail = $request->file('upper_video_thumbnail');
         $lowerVideoThumbnail = $request->file('lower_video_thumbnail');
+        $productIconRequest = $request->file('product_icon');
         if ($upperVideoThumbnail) {
             $currentDate = Carbon::now()->toDateString();
             $newUpperVideoThumbnailName = $currentDate . '-' . uniqid() . '.' . $upperVideoThumbnail->getClientOriginalExtension();
@@ -269,11 +288,29 @@ class ProductController extends Controller
 
             $lowerVideoThumbnailName = $newLowerVideoThumbnailName;
         }
+        if ($productIconRequest) {
+            $currentDate = Carbon::now()->toDateString();
+            $newProductIconName = $currentDate . '-' . uniqid() . '.' . $productIconRequest->getClientOriginalExtension();
+
+            if (!file_exists('assets/images/uploads/product/icon')) {
+                mkdir('assets/images/uploads/product/icon', 0777, true);
+            }
+
+            $productIconRequest->move(public_path('assets/images/uploads/product/icon'), $newProductIconName);
+
+            // Delete the previous icon file
+            if ($productIconName && file_exists(public_path('assets/images/uploads/product/icon/' . $productIconName))) {
+                unlink(public_path('assets/images/uploads/product/icon/' . $productIconName));
+            }
+
+            $productIconName = $newProductIconName;
+        }
 
         if ($product) {
             $product->update([
                 'title'                     => $request->title,
                 'is_menu'                   => $request->is_menu,
+                'is_page'                   => $request->is_page,
                 'slug'                      => Str::slug($request->title),
                 'short_description'         => $request->short_description,
                 'long_description'          => $request->long_description,
@@ -283,6 +320,7 @@ class ProductController extends Controller
                 'is_renewable'              => $request->is_renewable,
                 'upper_video_thumbnail'     => $upperVideoThumbnailName,
                 'lower_video_thumbnail'     => $lowerVideoThumbnailName,
+                'icon'                      => $productIconName,
                 'upper_video_link'          => $request->upper_video_link,
                 'lower_video_link'          => $request->lower_video_link
 

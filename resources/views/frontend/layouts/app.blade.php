@@ -17,7 +17,7 @@
 </head>
 
 <body>
-    {{-- @include('sweetalert::alert') --}}
+    @include('sweetalert::alert')
     <!-- header section -->
   @include('frontend.layouts.partials.header')
     <!-- header section end -->
