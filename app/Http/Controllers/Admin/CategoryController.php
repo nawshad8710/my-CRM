@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin\Category;
+use App\Models\Admin\CategoryKeyFeature;
 use Toastr;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
@@ -85,7 +86,7 @@ class CategoryController extends Controller
             $icon = $iconName;
         }
 
-        Category::create([
+       $category = Category::create([
             'name' => $request->name,
             'icon' => $icon,
             'slug' => Str::slug($request->name),
@@ -93,6 +94,13 @@ class CategoryController extends Controller
             'long_description' => $request->long_description,
             'status' => $request->status,
         ]);
+
+        foreach ($request->key_features_title ?? [] as $index => $title) {
+             $category->keyFeature()->create([
+                "title" => $title,
+
+            ]);
+        }
 
 
         Toastr::success('Category Added Successfully', 'Success', ["positionClass" => "toast-top-right"]);
@@ -124,6 +132,7 @@ class CategoryController extends Controller
         }
 
         $category = Category::findOrFail($id);
+        // dd($category);
         if($category){
             return view('admin.category.form', compact('category'));
         }
@@ -141,6 +150,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         $validated = $request->validate([
             'name' => 'required|max:100',
             'short_description' => 'nullable|max:255',
@@ -187,6 +197,18 @@ class CategoryController extends Controller
                 'long_description' => $request->long_description,
                 'status' => $request->status,
             ]);
+            foreach ($request->key_features_title ?? [] as $index => $title) {
+                $key_feature_id = isset($request->key_feature_id[$index]) ? $request->key_feature_id[$index] : null;
+                 $category->keyFeature()->updateOrCreate(
+                    [
+                        'id' => $key_feature_id
+                    ],
+                    [
+                        "title" => $title,
+
+                    ]
+                );
+            }
 
             Toastr::success('Category Updated Successfully', 'Success', ["positionClass" => "toast-top-right"]);
 
@@ -216,5 +238,15 @@ class CategoryController extends Controller
             return 1;
         }
         return 0;
+    }
+
+
+    public function deleteKeyFeature($id)
+    {
+        $categoryKeyFeature = CategoryKeyFeature::find($id);
+
+            $categoryKeyFeature->delete();
+
+        return json_decode($categoryKeyFeature);
     }
 }

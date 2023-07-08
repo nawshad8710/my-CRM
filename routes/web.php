@@ -70,6 +70,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::get('/category/edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
             Route::post('/category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
             Route::get('/category/delete/{id}', [CategoryController::class, 'destroy'])->name('category.delete');
+            Route::get('/category/key-feature/delete/{id}', [CategoryController::class, 'deleteKeyFeature'])->name('deleteKeyFeature');
 
             Route::get('/product/list', [ProductController::class, 'index'])->name('product.list');
             Route::get('/product/add', [ProductController::class, 'create'])->name('product.add');
@@ -264,6 +265,24 @@ Route::middleware(['auth', 'admin'])->group(function () {
         */
         Route::group(['as' => 'about.', 'prefix' => 'about'], function () {
             Route::get('/index', [AboutController::class, 'index'])->name('index');
+            Route::get('/who-we-are', [AboutController::class, 'whoWeAre'])->name('whoWeAre');
+            Route::post('/who-we-are-store', [AboutController::class, 'whoWeAreStore'])->name('whoWeAreStore');
+            Route::get('/our-vision', [AboutController::class, 'ourVision'])->name('ourVision');
+            Route::get('/our-mision', [AboutController::class, 'ourMision'])->name('ourMision');
+            Route::post('/our-vision-store', [AboutController::class, 'ourVisionStore'])->name('ourVisionStore');
+            Route::post('/our-mision-store', [AboutController::class, 'ourMisionStore'])->name('ourMisionStore');
+            Route::get('/our-vision-item', [AboutController::class, 'ourVisionItem'])->name('ourVisionItem');
+            Route::get('/our-mision-item', [AboutController::class, 'ourMisionItem'])->name('ourMisionItem');
+            Route::get('/our-vision-item-create', [AboutController::class, 'ourVisionItemCreate'])->name('ourVisionItemCreate');
+            Route::get('/our-mision-item-create', [AboutController::class, 'ourMisionItemCreate'])->name('ourMisionItemCreate');
+            Route::post('/our-vision-item-store', [AboutController::class, 'ourVisionItemStore'])->name('ourVisionItemStore');
+            Route::post('/our-mision-item-store', [AboutController::class, 'ourMisionItemStore'])->name('ourMisionItemStore');
+            Route::get('/our-vision-item-edit/{id}', [AboutController::class, 'ourVisionItemEdit'])->name('ourVisionItemEdit');
+            Route::get('/our-mision-item-edit/{id}', [AboutController::class, 'ourMisionItemEdit'])->name('ourMisionItemEdit');
+            Route::post('/our-vision-item-update/{id}', [AboutController::class, 'ourVisionItemUpdate'])->name('ourVisionItemUpdate');
+            Route::post('/our-mision-item-update/{id}', [AboutController::class, 'ourMisionItemUpdate'])->name('ourMisionItemUpdate');
+            Route::get('/our-vision-item-delete/{id}', [AboutController::class, 'ourVisionItemDelete'])->name('ourVisionItemDelete');
+            Route::get('/our-mision-item-delete/{id}', [AboutController::class, 'ourMisionItemDelete'])->name('ourMisionItemDelete');
             Route::post('/store', [AboutController::class, 'store'])->name('store');
         });
 
@@ -472,6 +491,7 @@ Route::get('/service/{slug}', [FrontendHomeController::class, 'singleService'])-
 Route::get('/contact-page',[FrontendHomeController::class, 'contactPage'])->name('contactPage');
 Route::post('/contact-page/store',[FrontendHomeController::class, 'contactPageStore'])->name('contactPageStore');
 Route::get('/about-page',[FrontendHomeController::class, 'aboutPage'])->name('aboutPage');
+Route::get('/product-service-home-banner',[FrontendHomeController::class, 'TypedText'])->name('TypedText');
 
 
 

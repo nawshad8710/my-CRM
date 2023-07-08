@@ -206,7 +206,7 @@ class ProductController extends Controller
         }
 
         $product = Product::findOrFail($id);
-
+// dd($product);
         if ($product) {
             $categories = Category::where('status', 1)->latest()->get();
             return view('admin.product.form', compact('product', 'categories'));

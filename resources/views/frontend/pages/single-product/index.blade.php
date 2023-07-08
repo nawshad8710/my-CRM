@@ -355,17 +355,17 @@
                                 <td></td>
                                 <td>
                                     <div class="get_package_btn">
-                                        <a href="./contact.html">Get Package</a>
+                                        <a href="{{route('contactPage')}}">Get Package</a>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="get_package_btn">
-                                        <a href="./contact.html">Get Package</a>
+                                        <a href="{{route('contactPage')}}">Get Package</a>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="get_package_btn">
-                                        <a href="./contact.html">Get Package</a>
+                                        <a href="{{route('contactPage')}}">Get Package</a>
                                     </div>
                                 </td>
                             </tr>

@@ -11,69 +11,45 @@
                 </div>
                 <!-- service wrapper -->
                 <div class="serrvice_wrapper">
-                    @isset($ourServices)
-                    @foreach ($ourServices as $key=>$service)
-                    <div class="service_item">
-                        <!-- image -->
-                        <div class="service_item_image">
-                            <img src="{{asset('assets/images/uploads/our-service/' .$service->icon)}}" alt="">
-                        </div>
-                        <!-- heading -->
-                        <h2 class="service_item_heading">{{$service->title}}</h2>
-                        <!-- text -->
-                        <p class="service_item_text">{{ $service->short_description }}</p>
-                        <!-- service list -->
-                        <ul class="service_list">
-                            <!-- service_list -->
-                            <li class="service_list_item">
-                                <span class="service_list_icon">
-                                    <i class="fa-regular fa-circle-check"></i>
-                                </span>
-                                <span class="service_list_text">We have experience</span>
-                            </li>
-                            <!-- service_list -->
-                            <li class="service_list_item">
-                                <span class="service_list_icon">
-                                    <i class="fa-regular fa-circle-check"></i>
-                                </span>
-                                <span class="service_list_text">We have Necessary technical skills</span>
-                            </li>
-                            <!-- service_list -->
-                            <li class="service_list_item">
-                                <span class="service_list_icon">
-                                    <i class="fa-regular fa-circle-check"></i>
-                                </span>
-                                <span class="service_list_text">We do effective communication</span>
-                            </li>
-                            <!-- service_list -->
-                            <li class="service_list_item">
-                                <span class="service_list_icon">
-                                    <i class="fa-regular fa-circle-check"></i>
-                                </span>
-                                <span class="service_list_text">Easy to Use</span>
-                            </li>
-                            <!-- service_list -->
-                            <!-- service_list -->
-                            <li class="service_list_item">
-                                <span class="service_list_icon">
-                                    <i class="fa-regular fa-circle-check"></i>
-                                </span>
-                                <span class="service_list_text">Safe & Secure</span>
-                            </li>
-                            <li class="service_list_item">
-                                <span class="service_list_icon">
-                                    <i class="fa-regular fa-circle-check"></i>
-                                </span>
-                                <span class="service_list_text">high-quality results</span>
-                            </li>
-                        </ul>
-                        <!-- service btn -->
-                        <div class="service_btn">
-                            <a href="https://classicit.com.bd/service">View Details <span><i
-                                        class="fa-solid fa-arrow-right"></i></span></a>
-                        </div>
-                    </div>
-                    @endforeach
+                    @isset($productCategories)
+                        @foreach ($productCategories as $key => $service)
+
+                                <div class="service_item">
+                                  <a href="{{route('singleService', $service->slug)}}">
+                                      <!-- image -->
+                                      <div class="service_item_image">
+                                        <img src="{{ asset('assets/images/uploads/category/icon/' . $service->icon) }}"
+                                            alt="">
+                                    </div>
+                                    <!-- heading -->
+                                    <h2 class="service_item_heading">{{ $service->name }}</h2>
+                                    <!-- text -->
+                                    <div class="service_item_text">{!! $service->short_description !!}</div>
+                                    <!-- service list -->
+                                    <ul class="service_list">
+                                        @if ($service->keyFeature)
+                                            @foreach ($service->keyFeature as $keyFeature)
+                                                <!-- service_list -->
+                                                <li class="service_list_item">
+                                                    <span class="service_list_icon">
+                                                        <i class="fa-regular fa-circle-check"></i>
+                                                    </span>
+                                                    <span class="service_list_text">{{$keyFeature->title}}</span>
+                                                </li>
+                                            @endforeach
+                                        @endif
+
+
+                                    </ul>
+                                    <!-- service btn -->
+                                    <div class="service_btn">
+                                        <a href="https://classicit.com.bd/service">View Details <span><i
+                                                    class="fa-solid fa-arrow-right"></i></span></a>
+                                    </div>
+                                  </a>
+                                </div>
+
+                        @endforeach
 
                     @endisset
                     <!-- service item -->

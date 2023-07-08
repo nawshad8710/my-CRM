@@ -176,7 +176,7 @@
                     <!-- logo -->
                     <div class="logo_inner">
                         <!-- logo image -->
-                        <a href="./index" class="logo_image">
+                        <a href="{{route('homePage')}}" class="logo_image">
                             <img src="assets/image/logo.png" alt="">
                         </a>
                     </div>

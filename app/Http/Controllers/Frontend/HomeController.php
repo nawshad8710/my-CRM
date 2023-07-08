@@ -18,7 +18,7 @@ use App\Models\Admin\WhyChooseUs;
 use App\Models\CustomerQuery;
 use Illuminate\Http\Request;
 use Alert;
-
+use App\Models\Admin\Technology;
 
 class HomeController extends Controller
 {
@@ -87,8 +87,9 @@ class HomeController extends Controller
     public function singleService($slug)
     {
         $singleService = Category::where('slug', $slug)->first();
-        $singleServiceProducts = Product::where('is_page', 1)->where('category_id', $singleService->id)->get();
-        return view('frontend.pages.single-services.index', compact('singleService', 'singleServiceProducts'));
+        $singleServiceProducts = Product::where('category_id', $singleService->id)->get();
+        $singleServiceTechnology = Technology::where('category_id', $singleService->id)->get();
+        return view('frontend.pages.single-services.index', compact('singleService', 'singleServiceProducts','singleServiceTechnology'));
     }
 
     /*
@@ -138,5 +139,13 @@ class HomeController extends Controller
     public function aboutPage()
     {
         return view('frontend.pages.about.index');
+    }
+
+
+
+    public function TypedText()
+    {
+        $serviceCategory = Category::select('name')->get();
+        return json_decode($serviceCategory);
     }
 }

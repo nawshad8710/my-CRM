@@ -39,26 +39,16 @@
                             <div class="section_text">{!! $singleService->long_description !!}</div>
                             <!-- list -->
                             <ul>
-                                <li>
-                                    <span class="details_icon"><i class="fa-solid fa-check"></i></span>
-                                    <span>Software Development</span>
-                                </li>
-                                <li>
-                                    <span class="details_icon"><i class="fa-solid fa-check"></i></span>
-                                    <span>Portfolio Website Design</span>
-                                </li>
-                                <li>
-                                    <span class="details_icon"><i class="fa-solid fa-check"></i></span>
-                                    <span>Portfolio Website Design</span>
-                                </li>
-                                <li>
-                                    <span class="details_icon"><i class="fa-solid fa-check"></i></span>
-                                    <span>Portfolio Website Design</span>
-                                </li>
-                                <li>
-                                    <span class="details_icon"><i class="fa-solid fa-check"></i></span>
-                                    <span>Portfolio Website Design</span>
-                                </li>
+                                @if ($singleService->keyFeature)
+                                    @foreach ($singleService->keyFeature as $key=>$keyFeature)
+                                    <li>
+                                        <span class="details_icon"><i class="fa-solid fa-check"></i></span>
+                                        <span>{{$keyFeature->title}}</span>
+                                    </li>
+                                    @endforeach
+                                @endif
+
+
                             </ul>
                         </div>
                     </div>
@@ -148,91 +138,32 @@
             <div class="container">
                 <!-- section title -->
                 <div class="section_title">
-                    <!-- title heading -->
+                    @if (count($singleServiceTechnology) > 0)
                     <h1 class="section_heading">We Use Technology</h1>
+                    @endif
+                    <!-- title heading -->
+
                 </div>
                 <!-- row -->
                 <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 gy-4">
+
+                    @if ($singleServiceTechnology)
+                    @foreach ($singleServiceTechnology as $key => $technology)
                     <div class="col">
                         <div class="tech_card text-center">
                             <div class="tech_image">
-                                <img src="{{asset('assets/images/technology/php.png')}}" alt="">
+                                <img src="{{asset('assets/images/uploads/technology/' .$technology->icon)}}" alt="">
                             </div>
-                            <p class="tech_name">PHP</p>
+                            <p class="tech_name">{{$technology->title}}</p>
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="tech_card text-center">
-                            <div class="tech_image">
-                                <img src="{{asset('assets/images/technology/Laravel.svg.png')}}" alt="">
-                            </div>
-                            <p class="tech_name">Laravel</p>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="tech_card text-center">
-                            <div class="tech_image">
-                                <img src="{{asset('assets/images/technology/Wordpress_Blue_logo.png')}}" alt="">
-                            </div>
-                            <p class="tech_name">WordPress</p>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="tech_card text-center">
-                            <div class="tech_image">
-                                <img src="{{asset('assets/images/technology/html-5.png')}}" alt="">
-                            </div>
-                            <p class="tech_name">HTML</p>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="tech_card text-center">
-                            <div class="tech_image">
-                                <img src="{{asset('assets/images/technology/css.png')}}" alt="">
-                            </div>
-                            <p class="tech_name">CSS</p>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="tech_card text-center">
-                            <div class="tech_image">
-                                <img src="{{asset('assets/images/technology/bootstrap.png')}}" alt="">
-                            </div>
-                            <p class="tech_name">Bootstrap</p>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="tech_card text-center">
-                            <div class="tech_image">
-                                <img src="{{asset('assets/images/technology/js-file.png')}}" alt="">
-                            </div>
-                            <p class="tech_name">JavaScript</p>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="tech_card text-center">
-                            <div class="tech_image">
-                                <img src="{{asset('assets/images/technology/react.png')}}" alt="">
-                            </div>
-                            <p class="tech_name">React</p>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="tech_card text-center">
-                            <div class="tech_image">
-                                <img src="{{asset('assets/images/technology/Vue.js_Logo_2.svg.png')}}" alt="">
-                            </div>
-                            <p class="tech_name">Vue</p>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="tech_card text-center">
-                            <div class="tech_image">
-                                <img src="{{asset('assets/images/technology/node-js.png')}}" alt="">
-                            </div>
-                            <p class="tech_name">Node.js</p>
-                        </div>
-                    </div>
+                    @endforeach
+
+                    @endif
+
+
+
+
                 </div>
             </div>
         </section>
