@@ -18,6 +18,9 @@ use App\Models\Admin\WhyChooseUs;
 use App\Models\CustomerQuery;
 use Illuminate\Http\Request;
 use Alert;
+use App\Models\Admin\AboutOurMision;
+use App\Models\Admin\AboutOurVision;
+use App\Models\Admin\AboutWhoWeAre;
 use App\Models\Admin\Technology;
 
 class HomeController extends Controller
@@ -138,7 +141,10 @@ class HomeController extends Controller
 
     public function aboutPage()
     {
-        return view('frontend.pages.about.index');
+        $data['whoWeAre'] = AboutWhoWeAre::first();
+        $data['ourVision'] = AboutOurVision::first();
+        $data['ourMision'] = AboutOurMision::first();
+        return view('frontend.pages.about.index', $data);
     }
 
 

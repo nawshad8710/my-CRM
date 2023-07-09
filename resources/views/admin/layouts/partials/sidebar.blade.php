@@ -282,7 +282,7 @@
                             Request::is('admin/banner/index') ||
                             Request::is('admin/blog/index') ||
                             Request::is('admin/technology/index') ||
-                Request::is('admin/why-choose-us/index')
+                            Request::is('admin/why-choose-us/index')
                                 ? 'up'
                                 : '' }}">
                             <i class="fas fa-angle-down"></i>
@@ -305,8 +305,7 @@
                                 Request::is('admin/banner/index') ||
                                 Request::is('admin/blog/index') ||
                                 Request::is('admin/technology/index') ||
-                Request::is('admin/why-choose-us/index')
-                                ) style="display: block;" @endif>
+                                Request::is('admin/why-choose-us/index')) style="display: block;" @endif>
 
                         <li class="{{ Request::is('admin/banner/index') ? 'active' : '' }}">
                             <a href="{{ route('admin.banner.index') }}">
@@ -316,6 +315,26 @@
                             <a href="{{ route('admin.about.index') }}">
                                 <i class="fas fa-tasks"></i>About</a>
                         </li>
+                        <li class="{{ Request::is('admin/about/who-we-are') ? 'active' : '' }}">
+                            <a href="{{ route('admin.about.whoWeAre') }}">
+                                <i class="fas fa-tasks"></i>About Who We Are</a>
+                        </li>
+                        <li class="{{ Request::is('admin/about/our-vision') ? 'active' : '' }}">
+                            <a href="{{ route('admin.about.ourVision') }}">
+                                <i class="fas fa-tasks"></i>About Our Vision</a>
+                        </li>
+                        <li class="{{ Request::is('admin/about/our-mision') ? 'active' : '' }}">
+                            <a href="{{ route('admin.about.ourMision') }}">
+                                <i class="fas fa-tasks"></i>About Our Mision</a>
+                        </li>
+                        {{-- <li class="{{ Request::is('admin/about/ourVisionItem') ? 'active' : '' }}">
+                            <a href="{{ route('admin.about.ourVisionItem') }}">
+                                <i class="fas fa-tasks"></i>Our Vision Item</a>
+                        </li>
+                        <li class="{{ Request::is('admin/about/ourMisionItem') ? 'active' : '' }}">
+                            <a href="{{ route('admin.about.ourMisionItem') }}">
+                                <i class="fas fa-tasks"></i>Our Mision Item</a>
+                        </li> --}}
                         <li class="{{ Request::is('admin/site-info/index') ? 'active' : '' }}">
                             <a href="{{ route('admin.site-info.index') }}">
                                 <i class="fas fa-tasks"></i>Site Infos</a>
@@ -382,7 +401,8 @@
                                 <i class="fas fa-edit"></i>Blogs
                             </a>
                         </li>
-                        <li class="{{ Request::is('admin/our-team/index') || Request::is('admin/our-team/create')  ? 'active' : '' }}">
+                        <li
+                            class="{{ Request::is('admin/our-team/index') || Request::is('admin/our-team/create') ? 'active' : '' }}">
                             <a href="{{ route('admin.our-team.index') }}">
                                 <i class="fas fa-edit"></i>Our Team
                             </a>

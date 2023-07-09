@@ -27,24 +27,16 @@
                         <!-- title heading -->
                         <h1 class="section_heading">Who We<span> Are?</span></h1>
                         <!-- section text -->
-                        <p class="section_text mb-3">
-                            Classic IT is a provider of IT consulting and software development services. We have helped non-IT organizations and software product companies improve business performance and quickly win new customers
-                        </p>
-                        <p class="section_text mb-3">
-                            Classic IT is a leading software development company delivering tailor-made digital solutions to businesses worldwide. As a technology pioneer with deep knowledge and expertise Classic IT believes in helping companies overcome their most complex tech challenges and drive business growth.
-                        </p>
-                        <p class="section_text">
-                            Classic IT offers custom software development and IT services. Our developers createcustomized software for individuals, start-ups, and small and medium-sized businesses. Based on years of experience, we know that each business has a different software and hardware environment. That is why we provide a wide range of software development services, as well as meet the needs and requirements of customers for the most modern technologies.
-                        </p>
+                       {!! $whoWeAre->description !!}
                     </div>
                     <div class="product_details_btn">
-                        <a href="#" class="btn_control common_btn btn_hover d-inline-block">Contact Us</a>
+                        <a href="{{route('aboutPage')}}" class="btn_control common_btn btn_hover d-inline-block">Contact Us</a>
                     </div>
                 </div>
 
                 <!-- about image -->
                 <div class="about_image">
-                    <img src="{{asset('assets/images/about/aboutbanner.png')}}" alt="">
+                    <img src="{{asset('assets/images/uploads/about/who-we-are/' . $whoWeAre->image)}}" alt="">
                 </div>
             </div>
         </div>
@@ -63,15 +55,15 @@
                         <!-- title heading -->
                         <h1 class="section_heading">Our<span> Vision</span></h1>
                         <!-- section text -->
-                        <p class="section_text mb-3">
-                            Our motto, ‘You Seed It: We Grow It,’ reflects our business philosophy. From putting flesh on your idea to delivering the expected end new technologies, untangle complex issues that always emerge during digital evolution, and orchestrate ongoing innovation. We're not just a resource provider. We value our customers' success as much as our own – sharing development risk so that they can be bold in their adoption of new technologies.
-                        </p>
+                        <div class="section_text mb-3">
+                           {!! $ourVision->description !!}
+                        </div>
                     </div>
                     <!-- vission content card -->
                     <div class="vission_card">
                         <!-- image -->
                         <div class="vission_card_image">
-                            <img src="{{asset('assets/images/about/chart.svg')}}" alt="">
+                            <img src="{{asset('assets/images/uploads/about/our-vision/' . $ourVision->image)}}" alt="">
                         </div>
                         <!-- content -->
                         <div class="vission_card_content">
@@ -113,7 +105,7 @@
 
                 <!-- about image -->
                 <div class="about_image">
-                    <img src="{{asset('assets/images/about/vission.svg')}}" alt="">
+                    <img src="{{asset('assets/images/uploads/about/our-mision/' .$ourMision->image)}}" alt="">
                 </div>
             </div>
         </div>
@@ -132,11 +124,9 @@
                         <!-- title heading -->
                         <h1 class="section_heading">Our<span> Mision</span></h1>
                         <!-- section text -->
-                        <p class="section_text mb-3">
-                            We’re the mirror of your vision.
-                                Classic IT & Sky Mart Ltd. is a global provider of full-spectrum software services, Classic IT & Sky Mart Ltd.
-                                Our belief in creating tangible value for our customers is what we think is different about Classic IT. Our attention to detail and quality is unmatched in the industry. We enable progressive businesses to transform, scale, and gain competitive advantage, through the expert delivery of innovative, tailor-made software. Our elegant, data-driven solutions help organizations and people around the world to perform more effectively and achieve better outcomes.
-                        </p>
+                        <div class="section_text mb-3">
+                          {!! $ourMision->description !!}
+                        </div>
                     </div>
 
                     <!-- vission content card -->
