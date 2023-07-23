@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ProductPlanController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\EmployeeController;
+use App\Http\Controllers\Admin\BranchController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\AssignedProjectController;
 use App\Http\Controllers\Admin\BannerController;
@@ -87,6 +88,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::get('/product-plan/edit/{id}', [ProductPlanController::class, 'edit'])->name('productplan.edit');
             Route::post('/product-plan/update/{id}', [ProductPlanController::class, 'update'])->name('productplan.update');
             Route::get('/product-plan/delete/{id}', [ProductPlanController::class, 'destroy'])->name('productplan.delete');
+        });
+        Route::group(['as' => 'branch.', 'prefix' => 'branch'], function () {
+            Route::get('/list', [BranchController::class, 'index'])->name('list');
+            Route::get('/add', [BranchController::class, 'create'])->name('add');
+            Route::post('/submit', [BranchController::class, 'store'])->name('submit');
+            Route::get('/edit/{id}', [BranchController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [BranchController::class, 'update'])->name('update');
+            Route::get('/delete/{id}', [BranchController::class, 'destroy'])->name('delete');
         });
         Route::group(['as' => 'employee.', 'prefix' => 'employee'], function () {
             Route::get('/list', [EmployeeController::class, 'index'])->name('list');

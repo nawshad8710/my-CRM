@@ -122,6 +122,31 @@
                         </ul>
                     </li>
                 @endif
+                @if (has_menu('branches'))
+                    <li class="has-sub {{ Request::is('admin/branch*') ? 'active' : '' }}">
+                        <a class="js-arrow" href="#">
+                            <i class="fas fa-users"></i>Braches
+                            <span class="arrow {{ Request::is('admin/branch*') ? 'up' : '' }}">
+                                <i class="fas fa-angle-down"></i>
+                            </span>
+                        </a>
+                        <ul class="list-unstyled navbar__sub-list js-sub-list"
+                            @if (Request::is('admin/branch*')) style="display: block;" @endif>
+                            @if (has_access('branch_list_view'))
+                                <li class="{{ Request::is('admin/branch/list') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.branch.list') }}">
+                                        <i class="fas fa-tasks"></i>All Branches</a>
+                                </li>
+                            @endif
+                            @if (has_access('create_branch'))
+                                <li class="{{ Request::is('admin/branch/add') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.branch.add') }}">
+                                        <i class="fas fa-plus"></i>Add New</a>
+                                </li>
+                            @endif
+                        </ul>
+                    </li>
+                @endif
                 @if (has_menu('projects'))
                     <li class="has-sub {{ Request::is('admin/project*') ? 'active' : '' }}">
                         <a class="js-arrow" href="#">
@@ -200,13 +225,13 @@
                         </a>
                         <ul class="list-unstyled navbar__sub-list js-sub-list"
                             @if (Request::is('admin/customer*')) style="display: block;" @endif>
-                            @if (has_access('view_customer'))
+                            @if (has_access('customer'))
                                 <li class="{{ Request::is('admin/customer/list') ? 'active' : '' }}">
                                     <a href="{{ route('admin.customer.index') }}">
                                         <i class="fas fa-tasks"></i>All Customer</a>
                                 </li>
                             @endif
-                            @if (has_access('view_customer'))
+                            @if (has_access('customer'))
                                 <li class="{{ Request::is('admin/customer/customer-query-list') ? 'active' : '' }}">
                                     <a href="{{ route('admin.customer.customerQueryList') }}">
                                         <i class="fas fa-tasks"></i>All Customer Queries</a>
